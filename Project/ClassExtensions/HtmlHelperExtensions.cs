@@ -25,8 +25,8 @@ namespace Project.ClassExtensions {
             if (String.IsNullOrEmpty(controllers))
                 controllers = currentController;
 
-            string[] acceptedActions = actions.Trim().Split(',').Distinct().ToArray();
-            string[] acceptedControllers = controllers.Trim().Split(',').Distinct().ToArray();
+            string[] acceptedActions = actions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(act => act.Trim()).Distinct().ToArray();
+            string[] acceptedControllers = controllers.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(act => act.Trim()).Distinct().ToArray();
 
             return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController) ?
                 cssClass : String.Empty;
