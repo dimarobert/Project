@@ -26,7 +26,10 @@ namespace Project.Tests.Controllers {
         [Fact]
         public void Index_AnonymousUser_ShouldDisplayLandingPage() {
             // Arrange
-            HomeController controller = new HomeController();
+            var userService = new Mock<IUserService>();
+            var taskManager = new Mock<ITaskManager>();
+
+            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -41,29 +44,33 @@ namespace Project.Tests.Controllers {
             var fixture = new Fixture();
             fixture.Customize(new AutoMoqCustomization() { ConfigureMembers = true });
 
-            var tasks = new List<Task> { new Task { Id = 1, Title = "Test", UserId = "1" } }.AsQueryable();
+            var tasks = new List<Task> { new Task { Id = 1, Title = "Test", UserId = "1" } };
 
-            var taskData = Utils.DbSetHelpers.GetDbSetMock(tasks);
-
-            var taskContext = new Mock<ITaskDbContext>();
-            taskContext.Setup(c => c.Tasks).Returns(taskData.Object);
+            var taskManager = new Mock<ITaskManager>();
+            taskManager.Setup(c => c.GetUserTasks(It.IsAny<string>())).Returns(tasks);
 
             var userService = new Mock<IUserService>();
             userService.Setup(i => i.IsAuthenticated).Returns(true);
             userService.Setup(i => i.GetUserId()).Returns("1");
 
-            var controller = new HomeController(null, userService.Object, new TaskManager(taskContext.Object));
+            var controller = new HomeController(null, userService.Object, taskManager.Object);
 
             var result = controller.Index() as ViewResult;
 
             Assert.NotNull(result);
             Assert.Equal("TaskList", result.ViewName);
+
+            Assert.IsType<List<Task>>(result.Model);
+            Assert.Equal(tasks.Count, (result.Model as List<Task>).Count);
         }
 
         [Fact]
         public void About() {
             // Arrange
-            HomeController controller = new HomeController();
+            var userService = new Mock<IUserService>();
+            var taskManager = new Mock<ITaskManager>();
+
+            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
 
             // Act
             ViewResult result = controller.About() as ViewResult;
@@ -75,7 +82,10 @@ namespace Project.Tests.Controllers {
         [Fact]
         public void Contact() {
             // Arrange
-            HomeController controller = new HomeController();
+            var userService = new Mock<IUserService>();
+            var taskManager = new Mock<ITaskManager>();
+
+            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;
