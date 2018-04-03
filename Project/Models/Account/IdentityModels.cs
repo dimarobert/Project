@@ -24,10 +24,5 @@ namespace Project.Models.Account
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
-
-        public static AccountDbContext Create()
-        {
-            return new AccountDbContext();
-        }
     }
 }

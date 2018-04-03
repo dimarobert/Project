@@ -14,17 +14,17 @@ namespace Project.Services.Account {
     }
 
     public class UserService : IUserService {
-        readonly Func<IPrincipal> getUser;
+        readonly IPrincipal user;
 
-        public bool IsAuthenticated => getUser()?.Identity?.IsAuthenticated ?? false;
+        public bool IsAuthenticated => user?.Identity?.IsAuthenticated ?? false;
 
-        public UserService(Func<IPrincipal> getUser) {
-            this.getUser = getUser;
+        public UserService(IPrincipal user) {
+            this.user = user;
         }
 
 
         public string GetUserId() {
-            return getUser()?.Identity?.GetUserId();
+            return user?.Identity?.GetUserId();
         }
     }
 }

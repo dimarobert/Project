@@ -23,11 +23,6 @@ namespace Project.Controllers {
         readonly IUserService userService;
         readonly ITaskManager taskManager;
 
-        public HomeController() {
-            userService = new UserService(() => User);
-            taskManager = new TaskManager(new TaskDbContext());
-        }
-
         public HomeController(ApplicationUserManager userManager, IUserService userService, ITaskManager taskManager) {
             UserManager = userManager;
             this.userService = userService;
