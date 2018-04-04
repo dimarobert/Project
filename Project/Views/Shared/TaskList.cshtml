@@ -1,0 +1,11 @@
+﻿@model IList<Project.Models.Tasks.Task>
+
+@{
+    ViewBag.Title = "Task List";
+}
+
+<ul>
+    @foreach (var task in Model) {
+        <li>@task.Title</li>
+    }
+</ul>
