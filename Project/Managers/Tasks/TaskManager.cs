@@ -17,10 +17,13 @@ namespace Project.Managers.Tasks {
         ITaskDbContext TaskDbContext { get; }
 
         public TaskManager(ITaskDbContext taskDbContext) {
-            TaskDbContext = taskDbContext;
+            TaskDbContext = taskDbContext ?? throw new ArgumentNullException(nameof(taskDbContext));
         }
 
         public IList<Task> GetUserTasks(string userId) {
+            if (string.IsNullOrWhiteSpace(userId) || TaskDbContext.Tasks == null)
+                return new List<Task>();
+
             return TaskDbContext.Tasks.Where(task => task.UserId == userId).ToList();
         }
     }

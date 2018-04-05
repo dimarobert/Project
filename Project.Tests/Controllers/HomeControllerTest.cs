@@ -25,14 +25,9 @@ namespace Project.Tests.Controllers {
     public class HomeControllerTest {
 
 
-        IFixture CreateFixture() {
-            return new Fixture().Customize(new WebModelCustomization());
-        }
-
-
         [Fact]
         public void Index_AnonymousUser_ShouldDisplayLandingPage() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var userService = fixture.Freeze<Mock<IUserService>>();
@@ -52,7 +47,7 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Index_AuthenticatedUser_ShouldDisplayTaskList() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var tasks = fixture.CreateMany<Task>(3).ToList();
@@ -79,7 +74,7 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void About() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var controller = fixture.CreateController<HomeController>();
@@ -93,7 +88,7 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Contact() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var controller = fixture.CreateController<HomeController>();

@@ -28,6 +28,10 @@ namespace Project.Tests.Utils {
 
     internal static class FixtureExtensions {
 
+        internal static IFixture CreateFixture() {
+            return new Fixture().Customize(new WebModelCustomization());
+        }
+
         internal static IPostprocessComposer<T> BuildController<T>(this IFixture fixture) where T : Controller {
             return fixture.Build<T>()
                 .Without(c => c.ActionInvoker)
