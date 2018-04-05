@@ -17,19 +17,30 @@ using Project.Managers.Tasks;
 using Project.Models.Account;
 using Project.Models.Tasks;
 using Project.Services.Account;
+using Project.Tests.Utils;
 using Xunit;
 
 namespace Project.Tests.Controllers {
 
     public class HomeControllerTest {
 
+
+        IFixture CreateFixture() {
+            return new Fixture().Customize(new WebModelCustomization());
+        }
+
+
         [Fact]
         public void Index_AnonymousUser_ShouldDisplayLandingPage() {
-            // Arrange
-            var userService = new Mock<IUserService>();
-            var taskManager = new Mock<ITaskManager>();
+            var fixture = CreateFixture();
 
-            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
+            // Arrange
+            var userService = fixture.Freeze<Mock<IUserService>>();
+            userService.Setup(i => i.IsAuthenticated).Returns(false);
+
+            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
+
+            var controller = fixture.CreateController<HomeController>();
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -41,22 +52,24 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Index_AuthenticatedUser_ShouldDisplayTaskList() {
-            var fixture = new Fixture();
-            fixture.Customize(new AutoMoqCustomization() { ConfigureMembers = true });
+            var fixture = CreateFixture();
 
-            var tasks = new List<Task> { new Task { Id = 1, Title = "Test", UserId = "1" } };
+            // Arrange
+            var tasks = fixture.CreateMany<Task>(3).ToList();
 
-            var taskManager = new Mock<ITaskManager>();
+            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
             taskManager.Setup(c => c.GetUserTasks(It.IsAny<string>())).Returns(tasks);
 
-            var userService = new Mock<IUserService>();
+            var userService = fixture.Freeze<Mock<IUserService>>();
             userService.Setup(i => i.IsAuthenticated).Returns(true);
-            userService.Setup(i => i.GetUserId()).Returns("1");
+            userService.Setup(i => i.GetUserId()).Returns(tasks.First().UserId);
 
-            var controller = new HomeController(null, userService.Object, taskManager.Object);
+            var controller = fixture.CreateController<HomeController>();
 
+            // Act
             var result = controller.Index() as ViewResult;
 
+            // Assert
             Assert.NotNull(result);
             Assert.Equal("TaskList", result.ViewName);
 
@@ -66,11 +79,10 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void About() {
-            // Arrange
-            var userService = new Mock<IUserService>();
-            var taskManager = new Mock<ITaskManager>();
+            var fixture = CreateFixture();
 
-            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
+            // Arrange
+            var controller = fixture.CreateController<HomeController>();
 
             // Act
             ViewResult result = controller.About() as ViewResult;
@@ -81,11 +93,10 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Contact() {
-            // Arrange
-            var userService = new Mock<IUserService>();
-            var taskManager = new Mock<ITaskManager>();
+            var fixture = CreateFixture();
 
-            HomeController controller = new HomeController(null, userService.Object, taskManager.Object);
+            // Arrange
+            var controller = fixture.CreateController<HomeController>();
 
             // Act
             ViewResult result = controller.Contact() as ViewResult;

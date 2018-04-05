@@ -13,18 +13,12 @@ using System.Web.Mvc;
 namespace Project.Controllers {
     public class HomeController : Controller {
 
-        ApplicationUserManager _userManager;
-
-        public ApplicationUserManager UserManager {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
-        }
-
+        //readonly ApplicationUserManager userManager;
         readonly IUserService userService;
         readonly ITaskManager taskManager;
 
-        public HomeController(ApplicationUserManager userManager, IUserService userService, ITaskManager taskManager) {
-            UserManager = userManager;
+        public HomeController(/*ApplicationUserManager userManager,*/ IUserService userService, ITaskManager taskManager) {
+            //this.userManager = userManager;
             this.userService = userService;
             this.taskManager = taskManager;
         }
