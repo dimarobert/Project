@@ -207,7 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Managers\Tasks\TaskManager.cs" />
+    <Compile Include="Repositories\Tasks\TaskManager.cs" />
     <Compile Include="Migrations\Account\201804022334386_AccountUserTables.cs" />
     <Compile Include="Migrations\Account\201804022334386_AccountUserTables.Designer.cs">
       <DependentUpon>201804022334386_AccountUserTables.cs</DependentUpon>

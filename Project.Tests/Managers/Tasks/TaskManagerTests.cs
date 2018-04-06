@@ -1,4 +1,4 @@
-﻿using Project.Managers.Tasks;
+﻿using Project.Repositories.Tasks;
 using Project.Tests.Utils;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace Project.Tests.Managers.Tasks {
             fixture.Register<ITaskDbContext>(() => null);
 
             // Assert
-            Assert.Throws<ArgumentNullException>("taskDbContext", () => new TaskManager(null));
+            Assert.Throws<ArgumentNullException>("taskDbContext", () => new TaskRepository(null));
         }
 
         [Theory]
@@ -35,7 +35,7 @@ namespace Project.Tests.Managers.Tasks {
             // Arrange
             RegisterTaskDbContext(fixture, null);
 
-            var sut = fixture.Create<TaskManager>();
+            var sut = fixture.Create<TaskRepository>();
 
             // Act
             var userTasks = sut.GetUserTasks(userId);
@@ -51,7 +51,7 @@ namespace Project.Tests.Managers.Tasks {
             // Arrange
             RegisterTaskDbContext(fixture, null);
 
-            var sut = fixture.Create<TaskManager>();
+            var sut = fixture.Create<TaskRepository>();
 
             // Act
             var userTasks = sut.GetUserTasks("1");
@@ -75,7 +75,7 @@ namespace Project.Tests.Managers.Tasks {
 
             RegisterTaskDbContext(fixture, tasks);
 
-            var sut = fixture.Create<TaskManager>();
+            var sut = fixture.Create<TaskRepository>();
 
             // Act
             var userTasks = sut.GetUserTasks(userId);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Project.DAL.Tasks;
-using Project.Managers.Tasks;
+using Project.Repositories.Tasks;
 using Project.Models.Account;
 using Project.Services.Account;
 using System;
@@ -15,29 +15,31 @@ namespace Project.Controllers {
 
         //readonly ApplicationUserManager userManager;
         readonly IUserService userService;
-        readonly ITaskManager taskManager;
+        readonly ITaskRepository taskRepository;
 
-        public HomeController(/*ApplicationUserManager userManager,*/ IUserService userService, ITaskManager taskManager) {
+        public HomeController(/*ApplicationUserManager userManager,*/ IUserService userService, ITaskRepository taskManager) {
             //this.userManager = userManager;
             this.userService = userService;
-            this.taskManager = taskManager;
+            this.taskRepository = taskManager;
         }
 
         public ActionResult Index() {
             if (!userService.IsAuthenticated)
                 return View();
 
-            var tasks = taskManager.GetUserTasks(userService.GetUserId());
+            var tasks = taskRepository.GetUserTasks(userService.GetUserId());
 
             return View("TaskList", tasks);
         }
 
+        [Route("About")]
         public ActionResult About() {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
+        [Route("Contact")]
         public ActionResult Contact() {
             ViewBag.Message = "Your contact page.";
 

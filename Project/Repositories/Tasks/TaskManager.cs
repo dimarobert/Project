@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Project.Managers.Tasks {
+namespace Project.Repositories.Tasks {
 
-    public interface ITaskManager {
+    public interface ITaskRepository {
         IList<Task> GetUserTasks(string userId);
 
     }
 
-    public class TaskManager : ITaskManager {
+    public class TaskRepository : ITaskRepository {
 
         ITaskDbContext TaskDbContext { get; }
 
-        public TaskManager(ITaskDbContext taskDbContext) {
+        public TaskRepository(ITaskDbContext taskDbContext) {
             TaskDbContext = taskDbContext ?? throw new ArgumentNullException(nameof(taskDbContext));
         }
 

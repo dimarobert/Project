@@ -6,7 +6,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
 using Project.DAL.Tasks;
-using Project.Managers.Tasks;
+using Project.Repositories.Tasks;
 using Project.Models.Account;
 using Project.Services.Account;
 using System;
@@ -45,7 +45,7 @@ namespace Project {
             // Register application types
             container.Register<IPrincipal>(Reuse.InWebRequest, Made.Of(() => PrincipalFactory()));
             container.Register<IUserService, UserService>(Reuse.InWebRequest);
-            container.Register<ITaskManager, TaskManager>(Reuse.InWebRequest);
+            container.Register<ITaskRepository, TaskRepository>(Reuse.InWebRequest);
 
             container.Register<ITaskDbContext, TaskDbContext>(Reuse.InWebRequest, Made.Of(() => new TaskDbContext()));
 

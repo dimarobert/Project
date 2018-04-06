@@ -13,7 +13,7 @@ using Moq;
 using Project;
 using Project.Controllers;
 using Project.DAL.Tasks;
-using Project.Managers.Tasks;
+using Project.Repositories.Tasks;
 using Project.Models.Account;
 using Project.Models.Tasks;
 using Project.Services.Account;
@@ -33,7 +33,7 @@ namespace Project.Tests.Controllers {
             var userService = fixture.Freeze<Mock<IUserService>>();
             userService.Setup(i => i.IsAuthenticated).Returns(false);
 
-            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
+            var taskRepository = fixture.Freeze<Mock<ITaskRepository>>();
 
             var controller = fixture.CreateController<HomeController>();
 
@@ -52,8 +52,8 @@ namespace Project.Tests.Controllers {
             // Arrange
             var tasks = fixture.CreateMany<Task>(3).ToList();
 
-            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
-            taskManager.Setup(c => c.GetUserTasks(It.IsAny<string>())).Returns(tasks);
+            var taskRepository = fixture.Freeze<Mock<ITaskRepository>>();
+            taskRepository.Setup(c => c.GetUserTasks(It.IsAny<string>())).Returns(tasks);
 
             var userService = fixture.Freeze<Mock<IUserService>>();
             userService.Setup(i => i.IsAuthenticated).Returns(true);
