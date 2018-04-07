@@ -1,4 +1,4 @@
-﻿using Project.Core.DbContext;
+﻿using Project.Account.DAL;
 using Project.StoryDomain.Models;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Project.StoryDomain.DAL {
 
     }
 
-    public class StoryContext : BaseDbContext<StoryContext>, IStoryContext {
+    public class StoryContext : IdentityReferenceDbContext<StoryContext>, IStoryContext {
 
         //public DbSet<Models.UserInfoRef> UserReferences { get; set; }
         public DbSet<Story> Stories { get; set; }

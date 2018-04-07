@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Project.Core.ClassExtensions {
+namespace Project.Core.RazorExtensions {
 
     public static class HtmlHelperExtensions {
         public static string IsSelected(this HtmlHelper<dynamic> html, string controllers = "", string actions = "", string cssClass = "selected") {
