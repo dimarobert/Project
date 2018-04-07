@@ -21,13 +21,10 @@ namespace Project.Migrations {
 
         // Story domain
         public DbSet<Story> Stories { get; set; }
-        public DbSet<Comment> StoryComments { get; set; }
-        public DbSet<Reply> CommentReplies { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Configurations.Add(new UserInfoRefMap());
 
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project.Account.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,7 +16,7 @@ namespace Project.StoryDomain.Models {
         public string Title { get; set; }
 
 
-        public virtual UserInfoRef User { get; set; }
+        public virtual UserInfo User { get; set; }
 
     }
 }

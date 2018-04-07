@@ -1,18 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using Project.Account.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.StoryDomain.Models {
-    public class Comment {
 
+    [Table("Comments")]
+    public class Comment {
         public int Id { get; set; }
 
-        public int StoryId { get; set; }
+        [Required]
+        public int ParentStoryId { get; set; }
+
+        public int? ParentCommentId { get; set; }
 
         public string UserId { get; set; }
 
 
-        public virtual Story Story { get; set; }
+        public string Text { get; set; }
 
-        public virtual UserInfoRef User { get; set; }
 
+        public virtual UserInfo User { get; set; }
+
+
+        [ForeignKey("ParentStoryId")]
+        [Required]
+        public virtual Story ParentStory { get; set; }
+
+        [ForeignKey("ParentCommentId")]
+        public virtual Comment ParentComment { get; set; }
     }
 }
