@@ -335,13 +335,17 @@
       <Project>{836D9956-1F92-4D9F-9A31-DF3E7DECC354}</Project>
       <Name>AccountDomain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Helpers\Helpers.csproj">
-      <Project>{4931192d-5913-475c-bd63-3c3da6b14f5c}</Project>
-      <Name>Helpers</Name>
+    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+      <Project>{4931192D-5913-475C-BD63-3C3DA6B14F5C}</Project>
+      <Name>Project.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\StoryDomain\StoryDomain.csproj">
       <Project>{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}</Project>
       <Name>StoryDomain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserProfileDomain\UserProfileDomain.csproj">
+      <Project>{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}</Project>
+      <Name>UserProfileDomain</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

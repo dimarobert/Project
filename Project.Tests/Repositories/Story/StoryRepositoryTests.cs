@@ -18,7 +18,7 @@ namespace Project.Tests.Repositories.StoryDomain {
             var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
-            fixture.Register<IStoryDbContext>(() => null);
+            fixture.Register<IStoryContext>(() => null);
 
             // Assert
             Assert.Throws<ArgumentNullException>("storyDbContext", () => new StoryRepository(null));
@@ -66,6 +66,7 @@ namespace Project.Tests.Repositories.StoryDomain {
         [InlineData(10)]
         public void Should_ReturnAllValues_WithSameUserId(int numberOfTasks) {
             var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
 
             var userId = "1";
             // Arrange
@@ -88,7 +89,7 @@ namespace Project.Tests.Repositories.StoryDomain {
         private void RegisterStoryDbContext(IFixture fixture, IQueryable<Story> stories) {
             var storyDbSet = stories != null ? DbSetHelpers.GetDbSetMock(stories) : null;
 
-            var storyDbC = new Mock<IStoryDbContext>();
+            var storyDbC = new Mock<IStoryContext>();
             storyDbC.Setup(t => t.Stories).Returns(storyDbSet?.Object);
             fixture.Register(() => storyDbC.Object);
         }

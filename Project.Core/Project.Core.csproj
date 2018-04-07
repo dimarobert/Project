@@ -7,8 +7,8 @@
     <ProjectGuid>{4931192D-5913-475C-BD63-3C3DA6B14F5C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Helpers</RootNamespace>
-    <AssemblyName>Helpers</AssemblyName>
+    <RootNamespace>Project.Core</RootNamespace>
+    <AssemblyName>Project.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,8 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassExtensions\HtmlHelperExtensions.cs" />
-    <Compile Include="DbContextHelpers\BaseDbContext.cs" />
+    <Compile Include="DbContext\BaseDbContext.cs" />
+    <Compile Include="DbContext\Extensions.cs" />
+    <Compile Include="Models\IObjectWithState.cs" />
+    <Compile Include="Models\ModelState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IEntityRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

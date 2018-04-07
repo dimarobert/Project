@@ -10,6 +10,8 @@ using Project.Account.Models;
 using Project.Account.Services;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Repositories;
+using Project.UserProfileDomain.DAL;
+using Project.UserProfileDomain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,9 +48,12 @@ namespace Project {
             // Register application types
             container.Register<IPrincipal>(Reuse.InWebRequest, Made.Of(() => PrincipalFactory()));
             container.Register<IUserService, UserService>(Reuse.InWebRequest);
+
+            container.Register<IStoryContext, StoryContext>(Reuse.InWebRequest);
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
 
-            container.Register<IStoryDbContext, StoryDbContext>(Reuse.InWebRequest, Made.Of(() => new StoryDbContext()));
+            container.Register<IUserProfileContext, UserProfileContext>(Reuse.InWebRequest);
+            container.Register<IHobbyRepository, HobbyRepository>(Reuse.InWebRequest);
 
         }
 

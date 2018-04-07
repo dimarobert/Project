@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Project.Account.Models;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
+using Project.UserProfileDomain.Models;
 
 namespace Project.Migrations {
     internal class MigrationDbContext : IdentityDbContext<UserInfo> {
@@ -23,9 +24,19 @@ namespace Project.Migrations {
         public DbSet<Story> Stories { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
+
+        // UserProfile Domain
+        public DbSet<Interest> Interests { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<UserInterest> UserInterests { get; set; }
+        public DbSet<UserHobby> UserHobbies { get; set; }
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Configurations.Add(new StoryTypeConfiguration());
+            modelBuilder.Configurations.Add(new CommentTypeConfiguration());
         }
 
     }

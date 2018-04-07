@@ -1,9 +1,11 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
+using AutoFixture.Kernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -48,6 +50,20 @@ namespace Project.Tests.Utils {
 
         internal static T CreateController<T>(this IFixture fixture) where T : Controller {
             return fixture.BuildController<T>().Create();
+        }
+    }
+
+    internal class ManyNavigationPropertyOmitter<ParentEntity> : ISpecimenBuilder {
+
+
+        public object Create(object request, ISpecimenContext context) {
+            var propInfo = request as PropertyInfo;
+            if (propInfo != null
+                && propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
+                && typeof(System.Collections.IEnumerable).IsAssignableFrom(propInfo.PropertyType))
+                return new OmitSpecimen();
+
+            return new NoSpecimen();
         }
     }
 }
