@@ -1,11 +1,10 @@
-﻿using Project.Core.DbContext;
-using Project.UserProfileDomain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity;
+using Project.Account.DAL;
+using Project.UserProfileDomain.Models;
 
 namespace Project.UserProfileDomain.DAL {
     public interface IUserProfileContext {
@@ -18,7 +17,7 @@ namespace Project.UserProfileDomain.DAL {
 
     }
 
-    public class UserProfileContext : BaseDbContext<UserProfileContext>, IUserProfileContext {
+    public class UserProfileContext : IdentityReferenceDbContext<UserProfileContext>, IUserProfileContext {
 
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Hobby> Hobbies { get; set; }

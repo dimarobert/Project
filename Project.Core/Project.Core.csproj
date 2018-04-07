@@ -69,7 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassExtensions\HtmlHelperExtensions.cs" />
+    <Compile Include="RazorExtensions\HtmlHelperExtensions.cs" />
     <Compile Include="DbContext\BaseDbContext.cs" />
     <Compile Include="DbContext\Extensions.cs" />
     <Compile Include="Models\IObjectWithState.cs" />

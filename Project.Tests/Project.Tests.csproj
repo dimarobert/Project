@@ -136,6 +136,10 @@
       <Project>{836D9956-1F92-4D9F-9A31-DF3E7DECC354}</Project>
       <Name>AccountDomain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+      <Project>{4931192D-5913-475C-BD63-3C3DA6B14F5C}</Project>
+      <Name>Project.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project\Project.csproj">
       <Project>{F1010B26-095B-4EF4-9B03-44C370C7784A}</Project>
       <Name>Project</Name>
