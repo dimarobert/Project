@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using Moq;
-using Project.Services.Account;
+using Project.Account.Services;
 using Project.Tests.Utils;
 using System;
 using System.Collections.Generic;

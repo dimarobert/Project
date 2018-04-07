@@ -1,35 +1,29 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Project.DAL.Tasks;
-using Project.Repositories.Tasks;
-using Project.Models.Account;
-using Project.Services.Account;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Project.Account.Services;
+using Project.StoryDomain.Repositories;
 
 namespace Project.Controllers {
     public class HomeController : Controller {
 
-        //readonly ApplicationUserManager userManager;
         readonly IUserService userService;
-        readonly ITaskRepository taskRepository;
+        readonly IStoryRepository storyRepository;
 
-        public HomeController(/*ApplicationUserManager userManager,*/ IUserService userService, ITaskRepository taskManager) {
-            //this.userManager = userManager;
+        public HomeController(IUserService userService, IStoryRepository storyRepository) {
             this.userService = userService;
-            this.taskRepository = taskManager;
+            this.storyRepository = storyRepository;
         }
 
         public ActionResult Index() {
             if (!userService.IsAuthenticated)
                 return View();
 
-            var tasks = taskRepository.GetUserTasks(userService.GetUserId());
+            var userStories = storyRepository.GetUserStories(userService.GetUserId());
 
-            return View("TaskList", tasks);
+            return View("StoryList", userStories);
         }
 
         [Route("About")]
@@ -46,8 +40,5 @@ namespace Project.Controllers {
             return View();
         }
 
-        //private UserInfo GetCurrentUser() {
-        //    return UserManager.FindById(User.Identity.GetUserId());
-        //}
     }
 }

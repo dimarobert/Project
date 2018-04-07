@@ -6,7 +6,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using Project.Models.Account;
+using Project.Account.Models;
 
 namespace Project {
     public partial class Startup {

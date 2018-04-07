@@ -5,10 +5,11 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataProtection;
 using Owin;
-using Project.DAL.Tasks;
-using Project.Repositories.Tasks;
-using Project.Models.Account;
-using Project.Services.Account;
+using Project.Account.DAL;
+using Project.Account.Models;
+using Project.Account.Services;
+using Project.StoryDomain.DAL;
+using Project.StoryDomain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,9 +46,9 @@ namespace Project {
             // Register application types
             container.Register<IPrincipal>(Reuse.InWebRequest, Made.Of(() => PrincipalFactory()));
             container.Register<IUserService, UserService>(Reuse.InWebRequest);
-            container.Register<ITaskRepository, TaskRepository>(Reuse.InWebRequest);
+            container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
 
-            container.Register<ITaskDbContext, TaskDbContext>(Reuse.InWebRequest, Made.Of(() => new TaskDbContext()));
+            container.Register<IStoryDbContext, StoryDbContext>(Reuse.InWebRequest, Made.Of(() => new StoryDbContext()));
 
         }
 
