@@ -5,7 +5,7 @@ namespace Project.StoryDomain.Models {
 
         public int Id { get; set; }
 
-        public int StroyId { get; set; }
+        public int StoryId { get; set; }
 
         public string UserId { get; set; }
 
