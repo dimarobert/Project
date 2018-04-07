@@ -1,44 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using Microsoft.AspNet.Identity;
+using Xunit;
 using Moq;
 using Project;
 using Project.Controllers;
-using Project.DAL.Tasks;
-using Project.Managers.Tasks;
-using Project.Models.Account;
-using Project.Models.Tasks;
-using Project.Services.Account;
 using Project.Tests.Utils;
-using Xunit;
+using Project.StoryDomain.Repositories;
+using Project.Account.Services;
+using Project.StoryDomain.Models;
 
 namespace Project.Tests.Controllers {
 
     public class HomeControllerTest {
 
 
-        IFixture CreateFixture() {
-            return new Fixture().Customize(new WebModelCustomization());
-        }
-
-
         [Fact]
         public void Index_AnonymousUser_ShouldDisplayLandingPage() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var userService = fixture.Freeze<Mock<IUserService>>();
             userService.Setup(i => i.IsAuthenticated).Returns(false);
 
-            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
+            var storyRepository = fixture.Freeze<Mock<IStoryRepository>>();
 
             var controller = fixture.CreateController<HomeController>();
 
@@ -52,17 +42,17 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Index_AuthenticatedUser_ShouldDisplayTaskList() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
-            var tasks = fixture.CreateMany<Task>(3).ToList();
+            var userStories = fixture.CreateMany<Story>(3).ToList();
 
-            var taskManager = fixture.Freeze<Mock<ITaskManager>>();
-            taskManager.Setup(c => c.GetUserTasks(It.IsAny<string>())).Returns(tasks);
+            var taskRepository = fixture.Freeze<Mock<IStoryRepository>>();
+            taskRepository.Setup(c => c.GetUserStories(It.IsAny<string>())).Returns(userStories);
 
             var userService = fixture.Freeze<Mock<IUserService>>();
             userService.Setup(i => i.IsAuthenticated).Returns(true);
-            userService.Setup(i => i.GetUserId()).Returns(tasks.First().UserId);
+            userService.Setup(i => i.GetUserId()).Returns(userStories.First().UserId);
 
             var controller = fixture.CreateController<HomeController>();
 
@@ -71,15 +61,15 @@ namespace Project.Tests.Controllers {
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("TaskList", result.ViewName);
+            Assert.Equal("StoryList", result.ViewName);
 
-            Assert.IsType<List<Task>>(result.Model);
-            Assert.Equal(tasks.Count, (result.Model as List<Task>).Count);
+            Assert.IsType<List<Story>>(result.Model);
+            Assert.Equal(userStories.Count, (result.Model as List<Story>).Count);
         }
 
         [Fact]
         public void About() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var controller = fixture.CreateController<HomeController>();
@@ -93,7 +83,7 @@ namespace Project.Tests.Controllers {
 
         [Fact]
         public void Contact() {
-            var fixture = CreateFixture();
+            var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
             var controller = fixture.CreateController<HomeController>();

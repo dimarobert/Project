@@ -1,0 +1,12 @@
+﻿@using Project.StoryDomain.Models
+@model IList<Story>
+
+@{
+    ViewBag.Title = "User Stories";
+}
+
+<ul>
+    @foreach (var story in Model) {
+        <li>@story.Title</li>
+    }
+</ul>
