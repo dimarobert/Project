@@ -9,13 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Tests", "Project.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "Migrations\Migrations.csproj", "{3A31D171-2D34-4234-A2DA-A06450260D46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{4931192D-5913-475C-BD63-3C3DA6B14F5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Core", "Project.Core\Project.Core.csproj", "{4931192D-5913-475C-BD63-3C3DA6B14F5C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountDomain", "AccountDomain\AccountDomain.csproj", "{836D9956-1F92-4D9F-9A31-DF3E7DECC354}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoryDomain", "StoryDomain\StoryDomain.csproj", "{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domains", "Domains", "{02ECD8E9-1CAA-407A-9888-CD74086BD4B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserProfileDomain", "UserProfileDomain\UserProfileDomain.csproj", "{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{836D9956-1F92-4D9F-9A31-DF3E7DECC354} = {02ECD8E9-1CAA-407A-9888-CD74086BD4B2}
 		{3937F142-0A90-4FA1-9CD4-23AC2111D0C7} = {02ECD8E9-1CAA-407A-9888-CD74086BD4B2}
+		{ECEF368E-B9AE-41C2-AF74-539BAE460AA7} = {02ECD8E9-1CAA-407A-9888-CD74086BD4B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA630EEC-D394-4820-AC14-836F407B947A}

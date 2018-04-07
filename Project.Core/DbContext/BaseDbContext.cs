@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 
-namespace Helpers.DbContextHelpers {
-    public class BaseDbContext<TContext> : DbContext where TContext : DbContext {
+namespace Project.Core.DbContext {
+    public class BaseDbContext<TContext> : System.Data.Entity.DbContext where TContext : System.Data.Entity.DbContext {
 
 
         static BaseDbContext() {

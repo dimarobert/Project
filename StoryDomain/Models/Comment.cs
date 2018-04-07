@@ -1,4 +1,5 @@
 ﻿using Project.Account.Models;
+using Project.Core.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Project.StoryDomain.Models {
 
     [Table("Comments")]
-    public class Comment {
+    public class Comment : ObjectWithState {
         public int Id { get; set; }
 
         [Required]
@@ -29,5 +30,7 @@ namespace Project.StoryDomain.Models {
 
         [ForeignKey("ParentCommentId")]
         public virtual Comment ParentComment { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

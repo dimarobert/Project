@@ -58,6 +58,14 @@
     <Compile Include="Migrations\201804071708398_InitialMigration.Designer.cs">
       <DependentUpon>201804071708398_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804071829508_AddInterestsAndHobbies.cs" />
+    <Compile Include="Migrations\201804071829508_AddInterestsAndHobbies.Designer.cs">
+      <DependentUpon>201804071829508_AddInterestsAndHobbies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804071832104_MakeUserRequiredForInterestsAndHobbies.cs" />
+    <Compile Include="Migrations\201804071832104_MakeUserRequiredForInterestsAndHobbies.Designer.cs">
+      <DependentUpon>201804071832104_MakeUserRequiredForInterestsAndHobbies.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,10 +82,20 @@
       <Project>{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}</Project>
       <Name>StoryDomain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UserProfileDomain\UserProfileDomain.csproj">
+      <Project>{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}</Project>
+      <Name>UserProfileDomain</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201804071708398_InitialMigration.resx">
       <DependentUpon>201804071708398_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804071829508_AddInterestsAndHobbies.resx">
+      <DependentUpon>201804071829508_AddInterestsAndHobbies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804071832104_MakeUserRequiredForInterestsAndHobbies.resx">
+      <DependentUpon>201804071832104_MakeUserRequiredForInterestsAndHobbies.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

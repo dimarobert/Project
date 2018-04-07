@@ -1,4 +1,5 @@
 ﻿using Project.Account.Models;
+using Project.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 
 namespace Project.StoryDomain.Models {
-    public class Story {
+    public class Story : ObjectWithState {
 
         public int Id { get; set; }
 
@@ -18,5 +19,6 @@ namespace Project.StoryDomain.Models {
 
         public virtual UserInfo User { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }
