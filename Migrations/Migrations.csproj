@@ -54,6 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComposedDbContext.cs" />
+    <Compile Include="Migrations\201804071708398_InitialMigration.cs" />
+    <Compile Include="Migrations\201804071708398_InitialMigration.Designer.cs">
+      <DependentUpon>201804071708398_InitialMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +74,11 @@
       <Project>{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}</Project>
       <Name>StoryDomain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201804071708398_InitialMigration.resx">
+      <DependentUpon>201804071708398_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

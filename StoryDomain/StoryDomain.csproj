@@ -49,11 +49,8 @@
   <ItemGroup>
     <Compile Include="DAL\IStoryDbContext.cs" />
     <Compile Include="DAL\StoryDbContext.cs" />
-    <Compile Include="DAL\UserInfoRefMap.cs" />
     <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Reply.cs" />
     <Compile Include="Models\Story.cs" />
-    <Compile Include="Models\UserInfoRef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\StoryRepository.cs" />
   </ItemGroup>
@@ -62,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AccountDomain\AccountDomain.csproj">
+      <Project>{836D9956-1F92-4D9F-9A31-DF3E7DECC354}</Project>
+      <Name>AccountDomain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Helpers\Helpers.csproj">
       <Project>{4931192D-5913-475C-BD63-3C3DA6B14F5C}</Project>
       <Name>Helpers</Name>
