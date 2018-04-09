@@ -50,6 +50,7 @@
     <Compile Include="DAL\UserProfileContext.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Interest.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\UserHobby.cs" />
     <Compile Include="Models\UserInterest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

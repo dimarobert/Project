@@ -22,7 +22,10 @@ namespace Project.Migrations {
 
         // Story domain
         public DbSet<Story> Stories { get; set; }
+        public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Hashtag> Hashtags { get; set; }
 
 
         // UserProfile Domain
@@ -30,6 +33,8 @@ namespace Project.Migrations {
         public DbSet<Goal> Goals { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
         public DbSet<UserGoal> UserGoals { get; set; }
+
+        public DbSet<Notification> Notifications { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {

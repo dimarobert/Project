@@ -9,7 +9,7 @@ using Project.UserProfileDomain.Models;
 
 namespace Project.UserProfileDomain.Repositories {
 
-    public interface IInterestRepository: IEntityRepository<Interest> {
+    public interface IInterestRepository : IEntityRepository<Interest> {
 
         IList<UserInterest> GetUserInterests(string userId);
 

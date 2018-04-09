@@ -70,6 +70,18 @@
     <Compile Include="Migrations\201804091842089_RenameHobbyToGoal.Designer.cs">
       <DependentUpon>201804091842089_RenameHobbyToGoal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804092132183_AddHashtagsAndLikes.cs" />
+    <Compile Include="Migrations\201804092132183_AddHashtagsAndLikes.Designer.cs">
+      <DependentUpon>201804092132183_AddHashtagsAndLikes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804092139471_FixLikesRelations.cs" />
+    <Compile Include="Migrations\201804092139471_FixLikesRelations.Designer.cs">
+      <DependentUpon>201804092139471_FixLikesRelations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804092145133_AddNotifications.cs" />
+    <Compile Include="Migrations\201804092145133_AddNotifications.Designer.cs">
+      <DependentUpon>201804092145133_AddNotifications.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -103,6 +115,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804091842089_RenameHobbyToGoal.resx">
       <DependentUpon>201804091842089_RenameHobbyToGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804092132183_AddHashtagsAndLikes.resx">
+      <DependentUpon>201804092132183_AddHashtagsAndLikes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804092139471_FixLikesRelations.resx">
+      <DependentUpon>201804092139471_FixLikesRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804092145133_AddNotifications.resx">
+      <DependentUpon>201804092145133_AddNotifications.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
