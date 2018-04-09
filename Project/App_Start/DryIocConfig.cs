@@ -53,7 +53,7 @@ namespace Project {
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
 
             container.Register<IUserProfileContext, UserProfileContext>(Reuse.InWebRequest);
-            container.Register<IHobbyRepository, HobbyRepository>(Reuse.InWebRequest);
+            container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
 
         }
 
