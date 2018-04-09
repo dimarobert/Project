@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\UserProfileContext.cs" />
-    <Compile Include="Models\Hobby.cs" />
+    <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Interest.cs" />
     <Compile Include="Models\UserHobby.cs" />
     <Compile Include="Models\UserInterest.cs" />

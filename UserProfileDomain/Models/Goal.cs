@@ -1,7 +1,7 @@
 ﻿using Project.Core.Models;
 
 namespace Project.UserProfileDomain.Models {
-    public class Hobby : ObjectWithState {
+    public class Goal : ObjectWithState {
 
         public int Id { get; set; }
 

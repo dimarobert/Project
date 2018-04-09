@@ -66,6 +66,10 @@
     <Compile Include="Migrations\201804071832104_MakeUserRequiredForInterestsAndHobbies.Designer.cs">
       <DependentUpon>201804071832104_MakeUserRequiredForInterestsAndHobbies.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804091842089_RenameHobbyToGoal.cs" />
+    <Compile Include="Migrations\201804091842089_RenameHobbyToGoal.Designer.cs">
+      <DependentUpon>201804091842089_RenameHobbyToGoal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -96,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804071832104_MakeUserRequiredForInterestsAndHobbies.resx">
       <DependentUpon>201804071832104_MakeUserRequiredForInterestsAndHobbies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804091842089_RenameHobbyToGoal.resx">
+      <DependentUpon>201804091842089_RenameHobbyToGoal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

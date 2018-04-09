@@ -9,7 +9,7 @@ using Project.UserProfileDomain.Models;
 
 namespace Project.UserProfileDomain.Repositories {
 
-    public interface IHobbyRepository: IEntityRepository<Hobby> {
+    public interface IHobbyRepository: IEntityRepository<Goal> {
 
         IList<UserInterest> GetUserInterests(string userId);
 
@@ -19,7 +19,7 @@ namespace Project.UserProfileDomain.Repositories {
 
         readonly IUserProfileContext userProfileDbContext;
 
-        public IList<Hobby> All => throw new NotImplementedException();
+        public IList<Goal> All => throw new NotImplementedException();
 
         public HobbyRepository(IUserProfileContext userProfileDbContext) {
             this.userProfileDbContext = userProfileDbContext ?? throw new ArgumentNullException(nameof(userProfileDbContext));
@@ -32,23 +32,23 @@ namespace Project.UserProfileDomain.Repositories {
             return userProfileDbContext.UserInterests.Where(ui => ui.UserId == userId).ToList();
         }
 
-        public IList<Hobby> AllIncluding(params Expression<Func<Hobby, object>>[] includeProperties) {
+        public IList<Goal> AllIncluding(params Expression<Func<Goal, object>>[] includeProperties) {
             throw new NotImplementedException();
         }
 
-        public void Delete(Hobby entity) {
+        public void Delete(Goal entity) {
             throw new NotImplementedException();
         }
 
-        public IList<Hobby> Get(params Expression<Func<Hobby, object>>[] filters) {
+        public IList<Goal> Get(params Expression<Func<Goal, object>>[] filters) {
             throw new NotImplementedException();
         }
 
-        public IList<Hobby> GetIncluding(Expression<Func<Hobby, object>>[] filters, Expression<Func<Hobby, object>>[] includeProperties) {
+        public IList<Goal> GetIncluding(Expression<Func<Goal, object>>[] filters, Expression<Func<Goal, object>>[] includeProperties) {
             throw new NotImplementedException();
         }
 
-        public void InsertOrUpdate(Hobby entity) {
+        public void InsertOrUpdate(Goal entity) {
             throw new NotImplementedException();
         }
 

@@ -3,7 +3,7 @@ using Project.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project.UserProfileDomain.Models {
-    public class UserHobby : ObjectWithState {
+    public class UserGoal : ObjectWithState {
         public int Id { get; set; }
 
         public int HobbyId { get; set; }
@@ -12,7 +12,7 @@ namespace Project.UserProfileDomain.Models {
         public string UserId { get; set; }
 
 
-        public Hobby Hobby { get; set; }
+        public Goal Goal { get; set; }
 
         public UserInfo User { get; set; }
     }
