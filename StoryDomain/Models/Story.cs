@@ -20,5 +20,7 @@ namespace Project.StoryDomain.Models {
         public virtual UserInfo User { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }
