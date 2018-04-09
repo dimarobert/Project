@@ -9,19 +9,19 @@ using Project.UserProfileDomain.Models;
 
 namespace Project.UserProfileDomain.Repositories {
 
-    public interface IHobbyRepository: IEntityRepository<Hobby> {
+    public interface IInterestRepository: IEntityRepository<Interest> {
 
         IList<UserInterest> GetUserInterests(string userId);
 
     }
 
-    public class HobbyRepository : IHobbyRepository {
+    public class InterestRepository : IInterestRepository {
 
         readonly IUserProfileContext userProfileDbContext;
 
-        public IList<Hobby> All => throw new NotImplementedException();
+        public IList<Interest> All => throw new NotImplementedException();
 
-        public HobbyRepository(IUserProfileContext userProfileDbContext) {
+        public InterestRepository(IUserProfileContext userProfileDbContext) {
             this.userProfileDbContext = userProfileDbContext ?? throw new ArgumentNullException(nameof(userProfileDbContext));
         }
 
@@ -32,23 +32,23 @@ namespace Project.UserProfileDomain.Repositories {
             return userProfileDbContext.UserInterests.Where(ui => ui.UserId == userId).ToList();
         }
 
-        public IList<Hobby> AllIncluding(params Expression<Func<Hobby, object>>[] includeProperties) {
+        public IList<Interest> AllIncluding(params Expression<Func<Interest, object>>[] includeProperties) {
             throw new NotImplementedException();
         }
 
-        public void Delete(Hobby entity) {
+        public void Delete(Interest entity) {
             throw new NotImplementedException();
         }
 
-        public IList<Hobby> Get(params Expression<Func<Hobby, object>>[] filters) {
+        public IList<Interest> Get(params Expression<Func<Interest, object>>[] filters) {
             throw new NotImplementedException();
         }
 
-        public IList<Hobby> GetIncluding(Expression<Func<Hobby, object>>[] filters, Expression<Func<Hobby, object>>[] includeProperties) {
+        public IList<Interest> GetIncluding(Expression<Func<Interest, object>>[] filters, Expression<Func<Interest, object>>[] includeProperties) {
             throw new NotImplementedException();
         }
 
-        public void InsertOrUpdate(Hobby entity) {
+        public void InsertOrUpdate(Interest entity) {
             throw new NotImplementedException();
         }
 

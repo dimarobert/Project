@@ -27,9 +27,9 @@ namespace Project.Migrations {
 
         // UserProfile Domain
         public DbSet<Interest> Interests { get; set; }
-        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet<Goal> Goals { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
-        public DbSet<UserHobby> UserHobbies { get; set; }
+        public DbSet<UserGoal> UserGoals { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
