@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Project.ViewModels.Story
 {
-    public class HashtagViewModels
+    public class HashtagVM
     {
         public int Id { get; set; }
 

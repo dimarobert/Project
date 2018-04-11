@@ -9,7 +9,7 @@ using Project.ViewModels.Story;
 
 namespace Project.ViewModels.Story
 {
-    public class CommentViewModels
+    public class CommentVM
     {
         public int Id { get; set; }
 
@@ -24,12 +24,12 @@ namespace Project.ViewModels.Story
         public virtual UserInfo User { get; set; }
 
         [Required]
-        public virtual StoryViewModels ParentStory { get; set; }
+        public virtual StoryVM ParentStory { get; set; }
 
         [ForeignKey("ParentCommentId")]
-        public virtual CommentViewModels ParentComment { get; set; }
+        public virtual CommentVM ParentComment { get; set; }
 
-        public virtual ICollection<CommentViewModels> Comments { get; set; }
+        public virtual ICollection<CommentVM> Comments { get; set; }
 
     }
 }

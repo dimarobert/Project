@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Project.ViewModels.Story
 {
-    public class StoryViewModels
+    public class StoryVM
     {
         public int Id { get; set; }
 
@@ -16,8 +16,8 @@ namespace Project.ViewModels.Story
 
         public virtual UserInfo User { get; set; }
 
-        public virtual ICollection<CommentViewModels> Comments { get; set; }
+        public virtual ICollection<CommentVM> Comments { get; set; }
 
-        public virtual ICollection<LikeViewModels> Likes { get; set; }
+        public virtual ICollection<LikeVM> Likes { get; set; }
     }
 }

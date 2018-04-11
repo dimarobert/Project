@@ -6,7 +6,7 @@ using Project.Account.Models;
 
 namespace Project.ViewModels.Story
 {
-    public class LikeViewModels
+    public class LikeVM
     {
         public int Id { get; set; }
 
@@ -18,6 +18,6 @@ namespace Project.ViewModels.Story
 
         public virtual UserInfo User { get; set; }
 
-        public virtual StoryViewModels Story { get; set; }
+        public virtual StoryVM Story { get; set; }
     }
 }
