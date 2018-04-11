@@ -1,19 +1,22 @@
 ﻿using Project.Account.Models;
 using Project.Core.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.UserProfileDomain.Models {
     public class UserGoal : ObjectWithState {
         public int Id { get; set; }
 
-        public int HobbyId { get; set; }
+        public int GoalId { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        [ForeignKey("UserProfile")]
+        public int UserProfileId { get; set; }
 
 
         public Goal Goal { get; set; }
 
-        public UserInfo User { get; set; }
+        [ForeignKey("UserProfileId")]
+        public UserProfile UserProfile { get; set; }
     }
 }

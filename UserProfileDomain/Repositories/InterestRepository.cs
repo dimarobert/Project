@@ -29,7 +29,7 @@ namespace Project.UserProfileDomain.Repositories {
             if (string.IsNullOrWhiteSpace(userId))
                 throw new ArgumentException($"Could not retrieve user interests. Invalid parameter value: '{userId}'.", nameof(userId));
 
-            return userProfileDbContext.UserInterests.Where(ui => ui.UserId == userId).ToList();
+            return userProfileDbContext.UserInterests.Where(ui => ui.UserProfile.UserId == userId).ToList();
         }
 
         public IList<Interest> AllIncluding(params Expression<Func<Interest, object>>[] includeProperties) {
@@ -56,5 +56,4 @@ namespace Project.UserProfileDomain.Repositories {
             throw new NotImplementedException();
         }
     }
-
 }
