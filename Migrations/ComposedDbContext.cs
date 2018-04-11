@@ -35,6 +35,7 @@ namespace Project.Migrations {
         public DbSet<UserGoal> UserGoals { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
