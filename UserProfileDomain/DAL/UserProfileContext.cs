@@ -17,6 +17,8 @@ namespace Project.UserProfileDomain.DAL {
 
         DbSet<Notification> Notifications { get; set; }
 
+        DbSet<UserProfile> UserProfiles { get; set; }
+
     }
 
     public class UserProfileContext : IdentityReferenceDbContext<UserProfileContext>, IUserProfileContext {
@@ -27,6 +29,7 @@ namespace Project.UserProfileDomain.DAL {
         public DbSet<UserGoal> UserHobbies { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
     }
 }

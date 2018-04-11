@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-8 col-md-6">
+                        <h3 class="mb-0 text-truncated">Mike Anamendolla</h3>
+                        <p class="lead">Web / UI Designer</p>
+                        <p>
+                            I love to read, hang out with friends, watch football, listen to music, and learn new things.
+                        </p>
+                        <p>
+                            <span class="badge badge-info tags">html5</span>
+                            <span class="badge badge-info tags">css3</span>
+                            <span class="badge badge-info tags">nodejs</span>
+                        </p>
+                    </div>
+                    <div class="col-12 col-lg-4 col-md-6 text-center">
+                        <img src="https://robohash.org/68.186.255.198.png" alt="" class="mx-auto rounded-circle img-fluid">
+                        <br>
+                        <ul class="list-inline ratings text-center" title="Ratings">
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#"><span class="fa fa-star"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <h3 class="mb-0">20.7K</h3>
+                        <small>Followers</small>
+                        <button class="btn btn-block btn-outline-success"><span class="fa fa-plus-circle"></span> Follow</button>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <h3 class="mb-0">245</h3>
+                        <small>Following</small>
+                        <button class="btn btn-outline-info btn-block"><span class="fa fa-user"></span> View Profile</button>
+                    </div>
+                    <div class="col-12 col-lg-12">
+                        <h3 class="mb-0">43</h3>
+                        <small>Snippets</small>
+                        <button type="button" class="btn btn-outline-primary btn-block"><span class="fa fa-gear"></span> Options</button>
+                    </div>
+                    <!--/col-->
+                </div>
+                <!--/row-->
+            </div>
+            <!--/card-block-->
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8"><h3>Add Story</h3></div>
+                    <div class="col-4">
+                        <select class="custom-select">
+                            <option value="1" selected>One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <textarea class="form-control" id="exampleTextarea" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary float-right">Post <i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="margin-top:15px;">
+            <div class="card-body">
+                <div class="comments col-md-12" id="comments">
+                    <h3 class="mb-2">Comments</h3>
+                    <!-- comment -->
+                    <div class="comment mb-2 row">
+                        <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                            <a href=""><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/m103.jpg" alt="avatar"></a>
+                        </div>
+                        <div class="comment-content col-md-11 col-sm-10">
+                            <h6 class="small comment-meta"><a href="#">admin</a> Today, 2:38</h6>
+                            <div class="comment-body">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod <a href>http://wwwwww.com</a> tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
+                                    <br>
+                                    <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- reply is indented -->
+                        <div class="comment-reply col-md-11 offset-md-1 col-sm-10 offset-sm-2">
+                            <div class="row">
+                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                                    <a href=""><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="avatar"></a>
+                                </div>
+                                <div class="comment-content col-md-11 col-sm-10 col-12">
+                                    <h6 class="small comment-meta"><a href="#">phildownney</a> Today, 12:31</h6>
+                                    <div class="comment-body">
+                                        <p>
+                                            Really?? Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat.
+                                            <br>
+                                            <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /reply is indented -->
+                    </div>
+                    <!-- /comment -->
+                    <!-- comment -->
+                    <div class="comment mb-2 row">
+                        <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                            <a href=""><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/w102.jpg" alt="avatar"></a>
+                        </div>
+                        <div class="comment-content col-md-11 col-sm-10">
+                            <h6 class="small comment-meta"><a href="#">maslarino</a> Yesterday, 5:03 PM</h6>
+                            <div class="comment-body">
+                                <p>
+                                    Sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
+                                    <br>
+                                    <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /comment -->
+                    <div class="row pt-2">
+                        <div class="col-12">
+                            <a href="" class="btn btn-sm btn-primary">Comment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
