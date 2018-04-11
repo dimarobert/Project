@@ -82,6 +82,22 @@
     <Compile Include="Migrations\201804092145133_AddNotifications.Designer.cs">
       <DependentUpon>201804092145133_AddNotifications.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804111850462_AddUserProfile.cs" />
+    <Compile Include="Migrations\201804111850462_AddUserProfile.Designer.cs">
+      <DependentUpon>201804111850462_AddUserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804111856115_FixUserGoals.cs" />
+    <Compile Include="Migrations\201804111856115_FixUserGoals.Designer.cs">
+      <DependentUpon>201804111856115_FixUserGoals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804111902546_FixUserProfile.cs" />
+    <Compile Include="Migrations\201804111902546_FixUserProfile.Designer.cs">
+      <DependentUpon>201804111902546_FixUserProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804111910464_FixUserProfile2.cs" />
+    <Compile Include="Migrations\201804111910464_FixUserProfile2.Designer.cs">
+      <DependentUpon>201804111910464_FixUserProfile2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -124,6 +140,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804092145133_AddNotifications.resx">
       <DependentUpon>201804092145133_AddNotifications.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804111850462_AddUserProfile.resx">
+      <DependentUpon>201804111850462_AddUserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804111856115_FixUserGoals.resx">
+      <DependentUpon>201804111856115_FixUserGoals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804111902546_FixUserProfile.resx">
+      <DependentUpon>201804111902546_FixUserProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804111910464_FixUserProfile2.resx">
+      <DependentUpon>201804111910464_FixUserProfile2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

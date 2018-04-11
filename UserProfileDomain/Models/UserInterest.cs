@@ -1,6 +1,7 @@
 ﻿using Project.Account.Models;
 using Project.Core.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.UserProfileDomain.Models {
     public class UserInterest : ObjectWithState {
@@ -10,13 +11,15 @@ namespace Project.UserProfileDomain.Models {
         public int InterestId { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        [ForeignKey("UserProfile")]
+        public int UserProfileId { get; set; }
 
 
 
         public Interest Interest { get; set; }
 
-        public UserInfo User { get; set; }
+        [ForeignKey("UserProfileId")]
+        public UserProfile UserProfile { get; set; }
 
     }
 }
