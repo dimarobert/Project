@@ -30,6 +30,12 @@ namespace Project.Tests.Utils {
 
     internal static class FixtureExtensions {
 
+        /// <summary>
+        /// Creates a fixture with <see cref="AutoMoqCustomization"/> 
+        /// and also ignores the MVC Controller properties that trigger 
+        /// circular reference exceptions.
+        /// </summary>
+        /// <returns></returns>
         internal static IFixture CreateFixture() {
             return new Fixture().Customize(new WebModelCustomization());
         }

@@ -13,7 +13,10 @@ namespace Project {
 
         public static void Configure() {
             Mapper.Initialize(cfg => {
-                cfg.CreateMap<UserProfile, UserProfileVM>().ReverseMap();
+                cfg.CreateMap<UserProfile, UserProfileVM>()
+                    .ForMember(up => up.Email, opt => opt.MapFrom(src => src.User.Email))
+                    .ReverseMap();
+
                 cfg.CreateMap<UserProfile, UserProfileRefVM>();
 
                 cfg.CreateMap<Interest, InterestVM>().ReverseMap();
