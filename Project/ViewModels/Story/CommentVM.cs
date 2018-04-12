@@ -26,7 +26,6 @@ namespace Project.ViewModels.Story
         [Required]
         public virtual StoryVM ParentStory { get; set; }
 
-        [ForeignKey("ParentCommentId")]
         public virtual CommentVM ParentComment { get; set; }
 
         public virtual ICollection<CommentVM> Comments { get; set; }
