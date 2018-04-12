@@ -18,6 +18,8 @@ namespace Project {
             // This is here to initialize the container
             var container = DryIocConfig.GetContainer();
             DryIocConfig.WithMvc();
+
+            AutoMapperConfig.Configure();
         }
     }
 }

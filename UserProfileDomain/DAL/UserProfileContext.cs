@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.Entity;
 using Project.Account.DAL;
 using Project.UserProfileDomain.Models;
+using Project.Core.DbContext;
 
 namespace Project.UserProfileDomain.DAL {
     public interface IUserProfileContext {
@@ -21,7 +22,7 @@ namespace Project.UserProfileDomain.DAL {
 
     }
 
-    public class UserProfileContext : IdentityReferenceDbContext<UserProfileContext>, IUserProfileContext {
+    public class UserProfileContext : BaseDbContext<UserProfileContext>, IUserProfileContext {
 
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Goal> Hobbies { get; set; }
