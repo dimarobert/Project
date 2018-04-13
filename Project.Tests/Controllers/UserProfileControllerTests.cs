@@ -23,7 +23,7 @@ namespace Project.Tests.Controllers {
 
 
         [Fact]
-        public void Index_ShouldReturnAn_UserProfileVM() {
+        public async Task Index_ShouldReturnAn_UserProfileVM() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -32,19 +32,20 @@ namespace Project.Tests.Controllers {
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             var userProfile = fixture.Create<UserProfile>();
 
-            upRepo.Setup(r => r.GetUserProfile(It.IsAny<string>())).Returns(userProfile);
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(userProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = sut.Index();
+            var view = await sut.Index();
 
             // Assert
+            upRepo.Verify(p => p.GetUserProfileAsync(It.IsAny<string>()));
             Assert.IsType<UserProfileVM>(view.Model);
         }
 
         [Fact]
-        public void Index_ViewModel_ShouldMatch_RepositoryResult() {
+        public async Task Index_ViewModel_ShouldMatch_RepositoryResult() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -56,12 +57,12 @@ namespace Project.Tests.Controllers {
             var userProfile = fixture.Create<UserProfile>();
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.GetUserProfile(It.IsAny<string>())).Returns(userProfile);
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(userProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = sut.Index();
+            var view = await sut.Index();
             var model = view.Model as UserProfileVM;
 
             // Assert
@@ -69,15 +70,15 @@ namespace Project.Tests.Controllers {
             Assert.Equal(userProfile.UserId, model.UserId);
             Assert.Equal(userProfile.AboutMe, model.AboutMe);
             Assert.Equal(userProfile.BirthDate, model.BirthDate);
+            Assert.Equal(userProfile.User.UserName, model.UserName);
             Assert.Equal(userProfile.User.Email, model.Email);
             Assert.Equal(userProfile.FirstName, model.FirstName);
             Assert.Equal(userProfile.LastName, model.LastName);
-            //Assert.Equal(userProfile., model.NickName);
         }
 
 
         [Fact]
-        public void SaveProfile_ShouldReturn_IndexView() {
+        public async Task SaveProfile_ShouldReturn_IndexView() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -89,14 +90,14 @@ namespace Project.Tests.Controllers {
             var userProfileVM = fixture.Create<UserProfileVM>();
 
             // Act
-            var view = sut.SaveProfile(userProfileVM);
+            var view = await sut.SaveProfile(userProfileVM);
 
             // Assert
             Assert.Equal("Index", view.ViewName);
         }
 
         [Fact]
-        public void SaveProfile_ShouldReturnModel_UserProfileVM() {
+        public async Task SaveProfile_ShouldReturnModel_UserProfileVM() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -108,14 +109,14 @@ namespace Project.Tests.Controllers {
             var userProfileVM = fixture.Create<UserProfileVM>();
 
             // Act
-            var view = sut.SaveProfile(userProfileVM);
+            var view = await sut.SaveProfile(userProfileVM);
 
             // Assert
             Assert.IsType<UserProfileVM>(view.Model);
         }
 
         [Fact]
-        public void SaveProfile_ShouldCall_UserProfileRepo_InsertOrUpdate_ForValidUserId() {
+        public async Task SaveProfile_ShouldCall_UserProfileRepo_InsertOrUpdate_ForValidUserId() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -137,14 +138,14 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = sut.SaveProfile(userProfileVM);
+            var view = await sut.SaveProfile(userProfileVM);
 
             // Assert
             upRepo.Verify(r => r.InsertOrUpdate(It.IsAny<UserProfile>()));
         }
 
         [Fact]
-        public void SaveProfile_ShouldNot_UpdateProfileForAnotherUser() {
+        public async Task SaveProfile_ShouldNot_UpdateProfileForAnotherUser() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -166,7 +167,7 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = sut.SaveProfile(userProfileVM);
+            var view = await sut.SaveProfile(userProfileVM);
 
             // Assert
             Assert.False(sut.ModelState.IsValid);
@@ -174,7 +175,7 @@ namespace Project.Tests.Controllers {
         }
 
         [Fact]
-        public void SaveProfile_ShouldReturn_TheUpdatedVM() {
+        public async Task SaveProfile_ShouldReturn_TheUpdatedVM() {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
@@ -190,31 +191,32 @@ namespace Project.Tests.Controllers {
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             upRepo.Setup(r => r.InsertOrUpdate(It.IsAny<UserProfile>()))
                 .Callback<UserProfile>(p => savedUserProfile = p);
-            upRepo.Setup(r => r.GetUserProfile(It.IsAny<string>()))
-                .Returns(() => savedUserProfile);
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+                .Returns(() => Task.FromResult(savedUserProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
-            var userProfileVM = fixture.Build<UserProfileVM>()
+            var expectedVM = fixture.Build<UserProfileVM>()
                 .With(profile => profile.UserId, loggedInUserId)
                 .Create();
 
             // Act
-            var view = sut.SaveProfile(userProfileVM);
+            var view = await sut.SaveProfile(expectedVM);
 
             // Assert
-            upRepo.Verify(r => r.Save());
-            upRepo.Verify(r => r.GetUserProfile(It.IsAny<string>()));
+            upRepo.Verify(r => r.SaveAsync());
+            upRepo.Verify(r => r.GetUserProfileAsync(It.IsAny<string>()));
 
             Assert.IsType<UserProfileVM>(view.Model);
 
             var model = view.Model as UserProfileVM;
-            Assert.Equal(userProfileVM.Id, model.Id);
-            Assert.Equal(userProfileVM.UserId, model.UserId);
-            Assert.Equal(userProfileVM.AboutMe, model.AboutMe);
-            Assert.Equal(userProfileVM.BirthDate, model.BirthDate);
-            Assert.Equal(userProfileVM.Email, model.Email);
-            Assert.Equal(userProfileVM.FirstName, model.FirstName);
-            Assert.Equal(userProfileVM.LastName, model.LastName);
+            Assert.Equal(expectedVM.Id, model.Id);
+            Assert.Equal(expectedVM.UserId, model.UserId);
+            Assert.Equal(expectedVM.AboutMe, model.AboutMe);
+            Assert.Equal(expectedVM.BirthDate, model.BirthDate);
+            Assert.Equal(expectedVM.UserName, model.UserName);
+            Assert.Equal(expectedVM.Email, model.Email);
+            Assert.Equal(expectedVM.FirstName, model.FirstName);
+            Assert.Equal(expectedVM.LastName, model.LastName);
         }
     }
 }

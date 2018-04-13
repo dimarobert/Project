@@ -17,11 +17,15 @@ namespace Project.ViewModels
 
         public string AboutMe { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
-        public string NickName { get; set; }
+        public string UserName { get; set; }
 
         public string Email { get; set; }
+
+        public List<InterestVM> Interests { get; set; }
+
+        public List<GoalVM> Goals { get; set; }
 
     }
 }

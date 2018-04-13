@@ -16,10 +16,10 @@ namespace Project.UserProfileDomain.Models {
 
 
 
-        public Interest Interest { get; set; }
+        public virtual Interest Interest { get; set; }
 
         [ForeignKey("UserProfileId")]
-        public UserProfile UserProfile { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
 
     }
 }

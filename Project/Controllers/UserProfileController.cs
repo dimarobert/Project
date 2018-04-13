@@ -6,6 +6,7 @@ using Project.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -20,15 +21,16 @@ namespace Project.Controllers {
         }
 
         // GET: UserProfile
-        public ViewResult Index() {
-            var userProfile = userProfileRepository.GetUserProfile(userService.GetUserId());
+        public async Task<ViewResult> Index() {
+            var userProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             return View(viewModel);
         }
 
         [HttpPost]
-        public ViewResult SaveProfile(UserProfileVM userProfileVM) {
+        [ValidateAntiForgeryToken]
+        public async Task<ViewResult> SaveProfile(UserProfileVM userProfileVM) {
 
             if (userService.GetUserId() != userProfileVM.UserId) {
                 ModelState.AddModelError("UserId", "You cannot save the profile of another user.");
@@ -37,8 +39,8 @@ namespace Project.Controllers {
 
             var userProfile = Mapper.Map<UserProfile>(userProfileVM);
             userProfileRepository.InsertOrUpdate(userProfile);
-            userProfileRepository.Save();
-            var updatedProfile = userProfileRepository.GetUserProfile(userService.GetUserId());
+            await userProfileRepository.SaveAsync();
+            var updatedProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
             var updatedViewModel = Mapper.Map<UserProfileVM>(updatedProfile);
             return View("Index", updatedViewModel);

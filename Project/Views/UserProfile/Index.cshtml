@@ -1,4 +1,4 @@
-﻿
+﻿@model Project.ViewModels.UserProfileVM
 @{
     ViewBag.Title = "Profile";
 }
@@ -12,12 +12,25 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-lg-8 col-md-6">
-                        <h3 class="mb-0 text-truncated">Mike Anamendolla</h3>
+                        <h3 class="mb-0 text-truncated">
+                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName)) {
+                                <span class="text-muted font-italic">No name</span>
+                            } else {
+                                @Model.FirstName @Model.LastName
+                            }
+                        </h3>
                         <p class="lead">Web / UI Designer</p>
                         <p>
-                            I love to read, hang out with friends, watch football, listen to music, and learn new things.
+                            @if (string.IsNullOrWhiteSpace(Model.AboutMe)) {
+                                <span class="text-muted font-italic">User did not write anything about him.</span>
+                            } else {
+                                @Model.AboutMe
+                            }
                         </p>
                         <p>
+                            @foreach (var interest in Model.Interests) {
+                                <span class="badge badge-info tags">@interest.Title</span>
+                            }
                             <span class="badge badge-info tags">html5</span>
                             <span class="badge badge-info tags">css3</span>
                             <span class="badge badge-info tags">nodejs</span>
@@ -84,7 +97,10 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="button" class="btn btn-primary float-right">Post <i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-primary float-right">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                            Post
+                        </button>
                     </div>
                 </div>
             </div>
