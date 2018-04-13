@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Project.StoryDomain.DAL {
 
-    public interface IStoryContext {
+    public interface IStoryContext : IDbContext {
 
         DbSet<Story> Stories { get; set; }
         DbSet<Like> Likes { get; set; }
@@ -19,9 +19,8 @@ namespace Project.StoryDomain.DAL {
 
     }
 
-    public class StoryContext : BaseDbContext<StoryContext>, IStoryContext {
+    public class StoryContext : IdentityReferenceDbContext<StoryContext>, IStoryContext {
 
-        //public DbSet<Models.UserInfoRef> UserReferences { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }

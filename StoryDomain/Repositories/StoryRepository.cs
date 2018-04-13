@@ -20,6 +20,8 @@ namespace Project.StoryDomain.Repositories {
 
         public IList<Story> All => throw new NotImplementedException();
 
+        public Task<IList<Story>> AllAsync => throw new NotImplementedException();
+
         public StoryRepository(IStoryContext storyDbContext) {
             this.storyDbContext = storyDbContext ?? throw new ArgumentNullException(nameof(storyDbContext));
         }
@@ -35,11 +37,27 @@ namespace Project.StoryDomain.Repositories {
             throw new NotImplementedException();
         }
 
-        public IList<Story> Get(params Expression<Func<Story, object>>[] filters) {
+        public Task<IList<Story>> AllIncludingAsync(params Expression<Func<Story, object>>[] includeProperties) {
             throw new NotImplementedException();
         }
 
-        public IList<Story> GetIncluding(Expression<Func<Story, object>>[] filters, Expression<Func<Story, object>>[] includeProperties) {
+        public IList<Story> Get(params Expression<Func<Story, bool>>[] filters) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<Story>> GetAsync(params Expression<Func<Story, bool>>[] filters) {
+            throw new NotImplementedException();
+        }
+
+        public IList<Story> GetIncluding(Expression<Func<Story, bool>>[] filters, Expression<Func<Story, object>>[] includeProperties) {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<Story>> GetIncludingAsync(Expression<Func<Story, bool>>[] filters, Expression<Func<Story, object>>[] includeProperties) {
+            throw new NotImplementedException();
+        }
+
+        public void InsertOrUpdateGraph(Story entity) {
             throw new NotImplementedException();
         }
 
@@ -48,6 +66,10 @@ namespace Project.StoryDomain.Repositories {
         }
 
         public void Save() {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync() {
             throw new NotImplementedException();
         }
 

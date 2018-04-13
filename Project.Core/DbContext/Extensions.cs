@@ -13,6 +13,7 @@ namespace Project.Core.DbContext {
             foreach(var entry in context.ChangeTracker.Entries<IObjectWithState>()) {
                 var stateInfo = entry.Entity;
                 entry.State = ModelStateHelpers.ConvertState(stateInfo.State);
+                stateInfo.State = ModelState.Unchanged;
             }
         }
     }
