@@ -10,7 +10,7 @@ using Project.Account.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Project.Account.DAL {
-    public abstract class IdentityReferenceDbContext<TContext> : BaseDbContext<TContext> where TContext : System.Data.Entity.DbContext {
+    public abstract class IdentityReferenceDbContext<TContext> : BaseDbContext<TContext> where TContext : DbContext {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
