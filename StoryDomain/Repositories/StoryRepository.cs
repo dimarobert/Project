@@ -3,6 +3,7 @@ using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -11,6 +12,8 @@ using System.Threading.Tasks;
 namespace Project.StoryDomain.Repositories {
     public interface IStoryRepository : IEntityRepository<Story> {
         IList<Story> GetUserStories(string userId);
+
+        Task<IList<Story>> GetUserStoriesAsync(string userId);
 
     }
 
@@ -31,6 +34,13 @@ namespace Project.StoryDomain.Repositories {
                 return new List<Story>();
 
             return storyDbContext.Stories.Where(story => story.UserId == userId).ToList();
+        }
+
+        public async Task<IList<Story>> GetUserStoriesAsync(string userId) {
+            if (string.IsNullOrWhiteSpace(userId) || storyDbContext.Stories == null)
+                return new List<Story>();
+
+            return await storyDbContext.Stories.Where(story => story.UserId == userId).ToListAsync();
         }
 
         public IList<Story> AllIncluding(params Expression<Func<Story, object>>[] includeProperties) {

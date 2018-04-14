@@ -219,7 +219,6 @@
     <Compile Include="ViewModels\GoalVM.cs" />
     <Compile Include="ViewModels\GroupVM.cs" />
     <Compile Include="ViewModels\InterestVM.cs" />
-    <Compile Include="ViewModels\StoryVM.cs" />
     <Compile Include="ViewModels\Story\CommentVM.cs" />
     <Compile Include="ViewModels\Story\HashtagVM.cs" />
     <Compile Include="ViewModels\Story\LikeVM.cs" />

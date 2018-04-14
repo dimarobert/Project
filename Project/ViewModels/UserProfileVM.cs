@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Project.ViewModels.Story;
 
 namespace Project.ViewModels
 {
@@ -23,9 +24,10 @@ namespace Project.ViewModels
 
         public string Email { get; set; }
 
-        public List<InterestVM> Interests { get; set; }
+        public IList<InterestVM> Interests { get; set; }
 
-        public List<GoalVM> Goals { get; set; }
+        public IList<GoalVM> Goals { get; set; }
 
+        public IList<StoryVM> Stories { get; set; }
     }
 }

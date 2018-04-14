@@ -3,10 +3,13 @@ using Moq;
 using Project.Account.Models;
 using Project.Account.Services;
 using Project.Controllers;
+using Project.StoryDomain.Models;
+using Project.StoryDomain.Repositories;
 using Project.Tests.Utils;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
+using Project.ViewModels.Story;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +25,12 @@ namespace Project.Tests.Controllers {
             AutoMapperUtil.ConfigureOnce();
         }
 
+        void AddCustomizations(IFixture fixture) {
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<StoryVM>());
+        }
+
 
         [Theory]
         [InlineData(null)]
@@ -31,7 +40,7 @@ namespace Project.Tests.Controllers {
         public async Task Index_ShouldReturnAn_UserProfileVM(string userName) {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var userProfile = fixture.Create<UserProfile>();
@@ -52,7 +61,7 @@ namespace Project.Tests.Controllers {
         public async Task Index_CalledWithNoUserName_ShouldReturn_CurrentUserProfileVM() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var currentUserInfo = fixture.Create<UserInfo>();
@@ -63,7 +72,7 @@ namespace Project.Tests.Controllers {
 
             var currentUserProfile = fixture.Build<UserProfile>()
                 .With(up => up.User, currentUserInfo)
-                .With(up=> up.UserId, currentUserInfo.Id)
+                .With(up => up.UserId, currentUserInfo.Id)
                 .Create();
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
@@ -74,7 +83,7 @@ namespace Project.Tests.Controllers {
             // Act
             var view = await sut.Index();
             var model = view.Model as UserProfileVM;
-            
+
             // Assert
             uService.Verify(u => u.GetUserName(), Times.Once());
             uService.Verify(u => u.FindUserByName(It.Is<string>(_userName => _userName == currentUserInfo.UserName)), Times.Once(), "FindUserByName was not called or called with wrong parameter.");
@@ -88,7 +97,7 @@ namespace Project.Tests.Controllers {
         public async Task Index_ViewModel_ShouldMatch_RepositoryResult() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var uService = fixture.Freeze<Mock<IUserService>>();
@@ -116,12 +125,51 @@ namespace Project.Tests.Controllers {
             Assert.Equal(profileFromRepository.LastName, model.LastName);
         }
 
+        [Theory]
+        [InlineData(null, 0)]
+        [InlineData("aaa", 0)]
+        [InlineData(null, 1)]
+        [InlineData("aaa", 1)]
+        [InlineData(null, 10)]
+        [InlineData("aaa", 10)]
+        public async Task Index_ShouldQueryUserStories(string userName, int numberOfStories) {
+            var fixture = FixtureExtensions.CreateFixture();
+            AddCustomizations(fixture);
+
+            // Arrange
+            var userStories = fixture.CreateMany<Story>(numberOfStories).ToList();
+
+            var storyRepo = fixture.Freeze<Mock<IStoryRepository>>();
+            storyRepo.Setup(r => r.GetUserStoriesAsync(It.IsAny<string>())).Returns(Task.FromResult(userStories as IList<Story>));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.Index(userName);
+            var model = view.Model as UserProfileVM;
+
+            // Assert
+            Assert.NotNull(model.Stories);
+            if (!userStories.Any())
+                Assert.Empty(model.Stories);
+            else {
+                Assert.All(model.Stories, storyVM => {
+                    var expectedStory = userStories.First(s => s.Id == storyVM.Id);
+
+                    Assert.Equal(expectedStory.Title, storyVM.Title);
+                    Assert.Equal(expectedStory.User.UserName, storyVM.UserName);
+                    Assert.Equal(expectedStory.UserId, storyVM.UserId);
+                    Assert.Equal(expectedStory.User.Email, storyVM.UserEmail);
+                });
+            }
+        }
+
 
         [Fact]
         public async Task SaveProfile_ShouldReturn_IndexView() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
@@ -142,7 +190,7 @@ namespace Project.Tests.Controllers {
         public async Task SaveProfile_ShouldReturnModel_UserProfileVM(string currentUserId, string savedUserId) {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var uService = fixture.Freeze<Mock<IUserService>>();
@@ -164,7 +212,7 @@ namespace Project.Tests.Controllers {
         public async Task SaveProfile_ShouldCall_UserProfileRepo_InsertOrUpdate_ForValidUserId() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var userId = fixture.Create<string>();
@@ -193,7 +241,7 @@ namespace Project.Tests.Controllers {
         public async Task SaveProfile_ShouldNot_UpdateProfileForAnotherUser() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var anotherUserId = fixture.Create<string>();
@@ -224,7 +272,7 @@ namespace Project.Tests.Controllers {
         public async Task SaveProfile_ShouldReturn_TheUpdatedVM() {
 
             var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            AddCustomizations(fixture);
 
             //Arange
             var loggedInUserId = fixture.Create<string>();

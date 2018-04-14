@@ -1,24 +1,28 @@
-﻿using AutoMapper;
-using Project.Account.Services;
-using Project.UserProfileDomain.Models;
-using Project.UserProfileDomain.Repositories;
-using Project.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
+using Project.Account.Services;
+using Project.StoryDomain.Repositories;
+using Project.UserProfileDomain.Models;
+using Project.UserProfileDomain.Repositories;
+using Project.ViewModels;
+using Project.ViewModels.Story;
 
 namespace Project.Controllers {
     [RoutePrefix("UserProfile")]
     public class UserProfileController : Controller {
         readonly IUserService userService;
         readonly IUserProfileRepository userProfileRepository;
+        readonly IStoryRepository storyRepository;
 
-        public UserProfileController(IUserService userService, IUserProfileRepository userProfileRepository) {
+        public UserProfileController(IUserService userService, IUserProfileRepository userProfileRepository, IStoryRepository storyRepository) {
             this.userService = userService;
             this.userProfileRepository = userProfileRepository;
+            this.storyRepository = storyRepository;
         }
 
         [Route("{userName?}")]
@@ -30,8 +34,11 @@ namespace Project.Controllers {
 
             var userInfo = await userService.FindUserByName(userName);
             var userProfile = await userProfileRepository.GetUserProfileAsync(userInfo.Id);
+            var userStories = await storyRepository.GetUserStoriesAsync(userInfo.Id);
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
+            viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
+
             return View(viewModel);
         }
 

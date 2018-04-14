@@ -72,4 +72,18 @@ namespace Project.Tests.Utils {
             return new NoSpecimen();
         }
     }
+
+    internal class NavigationPropertyOmitter<ParentEntity, NavigationPropertyEntity> : ISpecimenBuilder {
+
+
+        public object Create(object request, ISpecimenContext context) {
+            var propInfo = request as PropertyInfo;
+            if (propInfo != null
+                && propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
+                && typeof(NavigationPropertyEntity).IsAssignableFrom(propInfo.PropertyType))
+                return new OmitSpecimen();
+
+            return new NoSpecimen();
+        }
+    }
 }
