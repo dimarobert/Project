@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace Project.Controllers {
+    [RoutePrefix("UserProfile")]
     public class UserProfileController : Controller {
         readonly IUserService userService;
         readonly IUserProfileRepository userProfileRepository;
@@ -20,9 +21,15 @@ namespace Project.Controllers {
             this.userProfileRepository = userProfileRepository;
         }
 
-        // GET: UserProfile
-        public async Task<ViewResult> Index() {
-            var userProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
+        [Route("{userName?}")]
+        public async Task<ViewResult> Index(string userName = null) {
+
+            if (string.IsNullOrWhiteSpace(userName)) {
+                userName = userService.GetUserName();
+            }
+
+            var userInfo = await userService.FindUserByName(userName);
+            var userProfile = await userProfileRepository.GetUserProfileAsync(userInfo.Id);
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             return View(viewModel);

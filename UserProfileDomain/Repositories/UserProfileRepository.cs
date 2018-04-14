@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Project.Account.Models;
+using Project.Core.DbContext;
 using Project.Core.Repositories;
 using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Models;

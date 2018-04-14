@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Moq;
+using Project.Account.Models;
 using Project.Account.Services;
 using Project.Controllers;
 using Project.Tests.Utils;
@@ -22,26 +23,65 @@ namespace Project.Tests.Controllers {
         }
 
 
-        [Fact]
-        public async Task Index_ShouldReturnAn_UserProfileVM() {
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("123")]
+        public async Task Index_ShouldReturnAn_UserProfileVM(string userName) {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
 
             //Arange
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             var userProfile = fixture.Create<UserProfile>();
 
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(userProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index();
+            var view = await sut.Index(userName);
 
             // Assert
-            upRepo.Verify(p => p.GetUserProfileAsync(It.IsAny<string>()));
             Assert.IsType<UserProfileVM>(view.Model);
+        }
+
+        [Fact]
+        public async Task Index_CalledWithNoUserName_ShouldReturn_CurrentUserProfileVM() {
+
+            var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+
+            //Arange
+            var currentUserInfo = fixture.Create<UserInfo>();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(u => u.GetUserName()).Returns(currentUserInfo.UserName);
+            uService.Setup(u => u.FindUserByName(It.Is<string>(_userName => _userName == currentUserInfo.UserName))).Returns(Task.FromResult(currentUserInfo));
+
+            var currentUserProfile = fixture.Build<UserProfile>()
+                .With(up => up.User, currentUserInfo)
+                .With(up=> up.UserId, currentUserInfo.Id)
+                .Create();
+
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            upRepo.Setup(r => r.GetUserProfileAsync(It.Is<string>(_userId => _userId == currentUserInfo.Id))).Returns(Task.FromResult(currentUserProfile));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.Index();
+            var model = view.Model as UserProfileVM;
+            
+            // Assert
+            uService.Verify(u => u.GetUserName(), Times.Once());
+            uService.Verify(u => u.FindUserByName(It.Is<string>(_userName => _userName == currentUserInfo.UserName)), Times.Once(), "FindUserByName was not called or called with wrong parameter.");
+            upRepo.Verify(r => r.GetUserProfileAsync(It.Is<string>(_userId => _userId == currentUserInfo.Id)), Times.Once(), "GetUserProfileAsync was not called or called with wrong parameter.");
+            Assert.IsType<UserProfileVM>(view.Model);
+            Assert.Equal(currentUserProfile.User.UserName, model.UserName);
+            Assert.Equal(currentUserProfile.UserId, model.UserId);
         }
 
         [Fact]
@@ -54,26 +94,26 @@ namespace Project.Tests.Controllers {
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(u => u.GetUserId()).Returns(() => fixture.Create<string>());
 
-            var userProfile = fixture.Create<UserProfile>();
+            var profileFromRepository = fixture.Create<UserProfile>();
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(userProfile));
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(profileFromRepository));
 
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index();
+            var view = await sut.Index(profileFromRepository.User.UserName);
             var model = view.Model as UserProfileVM;
 
             // Assert
-            Assert.Equal(userProfile.Id, model.Id);
-            Assert.Equal(userProfile.UserId, model.UserId);
-            Assert.Equal(userProfile.AboutMe, model.AboutMe);
-            Assert.Equal(userProfile.BirthDate, model.BirthDate);
-            Assert.Equal(userProfile.User.UserName, model.UserName);
-            Assert.Equal(userProfile.User.Email, model.Email);
-            Assert.Equal(userProfile.FirstName, model.FirstName);
-            Assert.Equal(userProfile.LastName, model.LastName);
+            Assert.Equal(profileFromRepository.Id, model.Id);
+            Assert.Equal(profileFromRepository.UserId, model.UserId);
+            Assert.Equal(profileFromRepository.AboutMe, model.AboutMe);
+            Assert.Equal(profileFromRepository.BirthDate, model.BirthDate);
+            Assert.Equal(profileFromRepository.User.UserName, model.UserName);
+            Assert.Equal(profileFromRepository.User.Email, model.Email);
+            Assert.Equal(profileFromRepository.FirstName, model.FirstName);
+            Assert.Equal(profileFromRepository.LastName, model.LastName);
         }
 
 

@@ -10,6 +10,6 @@ namespace Project.Core.DbContext {
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
-        void ApplyStateChanges();
+        DbChangeTracker ChangeTracker { get; }
     }
 }

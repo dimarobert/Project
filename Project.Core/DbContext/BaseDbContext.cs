@@ -16,17 +16,5 @@ namespace Project.Core.DbContext {
         public BaseDbContext()
             : base("name=DefaultConnection") {
         }
-
-        public virtual void ApplyStateChanges() {
-
-            foreach (var entry in ChangeTracker.Entries<IObjectWithState>()) {
-                var stateInfo = entry.Entity;
-                entry.State = ModelStateHelpers.ConvertState(stateInfo.State);
-                stateInfo.State = ModelState.Unchanged;
-            }
-        }
-
     }
-
-    
 }
