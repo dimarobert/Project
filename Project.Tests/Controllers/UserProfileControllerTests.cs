@@ -136,17 +136,22 @@ namespace Project.Tests.Controllers {
             Assert.Equal("Index", view.ViewName);
         }
 
-        [Fact]
-        public async Task SaveProfile_ShouldReturnModel_UserProfileVM() {
+        [Theory]
+        [InlineData("123", "321")]
+        [InlineData("123", "123")]
+        public async Task SaveProfile_ShouldReturnModel_UserProfileVM(string currentUserId, string savedUserId) {
 
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
 
             //Arange
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
 
             var sut = fixture.CreateController<UserProfileController>();
-            var userProfileVM = fixture.Create<UserProfileVM>();
+            var userProfileVM = fixture.Build<UserProfileVM>()
+                .With(p => p.UserId, savedUserId)
+                .Create();
 
             // Act
             var view = await sut.SaveProfile(userProfileVM);
@@ -181,7 +186,7 @@ namespace Project.Tests.Controllers {
             var view = await sut.SaveProfile(userProfileVM);
 
             // Assert
-            upRepo.Verify(r => r.InsertOrUpdate(It.IsAny<UserProfile>()));
+            upRepo.Verify(r => r.InsertOrUpdate(It.Is<UserProfile>(_profile => _profile.UserId == userId)));
         }
 
         [Fact]
@@ -211,6 +216,7 @@ namespace Project.Tests.Controllers {
 
             // Assert
             Assert.False(sut.ModelState.IsValid);
+            Assert.True(sut.ModelState.ContainsKey("UserId"));
             Assert.Equal(userProfileVM, view.Model);
         }
 

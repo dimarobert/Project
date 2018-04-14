@@ -39,9 +39,9 @@ namespace Project {
 
         public static void RegisterTypes(IContainer container) {
             // Register Identity types
-            container.Register<IAccountDbContext, AccountDbContext>(Reuse.InWebRequest);
+            container.Register<AccountDbContext>(Reuse.InWebRequest);
             container.Register<ApplicationSignInManager>(Reuse.InWebRequest);
-            container.Register<IApplicationUserManager, ApplicationUserManager>(Reuse.InWebRequest);
+            container.Register<ApplicationUserManager>(Reuse.InWebRequest);
 
             container.Register<IAuthenticationManager>(Reuse.InWebRequest, Made.Of(() => AuthenticationManagerFactory()));
             container.Register<IUserStore<UserInfo>>(Reuse.InWebRequest, Made.Of(() => new UserStore<UserInfo>(Arg.Of<AccountDbContext>())));

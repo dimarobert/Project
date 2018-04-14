@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using Project.Account.Managers;
 using Project.Account.Models;
@@ -20,13 +20,13 @@ namespace Project.Account.Services {
     }
 
     public class UserService : IUserService {
-        readonly IApplicationUserManager userManager;
+        readonly ApplicationUserManager userManager;
         readonly IPrincipal user;
 
         public bool IsAuthenticated => user?.Identity?.IsAuthenticated ?? false;
 
-        public UserService(IApplicationUserManager userManager, IPrincipal user) {
-            this.userManager = userManager;
+        public UserService(ApplicationUserManager userManager, IPrincipal user) {
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.user = user;
         }
 
@@ -36,7 +36,7 @@ namespace Project.Account.Services {
         }
 
         public string GetUserName() {
-            return user.Identity.GetUserName();
+            return user?.Identity?.GetUserName();
         }
 
         public async Task<UserInfo> FindUserByName(string userName) {
