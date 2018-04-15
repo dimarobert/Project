@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Project.Account.Managers;
 using Project.Account.Models;
+using Project.Core.Account;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels.Account;
 
@@ -121,7 +122,10 @@ namespace Project.Controllers {
                 if (result.Succeeded) {
                     await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    userProfileRepository.CreateProfile(user);
+                    await userProfileRepository.CreateProfileAsync(user);
+
+                    await userManager.AddToRoleAsync(user.Id, StandardRoles.Normal.ToString());
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\StandardRoles.cs" />
     <Compile Include="DbContext\IDbContext.cs" />
     <Compile Include="RazorExtensions\HtmlHelperExtensions.cs" />
     <Compile Include="DbContext\BaseDbContext.cs" />

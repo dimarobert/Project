@@ -11,6 +11,7 @@ namespace Project.Account.DAL {
 
     public interface IAccountDbContext : IDbContext {
         IDbSet<UserInfo> Users { get; set; }
+        IDbSet<RoleInfo> Roles { get; set; }
     }
 
     public class AccountDbContext : IdentityWithRoleDbContext, IAccountDbContext {

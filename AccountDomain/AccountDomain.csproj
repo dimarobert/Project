@@ -84,6 +84,7 @@
     <Compile Include="Repositories\ApplicationRoleStore.cs" />
     <Compile Include="Repositories\ApplicationUserStore.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Models\UserInfo.cs" />
