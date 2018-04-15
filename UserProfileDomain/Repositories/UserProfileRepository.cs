@@ -6,13 +6,13 @@ using Project.UserProfileDomain.Models;
 
 namespace Project.UserProfileDomain.Repositories {
 
-    public interface IUserProfileRepostory : IEntityRepository<UserProfile> {
+    public interface IUserProfileRepository : IEntityRepository<UserProfile> {
 
         UserProfile GetUserProfile(string userId);
 
     }
 
-    public class UserProfileRepository : IUserProfileRepostory {
+    public class UserProfileRepository : IUserProfileRepository {
 
         public IList<UserProfile> All => throw new NotImplementedException();
 

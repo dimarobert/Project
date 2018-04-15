@@ -49,11 +49,16 @@ namespace Project {
             container.Register<IPrincipal>(Reuse.InWebRequest, Made.Of(() => PrincipalFactory()));
             container.Register<IUserService, UserService>(Reuse.InWebRequest);
 
+            // Story Domain
             container.Register<IStoryContext, StoryContext>(Reuse.InWebRequest);
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
+            container.Register<ICommentRepository, CommentRepository>(Reuse.InWebRequest);
 
+
+            // UserProfile Domain
             container.Register<IUserProfileContext, UserProfileContext>(Reuse.InWebRequest);
             container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
+            container.Register<IUserProfileRepository, UserProfileRepository>(Reuse.InWebRequest);
 
         }
 

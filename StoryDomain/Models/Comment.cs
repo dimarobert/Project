@@ -17,12 +17,9 @@ namespace Project.StoryDomain.Models {
 
         public string UserId { get; set; }
 
-
         public string Text { get; set; }
 
-
         public virtual UserInfo User { get; set; }
-
 
         [ForeignKey("ParentStoryId")]
         [Required]
