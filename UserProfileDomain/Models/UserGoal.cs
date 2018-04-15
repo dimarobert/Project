@@ -14,9 +14,9 @@ namespace Project.UserProfileDomain.Models {
         public int UserProfileId { get; set; }
 
 
-        public Goal Goal { get; set; }
+        public virtual Goal Goal { get; set; }
 
         [ForeignKey("UserProfileId")]
-        public UserProfile UserProfile { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

@@ -6,9 +6,10 @@ using System.Data.Entity;
 using Project.Account.DAL;
 using Project.UserProfileDomain.Models;
 using Project.Core.DbContext;
+using System.Threading.Tasks;
 
 namespace Project.UserProfileDomain.DAL {
-    public interface IUserProfileContext {
+    public interface IUserProfileContext : IDbContext {
 
         DbSet<Interest> Interests { get; set; }
         DbSet<Goal> Hobbies { get; set; }
@@ -22,7 +23,7 @@ namespace Project.UserProfileDomain.DAL {
 
     }
 
-    public class UserProfileContext : BaseDbContext<UserProfileContext>, IUserProfileContext {
+    public class UserProfileContext : IdentityReferenceDbContext<UserProfileContext>, IUserProfileContext {
 
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Goal> Hobbies { get; set; }

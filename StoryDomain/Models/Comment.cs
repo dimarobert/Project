@@ -21,11 +21,8 @@ namespace Project.StoryDomain.Models {
 
         public virtual UserInfo User { get; set; }
 
-        [ForeignKey("ParentStoryId")]
-        [Required]
         public virtual Story ParentStory { get; set; }
 
-        [ForeignKey("ParentCommentId")]
         public virtual Comment ParentComment { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

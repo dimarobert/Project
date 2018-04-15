@@ -17,7 +17,7 @@ namespace Project.UserProfileDomain.Models {
 
         public string LastName { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public string AboutMe { get; set; }
 
