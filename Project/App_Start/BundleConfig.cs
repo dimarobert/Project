@@ -1,10 +1,13 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Project {
-    public class BundleConfig {
+namespace Project
+{
+    public class BundleConfig
+    {
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
-        public static void RegisterBundles(BundleCollection bundles) {
+        public static void RegisterBundles(BundleCollection bundles)
+        {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -25,6 +28,9 @@ namespace Project {
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.min.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/UserProfile.Index").Include(
+                "~/Scripts/UserProfile.Index.js"));
 
         }
     }
