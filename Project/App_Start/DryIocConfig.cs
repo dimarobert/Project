@@ -18,6 +18,7 @@ using Project.StoryDomain.DAL;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Repositories;
+using Project.Account.Repositories;
 
 namespace Project {
     public class DryIocConfig {
@@ -44,7 +45,10 @@ namespace Project {
             container.Register<ApplicationUserManager>(Reuse.InWebRequest);
 
             container.Register<IAuthenticationManager>(Reuse.InWebRequest, Made.Of(() => AuthenticationManagerFactory()));
-            container.Register<IUserStore<UserInfo>>(Reuse.InWebRequest, Made.Of(() => new UserStore<UserInfo>(Arg.Of<AccountDbContext>())));
+            container.Register<IUserStore<UserInfo, string>>(Reuse.InWebRequest, Made.Of(() => new ApplicationUserStore(Arg.Of<AccountDbContext>())));
+
+            container.Register<ApplicationRoleManager>(Reuse.InWebRequest);
+            container.Register<IRoleStore<RoleInfo, string>>(Reuse.InWebRequest, Made.Of(() => new ApplicationRoleStore(Arg.Of<AccountDbContext>())));
 
             // Register application types
             container.Register<IPrincipal>(Reuse.InWebRequest, Made.Of(() => PrincipalFactory()));

@@ -13,15 +13,20 @@ namespace Project.Account.DAL {
         IDbSet<UserInfo> Users { get; set; }
     }
 
-    public class AccountDbContext : IdentityDbContext<UserInfo>, IAccountDbContext {
+    public class AccountDbContext : IdentityWithRoleDbContext, IAccountDbContext {
 
         static AccountDbContext() {
             Database.SetInitializer<AccountDbContext>(null);
         }
 
         public AccountDbContext()
-            : base("name=DefaultConnection", throwIfV1Schema: false) {
+            : base("name=DefaultConnection") {
         }
 
+    }
+
+    public class IdentityWithRoleDbContext : IdentityDbContext<UserInfo, RoleInfo, string, IdentityUserLogin, UserRoleInfo, IdentityUserClaim> {
+
+        public IdentityWithRoleDbContext(string nameOrConnectionString) : base(nameOrConnectionString) { }
     }
 }
