@@ -26,13 +26,19 @@ namespace Project.Controllers {
         }
 
         [Route("{userName?}")]
-        public async Task<ViewResult> Index(string userName = null) {
+        public async Task<ActionResult> Index(string userName = null) {
 
             if (string.IsNullOrWhiteSpace(userName)) {
                 userName = userService.GetUserName();
             }
 
-            var userInfo = await userService.FindUserByName(userName);
+            if (userName.Equals("index", StringComparison.OrdinalIgnoreCase))
+                return RedirectToAction("Index", new { userName = "" });
+
+            var userInfo = await userService.FindUserByNameAsync(userName);
+            if (userInfo == null)
+                return View("PageNotFound");
+
             var userProfile = await userProfileRepository.GetUserProfileAsync(userInfo.Id);
             var userStories = await storyRepository.GetUserStoriesAsync(userInfo.Id);
 

@@ -16,7 +16,8 @@ namespace Project.Account.Services {
 
         string GetUserName();
 
-        Task<UserInfo> FindUserByName(string userName);
+        UserInfo FindUserByName(string userName);
+        Task<UserInfo> FindUserByNameAsync(string userName);
     }
 
     public class UserService : IUserService {
@@ -39,7 +40,11 @@ namespace Project.Account.Services {
             return user?.Identity?.GetUserName();
         }
 
-        public async Task<UserInfo> FindUserByName(string userName) {
+        public UserInfo FindUserByName(string userName) {
+            return userManager.FindByName(userName);
+        }
+
+        public async Task<UserInfo> FindUserByNameAsync(string userName) {
             return await userManager.FindByNameAsync(userName);
         }
     }
