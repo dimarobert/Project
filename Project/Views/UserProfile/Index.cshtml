@@ -62,11 +62,27 @@
                         <p>
                             @if (string.IsNullOrWhiteSpace(Model.AboutMe))
                             {
-                                <span class="text-muted font-italic">User did not write anything about him.</span>
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
+
+                                }
+                                else
+                                {
+                                    <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
                             }
                             else
                             {
-                                @Model.AboutMe
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">@Model.AboutMe <i class="fa fa-pencil" aria-hidden="true"></i></span>
+
+                                }
+                                else
+                                {
+                                    <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe<i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
                             }
                         </p>
                         @if (Model.UserId == User.Identity.GetUserId())
@@ -79,7 +95,7 @@
 
                                 @Html.TextAreaFor(m => m.AboutMe, new { @class = "form-control", placeholder = "What defines you? Keep it short." })
                                 <div class="btn-group" role="group" aria-label="Basic example" style="width:100%">
-                                    <button type="button" class="btn btn-sm btn-secondary btn-danger" style="width:50%" onclick="cancelEditName()"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+                                    <button type="button" class="btn btn-sm btn-secondary btn-danger" style="width:50%" onclick="cancelEditAboutme()"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
                                     <button type="submit" class="btn btn-sm btn-secondary btn-success" style="width:50%"><i class="fa fa-check" aria-hidden="true"></i> Update</button>
                                 </div>
 
