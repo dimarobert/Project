@@ -121,6 +121,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\UserProfileControllerTests.cs" />
     <Compile Include="Models\Stories\StoryTests.cs" />
     <Compile Include="Models\UserProfile\UserProfileTests.cs" />
