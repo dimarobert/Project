@@ -121,16 +121,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\UserProfileControllerTests.cs" />
     <Compile Include="Models\Stories\StoryTests.cs" />
     <Compile Include="Models\UserProfile\UserProfileTests.cs" />
     <Compile Include="Repositories\Story\StoryRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Repositories\UserProfile\UserProfileRepositoryTests.cs" />
     <Compile Include="Services\Account\UserServiceTests.cs" />
     <Compile Include="Utils\AutoMapperUtil.cs" />
     <Compile Include="Utils\DbSetHelpers.cs" />
     <Compile Include="Utils\FixtureExtensions.cs" />
+    <Compile Include="Utils\MockingHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

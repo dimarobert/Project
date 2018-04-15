@@ -15,7 +15,9 @@ namespace Project.Account.DAL {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Configurations.Add(new UserInfoTypeConfiguration());
-            modelBuilder.Configurations.Add(new IdentityUserRoleTypeConfiguration());
+            modelBuilder.Configurations.Add(new RoleInfoTypeConfiguration());
+            modelBuilder.Configurations.Add(new UserRoleInfoTypeConfiguration());
+
             modelBuilder.Configurations.Add(new IdentityUserLoginTypeConfiguration());
             modelBuilder.Configurations.Add(new IdentityUserClaimsTypeConfiguration());
         }
@@ -41,8 +43,15 @@ namespace Project.Account.DAL {
         }
     }
 
-    public class IdentityUserRoleTypeConfiguration : EntityTypeConfiguration<IdentityUserRole> {
-        public IdentityUserRoleTypeConfiguration() {
+    public class RoleInfoTypeConfiguration : EntityTypeConfiguration<RoleInfo> {
+        public RoleInfoTypeConfiguration() {
+            HasKey(r => new { r.Id })
+            .ToTable("AspNetRoles");
+        }
+    }
+
+    public class UserRoleInfoTypeConfiguration : EntityTypeConfiguration<UserRoleInfo> {
+        public UserRoleInfoTypeConfiguration() {
             HasKey(r => new { r.UserId, r.RoleId })
             .ToTable("AspNetUserRoles");
         }

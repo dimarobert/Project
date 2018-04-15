@@ -11,8 +11,8 @@ using Project.Account.Models;
 using Project.Account.Services;
 
 namespace Project.Account.Managers {
-    public class ApplicationUserManager : UserManager<UserInfo> {
-        public ApplicationUserManager(IDataProtectionProvider dataProtectionProvider, IUserStore<UserInfo> store)
+    public class ApplicationUserManager : UserManager<UserInfo, string> {
+        public ApplicationUserManager(IDataProtectionProvider dataProtectionProvider, IUserStore<UserInfo, string> store)
             : base(store) {
             UserValidator = new CustomUserValidator(this) {
                 // the simpler version: [a-zA-Z0-9\._]*@?[a-zA-Z0-9\._]*

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Project.UserProfileDomain.Repositories {
 
         public IList<Interest> All => throw new NotImplementedException();
 
-        public Task<IList<Interest>> AllAsync => throw new NotImplementedException();
+        public Task<IList<Interest>> AllAsync => Task.Run<IList<Interest>>(async () => await userProfileDbContext.Interests.ToListAsync());
 
         public IList<Interest> AllIncluding(params Expression<Func<Interest, object>>[] includeProperties) {
             throw new NotImplementedException();

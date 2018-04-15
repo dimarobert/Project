@@ -33,7 +33,8 @@ namespace Project.Tests.Repositories.StoryDomain {
             var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
-            RegisterStoryDbContext(fixture, null);
+            var storyContext = fixture.FreezeDbContext<IStoryContext>();
+            MockingHelpers.MockDbContextSet(storyContext, c => c.Stories, null);
 
             var sut = fixture.Create<StoryRepository>();
 
@@ -49,7 +50,8 @@ namespace Project.Tests.Repositories.StoryDomain {
             var fixture = FixtureExtensions.CreateFixture();
 
             // Arrange
-            RegisterStoryDbContext(fixture, null);
+            var storyContext = fixture.FreezeDbContext<IStoryContext>();
+            MockingHelpers.MockDbContextSet(storyContext, c => c.Stories, null);
 
             var sut = fixture.Create<StoryRepository>();
 
@@ -64,7 +66,7 @@ namespace Project.Tests.Repositories.StoryDomain {
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(10)]
-        public void Should_ReturnAllValues_WithSameUserId(int numberOfTasks) {
+        public void Should_ReturnAllValues_WithSameUserId(int numberOfStories) {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
 
@@ -72,9 +74,10 @@ namespace Project.Tests.Repositories.StoryDomain {
             // Arrange
             var stories = fixture
                 .Build<Story>()
-                .With(t => t.UserId, userId).CreateMany(numberOfTasks).AsQueryable();
+                .With(t => t.UserId, userId).CreateMany(numberOfStories).AsQueryable();
 
-            RegisterStoryDbContext(fixture, stories);
+            var storyContext = fixture.FreezeDbContext<IStoryContext>();
+            MockingHelpers.MockDbContextSet(storyContext, c => c.Stories, stories);
 
             var sut = fixture.Create<StoryRepository>();
 
@@ -83,15 +86,8 @@ namespace Project.Tests.Repositories.StoryDomain {
 
             // Assert
             Assert.NotNull(userStories);
-            Assert.Equal(numberOfTasks, userStories.Count);
+            Assert.Equal(numberOfStories, userStories.Count);
         }
 
-        private void RegisterStoryDbContext(IFixture fixture, IQueryable<Story> stories) {
-            var storyDbSet = stories != null ? DbSetHelpers.GetDbSetMock(stories) : null;
-
-            var storyDbC = new Mock<IStoryContext>();
-            storyDbC.Setup(t => t.Stories).Returns(storyDbSet?.Object);
-            fixture.Register(() => storyDbC.Object);
-        }
     }
 }

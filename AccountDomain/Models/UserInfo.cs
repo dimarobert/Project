@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace Project.Account.Models
 {
-    public class UserInfo : IdentityUser {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<UserInfo> manager) {
+    public class UserInfo : IdentityUser<string, IdentityUserLogin, UserRoleInfo, IdentityUserClaim> {
+
+        public UserInfo() {
+            Id = Guid.NewGuid().ToString();
+        }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<UserInfo, string> manager) {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
