@@ -21,14 +21,9 @@ namespace Project.ViewModels.Story
 
         public string Text { get; set; }
 
-        public virtual UserInfo User { get; set; }
+        public UserInfo User { get; set; }
 
-        [Required]
-        public virtual StoryVM ParentStory { get; set; }
-
-        public virtual CommentVM ParentComment { get; set; }
-
-        public virtual ICollection<CommentVM> Comments { get; set; }
+        public IList<CommentVM> Comments { get; set; }
 
     }
 }

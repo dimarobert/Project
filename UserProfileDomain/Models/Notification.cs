@@ -15,6 +15,6 @@ namespace Project.UserProfileDomain.Models {
         public string Url { get; set; }
 
 
-        public UserInfo User { get; set; }
+        public virtual UserInfo User { get; set; }
     }
 }

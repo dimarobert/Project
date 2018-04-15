@@ -1,22 +1,23 @@
-﻿using DryIoc;
-using DryIoc.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Security.Principal;
+using Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.DataProtection;
-using Owin;
+using DryIoc;
+using DryIoc.Mvc;
 using Project.Account.DAL;
+using Project.Account.Managers;
 using Project.Account.Models;
 using Project.Account.Services;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
 
 namespace Project {
     public class DryIocConfig {

@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
+using Project.Core.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,12 @@ namespace Project.Tests.Utils {
 
     internal static class FixtureExtensions {
 
+        /// <summary>
+        /// Creates a fixture with <see cref="AutoMoqCustomization"/> 
+        /// and also ignores the MVC Controller properties that trigger 
+        /// circular reference exceptions.
+        /// </summary>
+        /// <returns></returns>
         internal static IFixture CreateFixture() {
             return new Fixture().Customize(new WebModelCustomization());
         }
@@ -58,9 +65,28 @@ namespace Project.Tests.Utils {
 
         public object Create(object request, ISpecimenContext context) {
             var propInfo = request as PropertyInfo;
+            if (propInfo == null
+                || !propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
+                || !propInfo.PropertyType.IsGenericType)
+                return new NoSpecimen();
+
+            var collectionType = typeof(ICollection<>).MakeGenericType(propInfo.PropertyType.GenericTypeArguments.First());
+
+            if (collectionType.IsAssignableFrom(propInfo.PropertyType))
+                return new OmitSpecimen();
+
+            return new NoSpecimen();
+        }
+    }
+
+    internal class NavigationPropertyOmitter<ParentEntity, NavigationPropertyEntity> : ISpecimenBuilder {
+
+
+        public object Create(object request, ISpecimenContext context) {
+            var propInfo = request as PropertyInfo;
             if (propInfo != null
                 && propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
-                && typeof(System.Collections.IEnumerable).IsAssignableFrom(propInfo.PropertyType))
+                && typeof(NavigationPropertyEntity).IsAssignableFrom(propInfo.PropertyType))
                 return new OmitSpecimen();
 
             return new NoSpecimen();

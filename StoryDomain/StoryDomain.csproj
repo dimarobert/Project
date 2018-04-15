@@ -7,7 +7,7 @@
     <ProjectGuid>{3937F142-0A90-4FA1-9CD4-23AC2111D0C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StoryDomain</RootNamespace>
+    <RootNamespace>Project.StoryDomain</RootNamespace>
     <AssemblyName>StoryDomain</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -14,10 +14,12 @@ namespace Project.ViewModels.Story
 
         public string Title { get; set; }
 
-        public virtual UserInfo User { get; set; }
+        public string UserName { get; set; }
 
-        public virtual ICollection<CommentVM> Comments { get; set; }
+        public string UserEmail { get; set; }
 
-        public virtual ICollection<LikeVM> Likes { get; set; }
+        public IList<CommentVM> Comments { get; set; }
+
+        public IList<LikeVM> Likes { get; set; }
     }
 }
