@@ -28,7 +28,7 @@ namespace Project.Tests.Models.Tasks {
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Comment>());
             fixture.Customizations.Add(new NavigationPropertyOmitter<Comment, Comment>());
 
-
+            // Arrange
             var comments = fixture.CreateMany<Comment>(2).ToList();
             var likes = fixture.CreateMany<Like>(2).ToList();
 
@@ -40,6 +40,7 @@ namespace Project.Tests.Models.Tasks {
             // Act
             var storyVM = Mapper.Map<StoryVM>(sut);
 
+            // Assert
             Assert.NotNull(storyVM.Comments);
             Assert.NotEmpty(storyVM.Comments);
             Assert.All(storyVM.Comments, commentVM => {

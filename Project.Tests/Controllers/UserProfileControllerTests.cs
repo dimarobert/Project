@@ -9,7 +9,6 @@ using Project.Tests.Utils;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
-using Project.ViewModels.Story;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +27,7 @@ namespace Project.Tests.Controllers {
         void AddCustomizations(IFixture fixture) {
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<StoryVM>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfileVM>());
         }
 
 
@@ -166,7 +165,7 @@ namespace Project.Tests.Controllers {
 
 
         [Fact]
-        public async Task SaveProfile_ShouldReturn_IndexView() {
+        public async Task UpdateProfile_ShouldReturn_IndexView() {
 
             var fixture = FixtureExtensions.CreateFixture();
             AddCustomizations(fixture);
@@ -178,16 +177,22 @@ namespace Project.Tests.Controllers {
             var userProfileVM = fixture.Create<UserProfileVM>();
 
             // Act
-            var view = await sut.SaveProfile(userProfileVM);
+            var view = await sut.UpdateProfile(userProfileVM, null);
 
             // Assert
             Assert.Equal("Index", view.ViewName);
         }
 
         [Theory]
-        [InlineData("123", "321")]
-        [InlineData("123", "123")]
-        public async Task SaveProfile_ShouldReturnModel_UserProfileVM(string currentUserId, string savedUserId) {
+        [InlineData("123", "321", null)]
+        [InlineData("123", "123", null)]
+        [InlineData("123", "321", "Name")]
+        [InlineData("123", "123", "Name")]
+        [InlineData("123", "321", "AboutMe")]
+        [InlineData("123", "123", "AboutMe")]
+        [InlineData("123", "321", "BirthDate")]
+        [InlineData("123", "123", "BirthDate")]
+        public async Task UpdateProfile_ShouldReturnModel_UserProfileVM(string currentUserId, string savedUserId, string updateType) {
 
             var fixture = FixtureExtensions.CreateFixture();
             AddCustomizations(fixture);
@@ -202,14 +207,17 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = await sut.SaveProfile(userProfileVM);
+            var view = await sut.UpdateProfile(userProfileVM, updateType);
 
             // Assert
             Assert.IsType<UserProfileVM>(view.Model);
         }
 
-        [Fact]
-        public async Task SaveProfile_ShouldCall_UserProfileRepo_InsertOrUpdate_ForValidUserId() {
+        [Theory]
+        [InlineData("Name")]
+        [InlineData("AboutMe")]
+        [InlineData("BirthDate")]
+        public async Task UpdateProfile_ShouldCall_UserProfileRepo_InsertOrUpdate_ForValidUserId(string updateType) {
 
             var fixture = FixtureExtensions.CreateFixture();
             AddCustomizations(fixture);
@@ -220,9 +228,13 @@ namespace Project.Tests.Controllers {
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(u => u.GetUserId()).Returns(userId);
 
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            var existingProfile = fixture.Build<UserProfile>()
+                .With(p => p.UserId, userId)
+                .Create();
             UserProfile userProfile;
 
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>())).Returns(Task.FromResult(existingProfile));
             upRepo.Setup(r => r.InsertOrUpdate(It.IsAny<UserProfile>())).Callback<UserProfile>(profile => userProfile = profile);
 
             var sut = fixture.CreateController<UserProfileController>();
@@ -231,14 +243,17 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = await sut.SaveProfile(userProfileVM);
+            var view = await sut.UpdateProfile(userProfileVM, updateType);
 
             // Assert
             upRepo.Verify(r => r.InsertOrUpdate(It.Is<UserProfile>(_profile => _profile.UserId == userId)));
         }
 
-        [Fact]
-        public async Task SaveProfile_ShouldNot_UpdateProfileForAnotherUser() {
+        [Theory]
+        [InlineData("Name")]
+        [InlineData("AboutMe")]
+        [InlineData("BirthDate")]
+        public async Task UpdateProfile_ShouldNot_UpdateProfileForAnotherUser(string updateType) {
 
             var fixture = FixtureExtensions.CreateFixture();
             AddCustomizations(fixture);
@@ -260,7 +275,7 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = await sut.SaveProfile(userProfileVM);
+            var view = await sut.UpdateProfile(userProfileVM, updateType);
 
             // Assert
             Assert.False(sut.ModelState.IsValid);
@@ -268,8 +283,11 @@ namespace Project.Tests.Controllers {
             Assert.Equal(userProfileVM, view.Model);
         }
 
-        [Fact]
-        public async Task SaveProfile_ShouldReturn_TheUpdatedVM() {
+        [Theory]
+        [InlineData("Name")]
+        [InlineData("AboutMe")]
+        [InlineData("BirthDate")]
+        public async Task UpdateProfile_TypeName_ShouldReturn_TheUpdatedVM(string updateType) {
 
             var fixture = FixtureExtensions.CreateFixture();
             AddCustomizations(fixture);
@@ -280,13 +298,17 @@ namespace Project.Tests.Controllers {
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(u => u.GetUserId()).Returns(loggedInUserId);
 
-            UserProfile savedUserProfile = null;
+            var repositoryProfile = fixture.Build<UserProfile>()
+                .With(p => p.UserId, loggedInUserId)
+                .Create();
+
+            UserProfile oldProfile = null;
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.InsertOrUpdate(It.IsAny<UserProfile>()))
-                .Callback<UserProfile>(p => savedUserProfile = p);
             upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
-                .Returns(() => Task.FromResult(savedUserProfile));
+                .Returns(() => Task.FromResult(repositoryProfile));
+            upRepo.Setup(r => r.InsertOrUpdate(It.IsAny<UserProfile>()))
+                .Callback<UserProfile>(p => { oldProfile = repositoryProfile; repositoryProfile = p; });
 
             var sut = fixture.CreateController<UserProfileController>();
             var expectedVM = fixture.Build<UserProfileVM>()
@@ -294,23 +316,52 @@ namespace Project.Tests.Controllers {
                 .Create();
 
             // Act
-            var view = await sut.SaveProfile(expectedVM);
+            var view = await sut.UpdateProfile(expectedVM, updateType);
 
             // Assert
             upRepo.Verify(r => r.SaveAsync());
             upRepo.Verify(r => r.GetUserProfileAsync(It.IsAny<string>()));
 
-            Assert.IsType<UserProfileVM>(view.Model);
-
             var model = view.Model as UserProfileVM;
-            Assert.Equal(expectedVM.Id, model.Id);
-            Assert.Equal(expectedVM.UserId, model.UserId);
-            Assert.Equal(expectedVM.AboutMe, model.AboutMe);
-            Assert.Equal(expectedVM.BirthDate, model.BirthDate);
-            Assert.Equal(expectedVM.UserName, model.UserName);
-            Assert.Equal(expectedVM.Email, model.Email);
-            Assert.Equal(expectedVM.FirstName, model.FirstName);
-            Assert.Equal(expectedVM.LastName, model.LastName);
+            AssertUpdatedVMBasedOnUpdateType(repositoryProfile, expectedVM, model, updateType);
+        }
+
+        private static void AssertUpdatedVMBasedOnUpdateType(UserProfile repositoryProfile, UserProfileVM expectedVM, UserProfileVM model, string updateType) {
+            Enum.TryParse(updateType, out UserProfileUpdateType uType);
+
+            Assert.NotEqual(UserProfileUpdateType.Unknown, uType);
+
+            Assert.Equal(repositoryProfile.Id, model.Id);
+            Assert.Equal(repositoryProfile.UserId, model.UserId);
+            Assert.Equal(repositoryProfile.User.UserName, model.UserName);
+            Assert.Equal(repositoryProfile.User.Email, model.Email);
+
+            switch (uType) {
+                case UserProfileUpdateType.Name:
+                    Assert.Equal(repositoryProfile.AboutMe, model.AboutMe);
+                    Assert.Equal(repositoryProfile.BirthDate, model.BirthDate);
+
+                    Assert.Equal(expectedVM.FirstName, model.FirstName);
+                    Assert.Equal(expectedVM.LastName, model.LastName);
+                    break;
+
+                case UserProfileUpdateType.AboutMe:
+                    Assert.Equal(expectedVM.AboutMe, model.AboutMe);
+
+                    Assert.Equal(repositoryProfile.BirthDate, model.BirthDate);
+                    Assert.Equal(repositoryProfile.FirstName, model.FirstName);
+                    Assert.Equal(repositoryProfile.LastName, model.LastName);
+                    break;
+
+                case UserProfileUpdateType.BirthDate:
+                    Assert.Equal(repositoryProfile.AboutMe, model.AboutMe);
+
+                    Assert.Equal(expectedVM.BirthDate, model.BirthDate);
+
+                    Assert.Equal(repositoryProfile.FirstName, model.FirstName);
+                    Assert.Equal(repositoryProfile.LastName, model.LastName);
+                    break;
+            }
         }
     }
 }

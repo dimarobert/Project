@@ -44,20 +44,54 @@ namespace Project.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ViewResult> SaveProfile(UserProfileVM userProfileVM) {
+        [Route("{userName}/Update/{updateType:enum(Project.Controllers.UserProfileUpdateType)}")]
+        public async Task<ViewResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
+
+            Enum.TryParse(updateType, out UserProfileUpdateType updateTypeEnum);
+
+            if (updateTypeEnum == UserProfileUpdateType.Unknown) {
+                ModelState.AddModelError("updateType", "Invalid update type provided. Please check the request URL parameter.");
+                return View("Index", userProfileVM);
+            }
 
             if (userService.GetUserId() != userProfileVM.UserId) {
                 ModelState.AddModelError("UserId", "You cannot save the profile of another user.");
                 return View("Index", userProfileVM);
             }
 
-            var userProfile = Mapper.Map<UserProfile>(userProfileVM);
-            userProfileRepository.InsertOrUpdate(userProfile);
+            var existingProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
+
+            UpdateProfileProperties(userProfileVM, existingProfile, updateTypeEnum);
+
+            userProfileRepository.InsertOrUpdate(existingProfile);
             await userProfileRepository.SaveAsync();
             var updatedProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
             var updatedViewModel = Mapper.Map<UserProfileVM>(updatedProfile);
             return View("Index", updatedViewModel);
         }
+
+        private void UpdateProfileProperties(UserProfileVM userProfileVM, UserProfile existingProfile, UserProfileUpdateType updateTypeEnum) {
+            switch (updateTypeEnum) {
+                case UserProfileUpdateType.Name:
+                    existingProfile.FirstName = userProfileVM.FirstName;
+                    existingProfile.LastName = userProfileVM.LastName;
+                    break;
+
+                case UserProfileUpdateType.AboutMe:
+                    existingProfile.AboutMe = userProfileVM.AboutMe;
+                    break;
+                case UserProfileUpdateType.BirthDate:
+                    existingProfile.BirthDate = userProfileVM.BirthDate;
+                    break;
+            }
+        }
+    }
+
+    public enum UserProfileUpdateType {
+        Unknown = 0,
+        Name,
+        AboutMe,
+        BirthDate
     }
 }

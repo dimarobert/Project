@@ -25,10 +25,10 @@ namespace Project {
                     .ReverseMap();
 
                 cfg.CreateMap<UserProfile, UserProfileVM>()
-                    .ForMember(up => up.Email, opt => opt.MapFrom(src => src.User.Email))
-                    .ForMember(up => up.UserName, opt => opt.MapFrom(src => src.User.UserName))
-                    .ForMember(up => up.Goals, opt => opt.MapFrom(src => Mapper.Map<List<GoalVM>>(src.Goals)))
-                    .ForMember(up => up.Interests, opt => opt.MapFrom(src => Mapper.Map<List<InterestVM>>(src.Interests)))
+                    .ForMember(upVM => upVM.Email, opt => opt.MapFrom(src => src.User.Email))
+                    .ForMember(upVM => upVM.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                    .ForMember(upVM => upVM.Goals, opt => opt.MapFrom(src => Mapper.Map<List<GoalVM>>(src.Goals)))
+                    .ForMember(upVM => upVM.Interests, opt => opt.MapFrom(src => Mapper.Map<List<InterestVM>>(src.Interests)))
                     .ReverseMap();
 
                 cfg.CreateMap<UserProfile, UserProfileRefVM>();

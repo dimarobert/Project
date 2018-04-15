@@ -2,6 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
+using Project.Core.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,9 +65,14 @@ namespace Project.Tests.Utils {
 
         public object Create(object request, ISpecimenContext context) {
             var propInfo = request as PropertyInfo;
-            if (propInfo != null
-                && propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
-                && typeof(System.Collections.IEnumerable).IsAssignableFrom(propInfo.PropertyType))
+            if (propInfo == null
+                || !propInfo.DeclaringType.IsAssignableFrom(typeof(ParentEntity))
+                || !propInfo.PropertyType.IsGenericType)
+                return new NoSpecimen();
+
+            var collectionType = typeof(ICollection<>).MakeGenericType(propInfo.PropertyType.GenericTypeArguments.First());
+
+            if (collectionType.IsAssignableFrom(propInfo.PropertyType))
                 return new OmitSpecimen();
 
             return new NoSpecimen();

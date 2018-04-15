@@ -1,4 +1,8 @@
 ﻿@model Project.ViewModels.UserProfileVM
+
+@using Microsoft.AspNet.Identity;
+@using Project.Controllers;
+
 @{
     ViewBag.Title = "Profile";
 }
@@ -17,6 +21,16 @@
                                 <span class="text-muted font-italic">No name</span>
                             } else {
                                 @Model.FirstName @Model.LastName
+                            }
+                            @if (Model.UserId == User.Identity.GetUserId()) {
+                                <span class="fa fa-pencil" title="Edit your name" style="font-size: 0.7em;"></span>
+                                using (Html.BeginForm("UpdateProfile", "UserProfile", new { updateType = UserProfileUpdateType.Name.ToString() }, FormMethod.Post, new { @class = "form-horizontal d-none", role = "form" })) {
+                                    @Html.AntiForgeryToken()
+
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                                    @Html.HiddenFor(m => m.UserId)
+                                }
                             }
                         </h3>
                         <p class="lead">Web / UI Designer</p>
