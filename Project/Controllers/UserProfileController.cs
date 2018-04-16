@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Project.Account.Services;
+using Project.Core.Account;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
@@ -47,6 +48,14 @@ namespace Project.Controllers {
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
+            viewModel.Role = "";
+
+            var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
+                Enum.TryParse<StandardRoles>(r?.Role.Name, out var role);
+                return role;
+            });
+            if (maxRole > StandardRoles.Normal)
+                viewModel.Role = maxRole.ToString();
 
             return View(viewModel);
         }
@@ -102,7 +111,7 @@ namespace Project.Controllers {
 
             var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
-            if(interest.UserProfileId != currentUserProfile.Id) {
+            if (interest.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Interest", "You cannot add interests for another user.");
                 return View(interest);
             }

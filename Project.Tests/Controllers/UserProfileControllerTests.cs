@@ -3,6 +3,7 @@ using Moq;
 using Project.Account.Models;
 using Project.Account.Services;
 using Project.Controllers;
+using Project.Core.Account;
 using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
 using Project.Tests.Utils;
@@ -120,7 +121,7 @@ namespace Project.Tests.Controllers {
             AddCustomizations(fixture);
 
             //Arange
-            var currentUserInfo = fixture.Create<UserInfo>();
+            var currentUserInfo = fixture.CreateUser(null);
 
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(u => u.GetUserName()).Returns(currentUserInfo.UserName);
@@ -218,6 +219,43 @@ namespace Project.Tests.Controllers {
                     Assert.Equal(expectedStory.User.Email, storyVM.UserEmail);
                 });
             }
+        }
+
+        [Theory]
+        [InlineData(StandardRoles.Admin)]
+        [InlineData(StandardRoles.Coach)]
+        [InlineData(StandardRoles.Normal)]
+        public async Task Index_ShouldReturn_CorrectUserRole(StandardRoles role) {
+            var fixture = FixtureExtensions.CreateFixture();
+            AddCustomizations(fixture);
+
+            // Arrange
+            var userName = fixture.Create<string>();
+
+            var uInfo = fixture.CreateUser(
+                fixture.CreateMany<StandardRoles>()
+                    .Where(r => r < role)
+                    .Distinct()
+                    .Concat(new[] { role })
+                    .ToList()
+            );
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.FindUserByNameAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(uInfo));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.Index(userName) as ViewResult;
+            var model = view.Model as UserProfileVM;
+
+            // Assert
+            if (role == StandardRoles.Normal)
+                Assert.Equal("", model.Role);
+            else
+                Assert.Equal(role.ToString(), model.Role);
+
         }
 
         [Fact]
