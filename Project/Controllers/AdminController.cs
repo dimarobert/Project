@@ -4,6 +4,7 @@ using Project.Core.Account;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
 using Project.ViewModels.Admin;
+using Project.ViewModels.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;

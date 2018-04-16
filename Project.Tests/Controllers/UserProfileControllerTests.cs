@@ -9,6 +9,7 @@ using Project.Tests.Utils;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
+using Project.ViewModels.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;

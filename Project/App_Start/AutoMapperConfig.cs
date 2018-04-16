@@ -3,6 +3,7 @@ using Project.StoryDomain.Models;
 using Project.UserProfileDomain.Models;
 using Project.ViewModels;
 using Project.ViewModels.Story;
+using Project.ViewModels.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
