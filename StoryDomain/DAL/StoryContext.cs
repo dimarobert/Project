@@ -12,7 +12,9 @@ namespace Project.StoryDomain.DAL {
     public interface IStoryContext : IDbContext {
 
         DbSet<Story> Stories { get; set; }
+
         DbSet<Like> Likes { get; set; }
+
         DbSet<Comment> Comments { get; set; }
 
         DbSet<Hashtag> Hashtags { get; set; }
@@ -22,7 +24,9 @@ namespace Project.StoryDomain.DAL {
     public class StoryContext : IdentityReferenceDbContext<StoryContext>, IStoryContext {
 
         public DbSet<Story> Stories { get; set; }
+
         public DbSet<Like> Likes { get; set; }
+
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Hashtag> Hashtags { get; set; }

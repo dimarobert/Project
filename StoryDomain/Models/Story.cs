@@ -1,4 +1,5 @@
 ﻿using Project.Account.Models;
+using Project.Core.Enums;
 using Project.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Project.StoryDomain.Models {
 
         public string Title { get; set; }
 
+        public StoryType Type { get; set; }
 
         public virtual UserInfo User { get; set; }
 

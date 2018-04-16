@@ -22,9 +22,6 @@ namespace Project {
                     .ForMember(ui => ui.Title, opt => opt.MapFrom(src => src.Interest.Title));
                     
                 cfg.CreateMap<Goal, GoalVM>().ReverseMap();
-                cfg.CreateMap<GoalVM, UserGoal>()
-                    .ForMember(gvm => gvm.Goal, opt => opt.MapFrom(src => Mapper.Map<Goal>(src)))
-                    .ReverseMap();
 
                 cfg.CreateMap<UserProfile, UserProfileVM>()
                     .ForMember(upVM => upVM.Email, opt => opt.MapFrom(src => src.User.Email))

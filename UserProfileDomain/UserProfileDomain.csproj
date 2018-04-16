@@ -57,7 +57,7 @@
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Interest.cs" />
     <Compile Include="Models\Notification.cs" />
-    <Compile Include="Models\UserGoal.cs" />
+    <Compile Include="Models\Step.cs" />
     <Compile Include="Models\UserInterest.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

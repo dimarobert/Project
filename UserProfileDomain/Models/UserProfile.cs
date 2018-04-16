@@ -25,7 +25,7 @@ namespace Project.UserProfileDomain.Models {
 
         public virtual UserInfo User { get; set; }
 
-        public virtual ICollection<UserGoal> Goals { get; set; }
+        public virtual ICollection<Goal> Goals { get; set; }
 
         public virtual ICollection<UserInterest> Interests { get; set; }
 

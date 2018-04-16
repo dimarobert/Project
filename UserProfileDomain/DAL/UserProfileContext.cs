@@ -12,11 +12,13 @@ namespace Project.UserProfileDomain.DAL {
     public interface IUserProfileContext : IDbContext {
 
         DbSet<Interest> Interests { get; set; }
-        DbSet<Goal> Hobbies { get; set; }
+
+        DbSet<Goal> Goals { get; set; }
+
+        DbSet<Step> Steps { get; set; }
 
         DbSet<UserInterest> UserInterests { get; set; }
-        DbSet<UserGoal> UserHobbies { get; set; }
-
+  
         DbSet<Notification> Notifications { get; set; }
 
         DbSet<UserProfile> UserProfiles { get; set; }
@@ -26,11 +28,15 @@ namespace Project.UserProfileDomain.DAL {
     public class UserProfileContext : IdentityReferenceDbContext<UserProfileContext>, IUserProfileContext {
 
         public DbSet<Interest> Interests { get; set; }
-        public DbSet<Goal> Hobbies { get; set; }
+
+        public DbSet<Goal> Goals { get; set; }
+
+        public DbSet<Step> Steps { get; set; }
+
         public DbSet<UserInterest> UserInterests { get; set; }
-        public DbSet<UserGoal> UserHobbies { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
+
         public DbSet<UserProfile> UserProfiles { get; set; }
 
     }
