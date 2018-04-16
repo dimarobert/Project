@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Project.ViewModels.Story;
 
-namespace Project.ViewModels
+namespace Project.ViewModels.UserProfile
 {
     public class UserProfileVM
     {

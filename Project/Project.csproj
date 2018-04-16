@@ -216,15 +216,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\DashboardVM.cs" />
-    <Compile Include="ViewModels\GoalVM.cs" />
-    <Compile Include="ViewModels\GroupVM.cs" />
-    <Compile Include="ViewModels\InterestVM.cs" />
+    <Compile Include="ViewModels\UserProfile\GoalVM.cs" />
+    <Compile Include="ViewModels\UserProfile\GroupVM.cs" />
+    <Compile Include="ViewModels\UserProfile\InterestVM.cs" />
     <Compile Include="ViewModels\Story\CommentVM.cs" />
     <Compile Include="ViewModels\Story\HashtagVM.cs" />
     <Compile Include="ViewModels\Story\LikeVM.cs" />
     <Compile Include="ViewModels\Story\StoryVM.cs" />
-    <Compile Include="ViewModels\UserProfileRefVM.cs" />
-    <Compile Include="ViewModels\UserProfileVM.cs" />
+    <Compile Include="ViewModels\UserProfile\UserInterestVM.cs" />
+    <Compile Include="ViewModels\UserProfile\UserProfileRefVM.cs" />
+    <Compile Include="ViewModels\UserProfile\UserProfileVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -338,7 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ViewModels\UserProfile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

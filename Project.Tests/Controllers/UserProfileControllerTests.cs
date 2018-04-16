@@ -9,9 +9,11 @@ using Project.Tests.Utils;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
+using Project.ViewModels.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -211,7 +213,16 @@ namespace Project.Tests.Controllers {
             }
         }
 
-        
+        [Fact]
+        public void UpdateProfile_ShouldBeAccessible_ToLoggedUsersOnly() {
+
+            var controllerType = typeof(UserProfileController);
+            var dashboardMethodType = controllerType.GetMethod("UpdateProfile");
+            Assert.NotNull(dashboardMethodType);
+
+            var authAttrib = dashboardMethodType.CustomAttributes.FirstOrDefault(i => i.AttributeType == typeof(AuthorizeAttribute));
+            Assert.NotNull(authAttrib);
+        }
 
         [Fact]
         public async Task UpdateProfile_ShouldReturn_IndexView() {
@@ -373,6 +384,166 @@ namespace Project.Tests.Controllers {
 
             var model = view.Model as UserProfileVM;
             AssertUpdatedVMBasedOnUpdateType(repositoryProfile, expectedVM, model, updateType);
+        }
+
+
+
+        [Fact]
+        public void AddInterest_ShouldBeAccessible_ToLoggedUsersOnly() {
+
+            var controllerType = typeof(UserProfileController);
+            var dashboardMethodType = controllerType.GetMethod("AddInterest");
+            Assert.NotNull(dashboardMethodType);
+
+            var authAttrib = dashboardMethodType.CustomAttributes.FirstOrDefault(i => i.AttributeType == typeof(AuthorizeAttribute));
+            Assert.NotNull(authAttrib);
+        }
+
+        [Fact]
+        public async Task AddInterest_ShouldRetrieve_CurrentUserProfile() {
+            var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+
+            // Arrange
+            var currentUserId = fixture.Create<string>();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
+
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+
+            var model = fixture.Create<UserInterestVM>();
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.AddInterest(model);
+
+            // Assert
+            upRepo.Verify(r => r.GetUserProfileAsync(It.Is<string>(i => i == currentUserId)));
+
+        }
+
+        [Fact]
+        public async Task AddInterest_ShouldNot_AddForAnotherUser() {
+            var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+
+            // Arrange
+            var currentUserId = fixture.Create<string>();
+            var currentUserProfileId = fixture.Create<int>();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
+
+            var currentUserProfile = fixture.Build<UserProfile>()
+                .With(p => p.Id, currentUserProfileId)
+                .Create();
+
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(currentUserProfile));
+
+            var model = fixture.Create<UserInterestVM>();
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.AddInterest(model);
+
+            // Assert
+            Assert.False(sut.ModelState.IsValid);
+            Assert.Contains("Interest", sut.ModelState.Keys);
+        }
+
+
+        [Fact]
+        public async Task AddInterest_ShouldNot_AddInvalidInterests() {
+            var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+
+            // Arrange
+            var currentUserId = fixture.Create<string>();
+            var currentUserProfileId = fixture.Create<int>();
+
+            var model = fixture.Build<UserInterestVM>()
+                .With(m => m.UserProfileId, currentUserProfileId)
+                .Create();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
+
+            //var currentUserInterests = fixture.CreateMany<UserInterest>()
+            //    .Where(i => i.InterestId != model.InterestId)
+            //    .ToList();
+
+            var currentUserProfile = fixture.Build<UserProfile>()
+                .With(p => p.Id, currentUserProfileId)
+                .With(p => p.Interests, new List<UserInterest>())
+                .Create();
+
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(currentUserProfile));
+
+            var interestRepo = fixture.Freeze<Mock<IInterestRepository>>();
+            interestRepo.Setup(r => r.GetAsync(It.IsAny<Expression<Func<Interest, bool>>[]>())).Returns(Task.FromResult(new List<Interest>() as IList<Interest>));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.AddInterest(model);
+
+            // Assert
+            Assert.False(sut.ModelState.IsValid);
+            Assert.Contains("Interest", sut.ModelState.Keys);
+        }
+
+        [Fact]
+        public async Task AddInterest_ShouldInsertAndSaveToDatabase() {
+            var fixture = FixtureExtensions.CreateFixture();
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+
+            // Arrange
+            var currentUserId = fixture.Create<string>();
+            var currentUserProfileId = fixture.Create<int>();
+
+            var model = fixture.Build<UserInterestVM>()
+                .With(m => m.UserProfileId, currentUserProfileId)
+                .Create();
+
+            var currentUserInterests = fixture.CreateMany<UserInterest>()
+                .Where(i => i.InterestId != model.InterestId)
+                .ToList();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
+
+            var currentUserProfile = fixture.Build<UserProfile>()
+                .With(p => p.Id, currentUserProfileId)
+                .With(p => p.Interests, currentUserInterests)
+                .Create();
+
+            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
+            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+                .Returns(Task.FromResult(currentUserProfile));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+            var view = await sut.AddInterest(model);
+            var viewModel = view.Model as UserProfileVM;
+            // Assert
+            upRepo.Verify(r => r.InsertOrUpdateGraph(
+                It.Is<UserProfile>(p => 
+                    p.Interests.Where(i => 
+                        i.UserProfileId == model.UserProfileId && i.InterestId == model.InterestId).Count() == 1
+                    )
+                )
+            );
+            upRepo.Verify(r => r.SaveAsync());
+
+            Assert.IsType<UserProfileVM>(view.Model);
+            Assert.Contains(viewModel.Interests, i => i.Id == model.InterestId);
         }
 
         private static void AssertUpdatedVMBasedOnUpdateType(UserProfile repositoryProfile, UserProfileVM expectedVM, UserProfileVM model, string updateType) {

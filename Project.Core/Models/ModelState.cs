@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Project.Core.Models {
     public enum ModelState {
+        Unchanged = 0,
         Added,
-        Unchanged,
         Modified,
         Deleted
     }
