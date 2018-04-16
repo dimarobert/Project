@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using Project.Account.Services;
+using Project.Core.Account;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
@@ -47,6 +48,14 @@ namespace Project.Controllers {
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
+            viewModel.Role = "";
+
+            var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
+                Enum.TryParse<StandardRoles>(r?.Role.Name, out var role);
+                return role;
+            });
+            if (maxRole > StandardRoles.Normal)
+                viewModel.Role = maxRole.ToString();
 
             return View(viewModel);
         }
@@ -55,7 +64,7 @@ namespace Project.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         [Route("{userName}/Update/{updateType:enum(Project.Controllers.UserProfileUpdateType)}")]
-        public async Task<ViewResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
+        public async Task<ActionResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
 
             Enum.TryParse(updateType, out UserProfileUpdateType updateTypeEnum);
 
@@ -75,10 +84,8 @@ namespace Project.Controllers {
 
             userProfileRepository.InsertOrUpdate(existingProfile);
             await userProfileRepository.SaveAsync();
-            var updatedProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
-            var updatedViewModel = Mapper.Map<UserProfileVM>(updatedProfile);
-            return View("Index", updatedViewModel);
+            return RedirectToAction("Index");
         }
 
         private void UpdateProfileProperties(UserProfileVM userProfileVM, UserProfile existingProfile, UserProfileUpdateType updateTypeEnum) {
@@ -100,11 +107,11 @@ namespace Project.Controllers {
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddInterest")]
-        public async Task<ViewResult> AddInterest(UserInterestVM interest) {
+        public async Task<ActionResult> AddInterest(UserInterestVM interest) {
 
             var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
-            if(interest.UserProfileId != currentUserProfile.Id) {
+            if (interest.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Interest", "You cannot add interests for another user.");
                 return View(interest);
             }
@@ -122,8 +129,7 @@ namespace Project.Controllers {
             userProfileRepository.InsertOrUpdateGraph(currentUserProfile);
             await userProfileRepository.SaveAsync();
 
-            var updatedViewModel = Mapper.Map<UserProfileVM>(currentUserProfile);
-            return View("Index", updatedViewModel);
+            return RedirectToAction("Index");
         }
 
     }

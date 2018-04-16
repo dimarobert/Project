@@ -111,7 +111,7 @@ namespace Project.Tests.Repositories.UserProfile {
             var matchCount = fixture.Create<int>();
             var count = fixture.Create<int>();
 
-            var expectedProfiles = CreateUsers(fixture, matchCount, () =>
+            var expectedProfiles = fixture.CreateUsers(matchCount, () =>
                 fixture.CreateMany<StandardRoles>()
                     .Where(r => r < testRole)
                     .Concat(new[] { testRole })
@@ -120,11 +120,11 @@ namespace Project.Tests.Repositories.UserProfile {
             ).ToList();
 
             var profileStore = expectedProfiles.Concat(
-                CreateUsers(fixture, count, () =>
-                    fixture.CreateMany<StandardRoles>()
-                        .Where(r => r != testRole)
-                        .Distinct()
-                        .ToList()
+                fixture.CreateUsers(count, () =>
+                   fixture.CreateMany<StandardRoles>()
+                       .Where(r => r != testRole)
+                       .Distinct()
+                       .ToList()
                 )
             ).ToList();
 
@@ -150,7 +150,7 @@ namespace Project.Tests.Repositories.UserProfile {
             var matchCount = fixture.Create<int>();
             var count = fixture.Create<int>();
 
-            var expectedProfiles = CreateUsers(fixture, matchCount, () =>
+            var expectedProfiles = fixture.CreateUsers(matchCount, () =>
                 fixture.CreateMany<StandardRoles>()
                     .Concat(new[] { testRole })
                     .Distinct()
@@ -158,7 +158,7 @@ namespace Project.Tests.Repositories.UserProfile {
             ).ToList();
 
             var profileStore = expectedProfiles.Concat(
-                CreateUsers(fixture, count, () =>
+                fixture.CreateUsers(count, () =>
                     fixture.CreateMany<StandardRoles>()
                         .Where(r => r != testRole)
                         .Distinct()
@@ -180,28 +180,5 @@ namespace Project.Tests.Repositories.UserProfile {
                 Assert.Contains(actualAsync, p => p.User.Roles.Count > 1);
         }
 
-        private IEnumerable<UserProfileDomain.Models.UserProfile> CreateUsers(IFixture fixture, int count, Func<IList<StandardRoles>> roles) {
-            return fixture.Build<UserProfileDomain.Models.UserProfile>()
-                .Without(p => p.User)
-                .Do(p => p.User = CreateUser(fixture, roles()))
-                .CreateMany(count);
-        }
-
-        private UserInfo CreateUser(IFixture fixture, IList<StandardRoles> roles) {
-            return fixture.Build<UserInfo>()
-                 .Do(u => {
-                     foreach (var role in roles)
-                         u.Roles.Add(CreateRole(fixture, role));
-                 })
-                 .Create();
-        }
-
-        private UserRoleInfo CreateRole(IFixture fixture, StandardRoles role) {
-            return fixture.Build<UserRoleInfo>()
-                .With(ur => ur.Role, fixture.Build<RoleInfo>()
-                    .With(r => r.Name, role.ToString())
-                    .Create())
-                .Create();
-        }
     }
 }

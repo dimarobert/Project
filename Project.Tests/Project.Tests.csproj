@@ -134,6 +134,7 @@
     <Compile Include="Utils\DbSetHelpers.cs" />
     <Compile Include="Utils\FixtureExtensions.cs" />
     <Compile Include="Utils\MockingHelpers.cs" />
+    <Compile Include="Utils\UserInfoHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
