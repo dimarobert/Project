@@ -11,6 +11,7 @@ using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
 using Project.ViewModels.Story;
+using Project.ViewModels.UserProfile;
 
 namespace Project.Controllers {
     [RoutePrefix("UserProfile")]
@@ -18,11 +19,13 @@ namespace Project.Controllers {
         readonly IUserService userService;
         readonly IUserProfileRepository userProfileRepository;
         readonly IStoryRepository storyRepository;
+        readonly IInterestRepository interestRepository;
 
-        public UserProfileController(IUserService userService, IUserProfileRepository userProfileRepository, IStoryRepository storyRepository) {
+        public UserProfileController(IUserService userService, IUserProfileRepository userProfileRepository, IStoryRepository storyRepository, IInterestRepository interestRepository) {
             this.userService = userService;
             this.userProfileRepository = userProfileRepository;
             this.storyRepository = storyRepository;
+            this.interestRepository = interestRepository;
         }
 
         [Route("{userName?}")]
@@ -49,6 +52,7 @@ namespace Project.Controllers {
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         [Route("{userName}/Update/{updateType:enum(Project.Controllers.UserProfileUpdateType)}")]
         public async Task<ViewResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
@@ -92,6 +96,36 @@ namespace Project.Controllers {
                     break;
             }
         }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("{userName}/AddInterest")]
+        public async Task<ViewResult> AddInterest(UserInterestVM interest) {
+
+            var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
+
+            if(interest.UserProfileId != currentUserProfile.Id) {
+                ModelState.AddModelError("Interest", "You cannot add interests for another user.");
+                return View(interest);
+            }
+
+            var checkInterest = await interestRepository.GetAsync(i => i.Id == interest.InterestId);
+            if (!checkInterest.Any()) {
+                ModelState.AddModelError("Interest", "The provided interest does not exist.");
+                return View(interest);
+            }
+
+            var userInterest = Mapper.Map<UserInterest>(interest);
+            userInterest.State = Core.Models.ModelState.Added;
+
+            currentUserProfile.Interests.Add(userInterest);
+            userProfileRepository.InsertOrUpdateGraph(currentUserProfile);
+            await userProfileRepository.SaveAsync();
+
+            var updatedViewModel = Mapper.Map<UserProfileVM>(currentUserProfile);
+            return View("Index", updatedViewModel);
+        }
+
     }
 
     public enum UserProfileUpdateType {

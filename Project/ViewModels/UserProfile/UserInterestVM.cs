@@ -6,7 +6,7 @@ using System.Web;
 namespace Project.ViewModels.UserProfile {
     public class UserInterestVM {
 
-        public string UserProfileId { get; set; }
+        public int UserProfileId { get; set; }
 
         public int InterestId { get; set; }
 

@@ -16,10 +16,11 @@ namespace Project {
             Mapper.Initialize(cfg => {
 
                 cfg.CreateMap<Interest, InterestVM>().ReverseMap();
-                cfg.CreateMap<InterestVM, UserInterest>()
-                    .ForMember(ivm => ivm.Interest, opt => opt.MapFrom(src => Mapper.Map<Interest>(src)))
-                    .ReverseMap();
-
+                cfg.CreateMap<UserInterestVM, UserInterest>();
+                cfg.CreateMap<UserInterest, InterestVM>()
+                    .ForMember(ui => ui.Id, opt => opt.MapFrom(src => src.InterestId))
+                    .ForMember(ui => ui.Title, opt => opt.MapFrom(src => src.Interest.Title));
+                    
                 cfg.CreateMap<Goal, GoalVM>().ReverseMap();
                 cfg.CreateMap<GoalVM, UserGoal>()
                     .ForMember(gvm => gvm.Goal, opt => opt.MapFrom(src => Mapper.Map<Goal>(src)))
@@ -28,8 +29,8 @@ namespace Project {
                 cfg.CreateMap<UserProfile, UserProfileVM>()
                     .ForMember(upVM => upVM.Email, opt => opt.MapFrom(src => src.User.Email))
                     .ForMember(upVM => upVM.UserName, opt => opt.MapFrom(src => src.User.UserName))
-                    .ForMember(upVM => upVM.Goals, opt => opt.MapFrom(src => Mapper.Map<List<GoalVM>>(src.Goals)))
-                    .ForMember(upVM => upVM.Interests, opt => opt.MapFrom(src => Mapper.Map<List<InterestVM>>(src.Interests)))
+                    .ForMember(upVM => upVM.Goals, opt => opt.MapFrom(src => Mapper.Map<IList<GoalVM>>(src.Goals)))
+                    .ForMember(upVM => upVM.Interests, opt => opt.MapFrom(src => Mapper.Map<IList<InterestVM>>(src.Interests)))
                     .ReverseMap();
 
                 cfg.CreateMap<UserProfile, UserProfileRefVM>();
