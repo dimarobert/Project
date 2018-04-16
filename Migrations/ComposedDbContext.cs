@@ -4,20 +4,21 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Project.Account.DAL;
 using Project.Account.Models;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
 using Project.UserProfileDomain.Models;
 
 namespace Project.Migrations {
-    internal class MigrationDbContext : IdentityDbContext<UserInfo> {
+    internal class MigrationDbContext : IdentityWithRoleDbContext {
 
         static MigrationDbContext() {
             Database.SetInitializer<MigrationDbContext>(null);
         }
 
         public MigrationDbContext()
-            : base("name=DefaultConnection", throwIfV1Schema: true) {
+            : base("name=DefaultConnection") {
         }
 
         // Story domain

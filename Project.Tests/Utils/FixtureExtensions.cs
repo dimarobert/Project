@@ -2,9 +2,11 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Dsl;
 using AutoFixture.Kernel;
-using Project.Core.Reflection;
+using Moq;
+using Project.Core.DbContext;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -58,6 +60,10 @@ namespace Project.Tests.Utils {
         internal static T CreateController<T>(this IFixture fixture) where T : Controller {
             return fixture.BuildController<T>().Create();
         }
+
+        internal static Mock<T> FreezeDbContext<T>(this IFixture fixture) where T : class, IDbContext {
+            return fixture.Freeze<Mock<T>>(b => b.OmitAutoProperties());
+        }
     }
 
     internal class ManyNavigationPropertyOmitter<ParentEntity> : ISpecimenBuilder {
@@ -92,4 +98,5 @@ namespace Project.Tests.Utils {
             return new NoSpecimen();
         }
     }
+
 }

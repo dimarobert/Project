@@ -6,8 +6,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
+using Project.Account.DAL;
 using Project.Account.Managers;
 using Project.Account.Models;
+using Project.Account.Repositories;
 
 namespace Project {
     public partial class Startup {
@@ -43,6 +45,11 @@ namespace Project {
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
+            var roleManager = new ApplicationRoleManager(new ApplicationRoleStore(new AccountDbContext()));
+            CreateRoleIfNotExists(roleManager, "Admin");
+            CreateRoleIfNotExists(roleManager, "Normal");
+            CreateRoleIfNotExists(roleManager, "Coach");
+
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
@@ -61,6 +68,16 @@ namespace Project {
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+        }
+
+        private static void CreateRoleIfNotExists(ApplicationRoleManager roleManager, string roleName) {
+            if (!roleManager.RoleExists(roleName)) {
+                var role = new RoleInfo {
+                    Name = roleName
+                };
+
+                roleManager.Create(role);
+            }
         }
     }
 }

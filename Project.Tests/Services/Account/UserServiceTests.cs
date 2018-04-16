@@ -105,7 +105,7 @@ namespace Project.Tests.Services.Account {
             var sut = new UserService(userMgr.Object, null);
 
             // Act
-            var actualUserInfo = await sut.FindUserByName(userInfo.UserName);
+            var actualUserInfo = await sut.FindUserByNameAsync(userInfo.UserName);
 
             // Assert
             userMgr.Verify(mgr => mgr.FindByNameAsync(It.Is<string>(_uName => _uName == userInfo.UserName)));

@@ -30,6 +30,54 @@ namespace Project.Tests.Controllers {
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfileVM>());
         }
 
+        [Fact]
+        public async Task Index_WithInvalidUserName_ShouldDispaly404() {
+            var fixture = FixtureExtensions.CreateFixture();
+            AddCustomizations(fixture);
+
+            // Arrange
+            var userName = fixture.Create<string>();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.FindUserByNameAsync(It.IsAny<string>())).Returns(Task.FromResult<UserInfo>(null));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+
+            var action = await sut.Index(userName);
+            var view = action as ViewResult;
+            // Assert
+            Assert.IsType<ViewResult>(action);
+
+            Assert.Equal("PageNotFound", view.ViewName);
+        }
+
+        [Theory]
+        [InlineData("Index")]
+        [InlineData("index")]
+        public async Task Index_WithActionNameAsUserName_ShouldRedirectTo_CurrentUser(string userName) {
+            var fixture = FixtureExtensions.CreateFixture();
+            AddCustomizations(fixture);
+
+            // Arrange
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.FindUserByNameAsync(It.IsAny<string>())).Returns(Task.FromResult<UserInfo>(null));
+
+            var sut = fixture.CreateController<UserProfileController>();
+
+            // Act
+
+            var action = await sut.Index(userName);
+            var redirectAction = action as RedirectToRouteResult;
+            // Assert
+            Assert.IsType<RedirectToRouteResult>(action);
+
+            Assert.True(redirectAction.RouteValues.ContainsKey("action"));
+            Assert.Equal("Index", redirectAction.RouteValues["action"]);
+            Assert.True(redirectAction.RouteValues.ContainsKey("userName"));
+            Assert.Equal("", redirectAction.RouteValues["userName"]);
+        }
 
         [Theory]
         [InlineData(null)]
@@ -50,7 +98,7 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index(userName);
+            var view = await sut.Index(userName) as ViewResult;
 
             // Assert
             Assert.IsType<UserProfileVM>(view.Model);
@@ -67,7 +115,7 @@ namespace Project.Tests.Controllers {
 
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(u => u.GetUserName()).Returns(currentUserInfo.UserName);
-            uService.Setup(u => u.FindUserByName(It.Is<string>(_userName => _userName == currentUserInfo.UserName))).Returns(Task.FromResult(currentUserInfo));
+            uService.Setup(u => u.FindUserByNameAsync(It.Is<string>(_userName => _userName == currentUserInfo.UserName))).Returns(Task.FromResult(currentUserInfo));
 
             var currentUserProfile = fixture.Build<UserProfile>()
                 .With(up => up.User, currentUserInfo)
@@ -80,12 +128,12 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index();
+            var view = await sut.Index() as ViewResult;
             var model = view.Model as UserProfileVM;
 
             // Assert
             uService.Verify(u => u.GetUserName(), Times.Once());
-            uService.Verify(u => u.FindUserByName(It.Is<string>(_userName => _userName == currentUserInfo.UserName)), Times.Once(), "FindUserByName was not called or called with wrong parameter.");
+            uService.Verify(u => u.FindUserByNameAsync(It.Is<string>(_userName => _userName == currentUserInfo.UserName)), Times.Once(), "FindUserByName was not called or called with wrong parameter.");
             upRepo.Verify(r => r.GetUserProfileAsync(It.Is<string>(_userId => _userId == currentUserInfo.Id)), Times.Once(), "GetUserProfileAsync was not called or called with wrong parameter.");
             Assert.IsType<UserProfileVM>(view.Model);
             Assert.Equal(currentUserProfile.User.UserName, model.UserName);
@@ -110,7 +158,7 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index(profileFromRepository.User.UserName);
+            var view = await sut.Index(profileFromRepository.User.UserName) as ViewResult;
             var model = view.Model as UserProfileVM;
 
             // Assert
@@ -144,7 +192,7 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.Index(userName);
+            var view = await sut.Index(userName) as ViewResult;
             var model = view.Model as UserProfileVM;
 
             // Assert
@@ -163,6 +211,7 @@ namespace Project.Tests.Controllers {
             }
         }
 
+        
 
         [Fact]
         public async Task UpdateProfile_ShouldReturn_IndexView() {

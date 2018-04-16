@@ -6,6 +6,7 @@ using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using Project.Account.Managers;
 using Project.Account.Models;
+using Project.Core.Account;
 
 namespace Project.Account.Services {
 
@@ -16,7 +17,10 @@ namespace Project.Account.Services {
 
         string GetUserName();
 
-        Task<UserInfo> FindUserByName(string userName);
+        UserInfo FindUserByName(string userName);
+        Task<UserInfo> FindUserByNameAsync(string userName);
+        bool IsInRole(StandardRoles role);
+        bool IsInRole(string role);
     }
 
     public class UserService : IUserService {
@@ -30,6 +34,11 @@ namespace Project.Account.Services {
             this.user = user;
         }
 
+        public bool IsInRole(StandardRoles role) => IsInRole(role.ToString());
+
+        public bool IsInRole(string role) {
+            return user?.IsInRole(role) ?? false;
+        }
 
         public string GetUserId() {
             return user?.Identity?.GetUserId();
@@ -39,7 +48,11 @@ namespace Project.Account.Services {
             return user?.Identity?.GetUserName();
         }
 
-        public async Task<UserInfo> FindUserByName(string userName) {
+        public UserInfo FindUserByName(string userName) {
+            return userManager.FindByName(userName);
+        }
+
+        public async Task<UserInfo> FindUserByNameAsync(string userName) {
             return await userManager.FindByNameAsync(userName);
         }
     }
