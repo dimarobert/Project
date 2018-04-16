@@ -55,7 +55,7 @@ namespace Project.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         [Route("{userName}/Update/{updateType:enum(Project.Controllers.UserProfileUpdateType)}")]
-        public async Task<ViewResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
+        public async Task<ActionResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
 
             Enum.TryParse(updateType, out UserProfileUpdateType updateTypeEnum);
 
@@ -75,10 +75,8 @@ namespace Project.Controllers {
 
             userProfileRepository.InsertOrUpdate(existingProfile);
             await userProfileRepository.SaveAsync();
-            var updatedProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
-            var updatedViewModel = Mapper.Map<UserProfileVM>(updatedProfile);
-            return View("Index", updatedViewModel);
+            return RedirectToAction("Index");
         }
 
         private void UpdateProfileProperties(UserProfileVM userProfileVM, UserProfile existingProfile, UserProfileUpdateType updateTypeEnum) {
@@ -100,7 +98,7 @@ namespace Project.Controllers {
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddInterest")]
-        public async Task<ViewResult> AddInterest(UserInterestVM interest) {
+        public async Task<ActionResult> AddInterest(UserInterestVM interest) {
 
             var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
@@ -122,8 +120,7 @@ namespace Project.Controllers {
             userProfileRepository.InsertOrUpdateGraph(currentUserProfile);
             await userProfileRepository.SaveAsync();
 
-            var updatedViewModel = Mapper.Map<UserProfileVM>(currentUserProfile);
-            return View("Index", updatedViewModel);
+            return RedirectToAction("Index");
         }
 
     }
