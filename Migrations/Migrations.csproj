@@ -106,6 +106,10 @@
     <Compile Include="Migrations\201804162139323_UpdateRoleClasses.Designer.cs">
       <DependentUpon>201804162139323_UpdateRoleClasses.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804162147534_GoalsAndStepsMigration.cs" />
+    <Compile Include="Migrations\201804162147534_GoalsAndStepsMigration.Designer.cs">
+      <DependentUpon>201804162147534_GoalsAndStepsMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -166,6 +170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804162139323_UpdateRoleClasses.resx">
       <DependentUpon>201804162139323_UpdateRoleClasses.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804162147534_GoalsAndStepsMigration.resx">
+      <DependentUpon>201804162147534_GoalsAndStepsMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
