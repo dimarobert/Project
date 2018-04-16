@@ -17,32 +17,94 @@
                 <div class="row">
                     <div class="col-12 col-lg-8 col-md-6">
                         <h3 class="mb-0 text-truncated">
-                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName)) {
-                                <span class="text-muted font-italic">No name</span>
-                            } else {
-                                @Model.FirstName @Model.LastName
+                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName))
+                            {
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="text-muted font-italic edit-inline-hover" id="profile-name" onclick="editName(this);">No name <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted font-italic" id="profile-name">No name</span>
+                                }
                             }
-                            @if (Model.UserId == User.Identity.GetUserId()) {
-                                <span class="fa fa-pencil" title="Edit your name" style="font-size: 0.7em;"></span>
-                                using (Html.BeginForm("UpdateProfile", "UserProfile", new { updateType = UserProfileUpdateType.Name.ToString() }, FormMethod.Post, new { @class = "form-horizontal d-none", role = "form" })) {
-                                    @Html.AntiForgeryToken()
-
-                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
-                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
-                                    @Html.HiddenFor(m => m.UserId)
+                            else
+                            {
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="edit-inline-hover" id="profile-name" onclick="editName(this);">@(Model.FirstName + " " + Model.LastName) <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
+                                else
+                                {
+                                    <span id="profile-name">@(Model.FirstName + " " + Model.LastName)</span>
                                 }
                             }
                         </h3>
+                        @if (Model.UserId == User.Identity.GetUserId())
+                        {
+                            using (Html.BeginForm("UpdateProfile", "UserProfile",
+                                new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.Name.ToString() }, FormMethod.Post,
+                                new { @class = "form-horizontal d-none", id = "name-form", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-sm", placeholder = "First Name" })
+                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-sm", placeholder = "Last Name" })
+                                <div class="btn-group" role="group" aria-label="Basic example" style="width:100%">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-danger" style="width:50%" onclick="cancelEditName()"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-secondary btn-success" style="width:50%"><i class="fa fa-check" aria-hidden="true"></i> Update</button>
+                                </div>
+
+                                @Html.HiddenFor(m => m.UserId)
+                            }
+                        }
                         <p class="lead">Web / UI Designer</p>
                         <p>
-                            @if (string.IsNullOrWhiteSpace(Model.AboutMe)) {
-                                <span class="text-muted font-italic">User did not write anything about him.</span>
-                            } else {
-                                @Model.AboutMe
+                            @if (string.IsNullOrWhiteSpace(Model.AboutMe))
+                            {
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
+
+                                }
+                                else
+                                {
+                                    <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
+                            }
+                            else
+                            {
+                                if (Model.UserId == User.Identity.GetUserId())
+                                {
+                                    <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">@Model.AboutMe <i class="fa fa-pencil" aria-hidden="true"></i></span>
+
+                                }
+                                else
+                                {
+                                    <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe<i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                }
                             }
                         </p>
+                        @if (Model.UserId == User.Identity.GetUserId())
+                        {
+                            using (Html.BeginForm("UpdateProfile", "UserProfile",
+                                new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.AboutMe.ToString() }, FormMethod.Post,
+                                new { @class = "form-horizontal d-none", id = "aboutme-form", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.TextAreaFor(m => m.AboutMe, new { @class = "form-control", placeholder = "What defines you? Keep it short." })
+                                <div class="btn-group" role="group" aria-label="Basic example" style="width:100%">
+                                    <button type="button" class="btn btn-sm btn-secondary btn-danger" style="width:50%" onclick="cancelEditAboutme()"><i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-secondary btn-success" style="width:50%"><i class="fa fa-check" aria-hidden="true"></i> Update</button>
+                                </div>
+
+                                @Html.HiddenFor(m => m.UserId)
+                            }
+                        }
                         <p>
-                            @foreach (var interest in Model.Interests) {
+                            @foreach (var interest in Model.Interests)
+                            {
                                 <span class="badge badge-info tags">@interest.Title</span>
                             }
                             <span class="badge badge-info tags">html5</span>
@@ -188,3 +250,4 @@
     </div>
 </div>
 
+@Scripts.Render("~/Scripts/UserProfile.Index")
