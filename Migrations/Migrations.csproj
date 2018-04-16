@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201804132022473_ChangeBirthDateToNullable.Designer.cs">
       <DependentUpon>201804132022473_ChangeBirthDateToNullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804162139323_UpdateRoleClasses.cs" />
+    <Compile Include="Migrations\201804162139323_UpdateRoleClasses.Designer.cs">
+      <DependentUpon>201804162139323_UpdateRoleClasses.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -159,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804132022473_ChangeBirthDateToNullable.resx">
       <DependentUpon>201804132022473_ChangeBirthDateToNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804162139323_UpdateRoleClasses.resx">
+      <DependentUpon>201804162139323_UpdateRoleClasses.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
