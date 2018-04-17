@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 
 namespace Project.StoryDomain.Models {
-    public class Story : ObjectWithState {
+    public class Story : ObjectWithState, IEntity<int> {
 
         public int Id { get; set; }
 

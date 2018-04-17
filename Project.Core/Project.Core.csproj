@@ -71,13 +71,14 @@
   <ItemGroup>
     <Compile Include="Account\StandardRoles.cs" />
     <Compile Include="DbContext\IDbContext.cs" />
+    <Compile Include="Models\IEntity.cs" />
     <Compile Include="RazorExtensions\HtmlHelperExtensions.cs" />
     <Compile Include="DbContext\BaseDbContext.cs" />
     <Compile Include="DbContext\Extensions.cs" />
     <Compile Include="Models\IObjectWithState.cs" />
     <Compile Include="Models\ModelState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\IEntityRepository.cs" />
+    <Compile Include="Repositories\EntityRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

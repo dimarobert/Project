@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Project.UserProfileDomain.Models {
-    public class UserProfile : ObjectWithState {
+    public class UserProfile : ObjectWithState, IEntity<int> {
 
         public int Id { get; set; }
 

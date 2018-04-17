@@ -3,7 +3,7 @@ using Project.Core.Models;
 using System;
 
 namespace Project.StoryDomain.Models {
-    public class Like : ObjectWithState {
+    public class Like : ObjectWithState, IEntity<int> {
         public int Id { get; set; }
 
         public int StoryId { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Threading.Tasks;
 
 namespace Project.Core.DbContext {
@@ -11,5 +12,7 @@ namespace Project.Core.DbContext {
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
         DbChangeTracker ChangeTracker { get; }
+
+        DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 }

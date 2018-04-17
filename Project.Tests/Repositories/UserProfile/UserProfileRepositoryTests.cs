@@ -28,7 +28,7 @@ namespace Project.Tests.Repositories.UserProfile {
             var profileStore = fixture.CreateMany<UserProfileDomain.Models.UserProfile>(storeSize);
 
             var upContext = fixture.FreezeDbContext<IUserProfileContext>();
-            MockingHelpers.MockDbContextSet(upContext, c => c.UserProfiles, profileStore.AsQueryable());
+            MockingHelpers.MockDbContextSet(upContext, c => c.Set<UserProfileDomain.Models.UserProfile>(), profileStore.AsQueryable());
 
             var sut = fixture.Create<UserProfileRepository>();
 
@@ -57,7 +57,7 @@ namespace Project.Tests.Repositories.UserProfile {
             var profileStore = matching.Concat(fixture.CreateMany<UserProfileDomain.Models.UserProfile>(nonMatchingCount)).ToList();
 
             var upContext = fixture.FreezeDbContext<IUserProfileContext>();
-            MockingHelpers.MockDbContextSet(upContext, c => c.UserProfiles, profileStore.AsQueryable());
+            MockingHelpers.MockDbContextSet(upContext, c => c.Set<UserProfileDomain.Models.UserProfile>(), profileStore.AsQueryable());
 
             var sut = fixture.Create<UserProfileRepository>();
 
@@ -88,7 +88,7 @@ namespace Project.Tests.Repositories.UserProfile {
                     .CreateMany(count));
 
             var upContext = fixture.FreezeDbContext<IUserProfileContext>();
-            MockingHelpers.MockDbContextSet(upContext, c => c.UserProfiles, profileStore.AsQueryable());
+            MockingHelpers.MockDbContextSet(upContext, c => c.Set<UserProfileDomain.Models.UserProfile>(), profileStore.AsQueryable());
 
             var sut = fixture.Create<UserProfileRepository>();
 

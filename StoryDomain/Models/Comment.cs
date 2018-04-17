@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Project.StoryDomain.Models {
 
     [Table("Comments")]
-    public class Comment : ObjectWithState {
+    public class Comment : ObjectWithState, IEntity<int> {
         public int Id { get; set; }
 
         [Required]
