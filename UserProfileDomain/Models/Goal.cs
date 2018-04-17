@@ -12,7 +12,7 @@ namespace Project.UserProfileDomain.Models {
 
         public int UserProfileId { get; set; }
 
-        public virtual UserProfile User { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
 
         public virtual ICollection<Step> Steps { get; set; }
 

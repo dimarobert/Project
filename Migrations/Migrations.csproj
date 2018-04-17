@@ -110,6 +110,10 @@
     <Compile Include="Migrations\201804162147534_GoalsAndStepsMigration.Designer.cs">
       <DependentUpon>201804162147534_GoalsAndStepsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804171516524_FixUserProfileRefInGoal.cs" />
+    <Compile Include="Migrations\201804171516524_FixUserProfileRefInGoal.Designer.cs">
+      <DependentUpon>201804171516524_FixUserProfileRefInGoal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -173,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804162147534_GoalsAndStepsMigration.resx">
       <DependentUpon>201804162147534_GoalsAndStepsMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804171516524_FixUserProfileRefInGoal.resx">
+      <DependentUpon>201804171516524_FixUserProfileRefInGoal.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

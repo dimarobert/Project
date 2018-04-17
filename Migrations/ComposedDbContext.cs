@@ -8,6 +8,7 @@ using Project.Account.DAL;
 using Project.Account.Models;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
+using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Models;
 
 namespace Project.Migrations {
@@ -42,6 +43,8 @@ namespace Project.Migrations {
 
             modelBuilder.Configurations.Add(new StoryTypeConfiguration());
             modelBuilder.Configurations.Add(new CommentTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new GoalTypeConfiguration());
         }
 
     }
