@@ -72,6 +72,8 @@
     <Compile Include="Account\StandardRoles.cs" />
     <Compile Include="DbContext\IDbContext.cs" />
     <Compile Include="Models\IEntity.cs" />
+    <Compile Include="Enums\Difficulty.cs" />
+    <Compile Include="Enums\StoryType.cs" />
     <Compile Include="RazorExtensions\HtmlHelperExtensions.cs" />
     <Compile Include="DbContext\BaseDbContext.cs" />
     <Compile Include="DbContext\Extensions.cs" />

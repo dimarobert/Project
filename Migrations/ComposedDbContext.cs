@@ -8,6 +8,7 @@ using Project.Account.DAL;
 using Project.Account.Models;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
+using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Models;
 
 namespace Project.Migrations {
@@ -25,16 +26,14 @@ namespace Project.Migrations {
         public DbSet<Story> Stories { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
         public DbSet<Hashtag> Hashtags { get; set; }
 
 
         // UserProfile Domain
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Goal> Goals { get; set; }
+        public DbSet<Step> Steps { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
-        public DbSet<UserGoal> UserGoals { get; set; }
-
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
 
@@ -44,6 +43,8 @@ namespace Project.Migrations {
 
             modelBuilder.Configurations.Add(new StoryTypeConfiguration());
             modelBuilder.Configurations.Add(new CommentTypeConfiguration());
+
+            modelBuilder.Configurations.Add(new GoalTypeConfiguration());
         }
 
     }
