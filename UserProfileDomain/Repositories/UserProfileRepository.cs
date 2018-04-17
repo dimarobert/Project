@@ -36,11 +36,9 @@ namespace Project.UserProfileDomain.Repositories {
 
     public class UserProfileRepository : EntityRepository<UserProfile, int>, IUserProfileRepository {
 
-        readonly IUserProfileContext upContext;
+        IUserProfileContext upContext => context as IUserProfileContext;
 
-        public UserProfileRepository(IUserProfileContext userProfileContext) : base(userProfileContext) {
-            upContext = userProfileContext ?? throw new ArgumentNullException(nameof(userProfileContext));
-        }
+        public UserProfileRepository(IUserProfileContext userProfileContext) : base(userProfileContext) { }
 
         public UserProfile GetUserProfile(string userId) {
             return GetQ(profile => profile.UserId == userId).FirstOrDefault();

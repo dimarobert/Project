@@ -19,11 +19,9 @@ namespace Project.UserProfileDomain.Repositories {
 
     public class InterestRepository : EntityRepository<Interest, int>, IInterestRepository {
 
-        readonly IUserProfileContext userProfileDbContext;
+        IUserProfileContext userProfileDbContext => context as IUserProfileContext;
 
-        public InterestRepository(IUserProfileContext userProfileDbContext) : base(userProfileDbContext) {
-            this.userProfileDbContext = userProfileDbContext ?? throw new ArgumentNullException(nameof(userProfileDbContext));
-        }
+        public InterestRepository(IUserProfileContext userProfileDbContext) : base(userProfileDbContext) { }
 
         public IList<UserInterest> GetUserInterests(string userId) {
             if (string.IsNullOrWhiteSpace(userId))

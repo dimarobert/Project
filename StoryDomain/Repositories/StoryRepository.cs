@@ -19,11 +19,9 @@ namespace Project.StoryDomain.Repositories {
 
     public class StoryRepository : EntityRepository<Story, int>, IStoryRepository {
 
-        IStoryContext storyDbContext { get; }
+        IStoryContext storyDbContext => context as IStoryContext;
 
-        public StoryRepository(IStoryContext storyDbContext) : base(storyDbContext) {
-            this.storyDbContext = storyDbContext ?? throw new ArgumentNullException(nameof(storyDbContext));
-        }
+        public StoryRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
 
         public IList<Story> GetUserStories(string userId) {
             if (string.IsNullOrWhiteSpace(userId) || storyDbContext.Stories == null)

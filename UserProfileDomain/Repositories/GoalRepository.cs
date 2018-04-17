@@ -8,89 +8,25 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.UserProfileDomain.Repositories
-{
-    public interface IGoalRepository : IEntityRepository<Goal>
-    {
+namespace Project.UserProfileDomain.Repositories {
+    public interface IGoalRepository : IEntityRepository<Goal, int> {
         IList<Goal> GetUserGoals(string userId);
 
     }
-    public class GoalRepository : IGoalRepository
-    {
-        readonly IUserProfileContext userProfileDbContext;
 
-        public GoalRepository(IUserProfileContext userProfileDbContext)
-        {
-            this.userProfileDbContext = userProfileDbContext ?? throw new ArgumentNullException(nameof(userProfileDbContext));
-        }
+    public class GoalRepository : EntityRepository<Goal, int>, IGoalRepository {
 
-        public IList<Goal> All => throw new NotImplementedException();
+        IUserProfileContext userProfileContext => context as IUserProfileContext;
 
-        public Task<IList<Goal>> AllAsync => throw new NotImplementedException();
+        public GoalRepository(IUserProfileContext userProfileContext) : base(userProfileContext) { }
 
-        public IList<Goal> AllIncluding(params Expression<Func<Goal, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Goal>> AllIncludingAsync(params Expression<Func<Goal, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Goal entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Goal> Get(params Expression<Func<Goal, bool>>[] filters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Goal>> GetAsync(params Expression<Func<Goal, bool>>[] filters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Goal> GetIncluding(Expression<Func<Goal, bool>>[] filters, Expression<Func<Goal, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Goal>> GetIncludingAsync(Expression<Func<Goal, bool>>[] filters, Expression<Func<Goal, object>>[] includeProperties)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Goal> GetUserGoals(string userId)
-        {
-            if (string.IsNullOrWhiteSpace(userId))
-            {
+        public IList<Goal> GetUserGoals(string userId) {
+            if (string.IsNullOrWhiteSpace(userId)) {
                 throw new ArgumentException($"Could not retrieve user goals. Invalid parameter value: '{userId}'.", nameof(userId));
             }
 
-            return userProfileDbContext.Goals.Where(ui => ui.UserProfile.UserId == userId).ToList();
+            return userProfileContext.Goals.Where(ui => ui.UserProfile.UserId == userId).ToList();
         }
-
-        public void InsertOrUpdate(Goal entity)
-        {
-            userProfileDbContext.Goals.Add(entity);
-        }
-
-        public void InsertOrUpdateGraph(Goal entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Save()
-        {
-            userProfileDbContext.SaveChanges();
-        }
-
-        public Task SaveAsync()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

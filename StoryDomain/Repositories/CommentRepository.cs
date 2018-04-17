@@ -12,11 +12,9 @@ namespace Project.StoryDomain.Repositories {
 
     public class CommentRepository : EntityRepository<Comment, int>, ICommentRepository {
 
-        IStoryContext storyDbContext { get; }
+        IStoryContext storyDbContext => context as IStoryContext;
 
-        public CommentRepository(IStoryContext storyDbContext) : base(storyDbContext) {
-            this.storyDbContext = storyDbContext ?? throw new ArgumentNullException(nameof(storyDbContext));
-        }
+        public CommentRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
 
     }
 }
