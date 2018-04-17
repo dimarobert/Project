@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\GoalTypeConfiguration.cs" />
     <Compile Include="DAL\UserProfileContext.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\Interest.cs" />

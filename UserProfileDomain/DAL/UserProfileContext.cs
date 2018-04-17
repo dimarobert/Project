@@ -39,5 +39,10 @@ namespace Project.UserProfileDomain.DAL {
 
         public DbSet<UserProfile> UserProfiles { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Configurations.Add(new GoalTypeConfiguration());
+        }
     }
 }
