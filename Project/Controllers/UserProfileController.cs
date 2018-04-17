@@ -21,6 +21,7 @@ namespace Project.Controllers {
         readonly IUserProfileRepository userProfileRepository;
         readonly IStoryRepository storyRepository;
         readonly IInterestRepository interestRepository;
+        readonly IGoalRepository goalRepository;
 
         public UserProfileController(IUserService userService, IUserProfileRepository userProfileRepository, IStoryRepository storyRepository, IInterestRepository interestRepository) {
             this.userService = userService;
@@ -132,6 +133,54 @@ namespace Project.Controllers {
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("{userName}/AddGoal")]
+        public async Task<ActionResult> AddGoal(GoalVM goal) {
+            var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
+
+            if (goal.UserProfileId != currentUserProfile.Id) {
+                ModelState.AddModelError("Goal", "You cannot add goals for another user.");
+                return View(goal);
+            }
+
+            var userGoal = Mapper.Map<Goal>(goal);
+            userGoal.State = Core.Models.ModelState.Added;
+
+            currentUserProfile.Goals.Add(userGoal);
+            userProfileRepository.InsertOrUpdateGraph(currentUserProfile);
+            await userProfileRepository.SaveAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("{userName}/AddStep")]
+        public async Task<ActionResult> AddStep(GoalVM goal) {
+            var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
+
+            if (goal.UserProfileId != currentUserProfile.Id) {
+                ModelState.AddModelError("Goal", "You cannot add or update goal for another user.");
+                return View(goal);
+            }
+
+            var checkGoal = await goalRepository.GetAsync(g => g.Id == goal.Id);
+            if (!checkGoal.Any()) {
+                ModelState.AddModelError("Goal", "The provided goal does not exist.");
+                return View(goal);
+            }
+            var goalStep = Mapper.Map<Step>(goal);
+            goalStep.State = Core.Models.ModelState.Added;
+
+            var goalToUpdate = Mapper.Map<Goal>(goal);
+            goalToUpdate.Steps.Add(goalStep);
+
+            goalRepository.InsertOrUpdateGraph(goalToUpdate);
+            await goalRepository.SaveAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 
     public enum UserProfileUpdateType {

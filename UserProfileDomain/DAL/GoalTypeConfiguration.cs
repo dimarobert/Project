@@ -6,7 +6,7 @@ namespace Project.UserProfileDomain.DAL {
 
         public GoalTypeConfiguration() {
             HasRequired(g => g.UserProfile)
-                .WithMany()
+                .WithMany(g => g.Goals)
                 .HasForeignKey(g => g.UserProfileId)
                 .WillCascadeOnDelete();
 
