@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Project.UserProfileDomain.Models {
 
-    public class Interest : ObjectWithState {
+    public class Interest : ObjectWithState, IEntity<int> {
 
         public int Id { get; set; }
 

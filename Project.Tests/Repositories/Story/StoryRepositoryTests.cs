@@ -21,7 +21,7 @@ namespace Project.Tests.Repositories.StoryDomain {
             fixture.Register<IStoryContext>(() => null);
 
             // Assert
-            Assert.Throws<ArgumentNullException>("storyDbContext", () => new StoryRepository(null));
+            Assert.Throws<ArgumentNullException>("context", () => new StoryRepository(null));
         }
 
         [Theory]

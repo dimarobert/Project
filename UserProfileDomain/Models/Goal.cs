@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.UserProfileDomain.Models {
-    public class Goal : ObjectWithState {
+    public class Goal : ObjectWithState, IEntity<int> {
 
         public int Id { get; set; }
 

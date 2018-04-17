@@ -8,62 +8,13 @@ using Project.StoryDomain.Models;
 
 namespace Project.StoryDomain.Repositories {
 
-    public interface ICommentRepository : IEntityRepository<Comment> { }
+    public interface ICommentRepository : IEntityRepository<Comment, int> { }
 
-    public class CommentRepository : ICommentRepository {
+    public class CommentRepository : EntityRepository<Comment, int>, ICommentRepository {
 
-        IStoryContext storyDbContext { get; }
+        IStoryContext storyDbContext => context as IStoryContext;
 
-        public IList<Comment> All => throw new NotImplementedException();
+        public CommentRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
 
-        public Task<IList<Comment>> AllAsync => throw new NotImplementedException();
-
-        public CommentRepository(IStoryContext storyDbContext) {
-            this.storyDbContext = storyDbContext ?? throw new ArgumentNullException(nameof(storyDbContext));
-        }
-
-        public IList<Comment> AllIncluding(params Expression<Func<Comment, object>>[] includeProperties) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Comment>> AllIncludingAsync(params Expression<Func<Comment, object>>[] includeProperties) {
-            throw new NotImplementedException();
-        }
-
-        public IList<Comment> Get(params Expression<Func<Comment, bool>>[] filters) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Comment>> GetAsync(params Expression<Func<Comment, bool>>[] filters) {
-            throw new NotImplementedException();
-        }
-
-        public IList<Comment> GetIncluding(Expression<Func<Comment, bool>>[] filters, Expression<Func<Comment, object>>[] includeProperties) {
-            throw new NotImplementedException();
-        }
-
-        public Task<IList<Comment>> GetIncludingAsync(Expression<Func<Comment, bool>>[] filters, Expression<Func<Comment, object>>[] includeProperties) {
-            throw new NotImplementedException();
-        }
-
-        public void InsertOrUpdateGraph(Comment entity) {
-            throw new NotImplementedException();
-        }
-
-        public void InsertOrUpdate(Comment entity) {
-            throw new NotImplementedException();
-        }
-
-        public void Save() {
-            throw new NotImplementedException();
-        }
-
-        public Task SaveAsync() {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Comment entity) {
-            throw new NotImplementedException();
-        }
     }
 }

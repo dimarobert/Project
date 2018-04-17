@@ -3,7 +3,7 @@ using Project.Core.Models;
 using System;
 
 namespace Project.UserProfileDomain.Models {
-    public class Notification : ObjectWithState {
+    public class Notification : ObjectWithState, IEntity<int> {
         public int Id { get; set; }
 
         public string UserId { get; set; }
