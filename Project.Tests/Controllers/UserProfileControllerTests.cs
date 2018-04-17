@@ -512,11 +512,14 @@ namespace Project.Tests.Controllers {
         }
 
 
-        [Fact]
-        public void AddInterest_ShouldBeAccessible_ToLoggedUsersOnly() {
+        [Theory]
+        [InlineData("AddGoal")]
+        [InlineData("AddInterest")]
+        [InlineData("AddStep")]
+        public void AddEditDeleteMethod_ShouldBeAccessible_ToLoggedUsersOnly(string methodName) {
 
             var controllerType = typeof(UserProfileController);
-            var dashboardMethodType = controllerType.GetMethod("AddInterest");
+            var dashboardMethodType = controllerType.GetMethod(methodName);
             Assert.NotNull(dashboardMethodType);
 
             var authAttrib = dashboardMethodType.CustomAttributes.FirstOrDefault(i => i.AttributeType == typeof(AuthorizeAttribute));

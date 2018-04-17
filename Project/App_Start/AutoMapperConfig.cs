@@ -20,11 +20,13 @@ namespace Project {
                 cfg.CreateMap<UserInterest, InterestVM>()
                     .ForMember(ui => ui.Id, opt => opt.MapFrom(src => src.InterestId))
                     .ForMember(ui => ui.Title, opt => opt.MapFrom(src => src.Interest.Title));
-                    
-                cfg.CreateMap<Goal, GoalVM>().ReverseMap();
-                cfg.CreateMap<GoalVM, UserGoal>()
-                    .ForMember(gvm => gvm.Goal, opt => opt.MapFrom(src => Mapper.Map<Goal>(src)))
+
+                cfg.CreateMap<Goal, GoalVM>()
+                    .ForMember(g => g.UserProfileId, opt => opt.MapFrom(src => src.UserProfileId))
                     .ReverseMap();
+
+                cfg.CreateMap<Step, StepVM>().ReverseMap();
+
 
                 cfg.CreateMap<UserProfile, UserProfileVM>()
                     .ForMember(upVM => upVM.Email, opt => opt.MapFrom(src => src.User.Email))
