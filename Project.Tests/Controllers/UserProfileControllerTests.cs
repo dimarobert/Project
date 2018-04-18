@@ -533,55 +533,27 @@ namespace Project.Tests.Controllers {
 
             // Arrange
             var currentUserId = fixture.Create<string>();
-
-            var uService = fixture.Freeze<Mock<IUserService>>();
-            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
-
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-
-            var model = fixture.Create<UserInterestVM>();
-            var sut = fixture.CreateController<UserProfileController>();
-
-            // Act
-            var view = await sut.AddInterest(model);
-
-            // Assert
-            upRepo.Verify(r => r.GetUserProfileAsync(It.Is<string>(i => i == currentUserId)));
-
-        }
-
-        [Fact]
-        public async Task AddInterest_ShouldNot_AddForAnotherUser() {
-            var fixture = FixtureExtensions.CreateFixture();
-            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
-
-            // Arrange
-            var currentUserId = fixture.Create<string>();
-            var currentUserProfileId = fixture.Create<int>();
-
-            var uService = fixture.Freeze<Mock<IUserService>>();
-            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
-
             var currentUserProfile = fixture.Build<UserProfile>()
-                .With(p => p.Id, currentUserProfileId)
+                .With(p => p.Interests, new List<UserInterest>())
                 .Create();
+
+            var uService = fixture.Freeze<Mock<IUserService>>();
+            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(currentUserProfile));
 
-            var model = fixture.Create<UserInterestVM>();
-
+            var interestId = fixture.Create<int>();
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.AddInterest(model);
+            var view = await sut.AddInterest(interestId);
 
             // Assert
-            Assert.False(sut.ModelState.IsValid);
-            Assert.Contains("Interest", sut.ModelState.Keys);
-        }
+            upRepo.Verify(r => r.GetUserProfileAsync(It.Is<string>(i => i == currentUserId)));
 
+        }
 
         [Fact]
         public async Task AddInterest_ShouldNot_AddInvalidInterests() {
@@ -592,9 +564,7 @@ namespace Project.Tests.Controllers {
             var currentUserId = fixture.Create<string>();
             var currentUserProfileId = fixture.Create<int>();
 
-            var model = fixture.Build<UserInterestVM>()
-                .With(m => m.UserProfileId, currentUserProfileId)
-                .Create();
+            var interestId = fixture.Create<int>();
 
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(s => s.GetUserId()).Returns(currentUserId);
@@ -614,7 +584,7 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var view = await sut.AddInterest(model);
+            var view = await sut.AddInterest(interestId);
 
             // Assert
             Assert.False(sut.ModelState.IsValid);
@@ -630,12 +600,10 @@ namespace Project.Tests.Controllers {
             var currentUserId = fixture.Create<string>();
             var currentUserProfileId = fixture.Create<int>();
 
-            var model = fixture.Build<UserInterestVM>()
-                .With(m => m.UserProfileId, currentUserProfileId)
-                .Create();
+            var interestId = fixture.Create<int>();
 
             var currentUserInterests = fixture.CreateMany<UserInterest>()
-                .Where(i => i.InterestId != model.InterestId)
+                .Where(i => i.InterestId != interestId)
                 .ToList();
 
             var uService = fixture.Freeze<Mock<IUserService>>();
@@ -653,13 +621,13 @@ namespace Project.Tests.Controllers {
             var sut = fixture.CreateController<UserProfileController>();
 
             // Act
-            var action = await sut.AddInterest(model);
+            var action = await sut.AddInterest(interestId);
             var redirect = action as RedirectToRouteResult;
             // Assert
             upRepo.Verify(r => r.InsertOrUpdateGraph(
                 It.Is<UserProfile>(p =>
                     p.Interests.Where(i =>
-                        i.UserProfileId == model.UserProfileId && i.InterestId == model.InterestId).Count() == 1
+                        i.UserProfileId == currentUserProfileId && i.InterestId == interestId).Count() == 1
                     )
                 )
             );

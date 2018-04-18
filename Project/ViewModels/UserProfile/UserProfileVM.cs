@@ -32,5 +32,7 @@ namespace Project.ViewModels.UserProfile
         public IList<GoalVM> Goals { get; set; }
 
         public IList<StoryVM> Stories { get; set; }
+
+        public IList<InterestVM> AvailableInterests { get; set; }
     }
 }

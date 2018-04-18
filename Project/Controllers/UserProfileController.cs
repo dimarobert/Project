@@ -47,8 +47,11 @@ namespace Project.Controllers {
             var userProfile = await userProfileRepository.GetUserProfileAsync(userInfo.Id);
             var userStories = await storyRepository.GetUserStoriesAsync(userInfo.Id);
 
+            var availableInterests = interestRepository.GetAllForUser(userProfile.Id, true);
+
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
+            viewModel.AvailableInterests = Mapper.Map<List<InterestVM>>(availableInterests);
             viewModel.Role = "";
 
             var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
@@ -107,24 +110,22 @@ namespace Project.Controllers {
 
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
-        [Route("{userName}/AddInterest")]
-        public async Task<ActionResult> AddInterest(UserInterestVM interest) {
+        [Route("{userName}/AddInterest/{id}")]
+        public async Task<ActionResult> AddInterest(int id) {
 
             var currentUserProfile = await userProfileRepository.GetUserProfileAsync(userService.GetUserId());
 
-            if (interest.UserProfileId != currentUserProfile.Id) {
-                ModelState.AddModelError("Interest", "You cannot add interests for another user.");
-                return View(interest);
-            }
-
-            var checkInterest = await interestRepository.GetAsync(i => i.Id == interest.InterestId);
-            if (!checkInterest.Any()) {
+            var checkInterest = (await interestRepository.GetAsync(i => i.Id == id)).FirstOrDefault();
+            if (checkInterest == null) {
                 ModelState.AddModelError("Interest", "The provided interest does not exist.");
-                return View(interest);
+                return View();
             }
 
-            var userInterest = Mapper.Map<UserInterest>(interest);
-            userInterest.State = Core.Models.ModelState.Added;
+            var userInterest = new UserInterest {
+                InterestId = id,
+                UserProfileId = currentUserProfile.Id,
+                State = Core.Models.ModelState.Added
+            };
 
             currentUserProfile.Interests.Add(userInterest);
             userProfileRepository.InsertOrUpdateGraph(currentUserProfile);
