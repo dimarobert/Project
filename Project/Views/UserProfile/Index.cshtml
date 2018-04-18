@@ -56,14 +56,14 @@
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
                                 } else {
-                                    <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                    <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. </span>
                                 }
                             } else {
                                 if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">@Model.AboutMe <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
                                 } else {
-                                    <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe<i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                    <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe</span>
                                 }
                             }
                         </p>
