@@ -9,21 +9,24 @@
 <h2>Admin Dashboard</h2>
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Users</a>
+        <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Coaches</a>
+        <a class="nav-link" id="coaches-tab" data-toggle="tab" href="#coaches" role="tab" aria-controls="coaches" aria-selected="false">Coaches</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Interests</a>
+        <a class="nav-link" id="interests-tab" data-toggle="tab" href="#interests" role="tab" aria-controls="interests" aria-selected="false">Interests</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Groups</a>
+        <a class="nav-link" id="groups-tab" data-toggle="tab" href="#groups" role="tab" aria-controls="groups" aria-selected="false">Groups</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="hashtags-tab" data-toggle="tab" href="#hashtags" role="tab" aria-controls="hashtags" aria-selected="false">Hashtags</a>
     </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-pane active" id="users" role="tabpanel" aria-labelledby="users-tab">
         <table class="table">
             <thead>
                 <tr>
@@ -63,7 +66,7 @@
         }
 
     </div>
-    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="tab-pane" id="coaches" role="tabpanel" aria-labelledby="coaches-tab">
         <table class="table">
             <thead>
                 <tr>
@@ -102,7 +105,7 @@
         }
 
     </div>
-    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+    <div class="tab-pane" id="interests" role="tabpanel" aria-labelledby="interests-tab">
         <table class="table">
             <thead>
                 <tr>
@@ -121,12 +124,13 @@
             </tbody>
         </table>
     </div>
-    <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+    <div class="tab-pane" id="groups" role="tabpanel" aria-labelledby="groups-tab">
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Member Count</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,6 +138,27 @@
                     <tr>
                         <th scope="row">@group.Id</th>
                         <td>@group.Title</td>
+                        <td>@group.Members.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="hashtags" role="tabpanel" aria-labelledby="hashtags-tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Usage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var hashtag in Model.Hashtags) {
+                    <tr>
+                        <th scope="row">@hashtag.Id</th>
+                        <td>@hashtag.Value</td>
+                        <td>@hashtag.UsageCount</td>
                     </tr>
                 }
             </tbody>

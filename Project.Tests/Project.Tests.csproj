@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\UserProfileControllerTests.cs" />
+    <Compile Include="Models\Stories\GroupTests.cs" />
     <Compile Include="Models\Stories\StoryTests.cs" />
     <Compile Include="Models\UserProfile\UserProfileTests.cs" />
     <Compile Include="Repositories\Story\StoryRepositoryTests.cs" />

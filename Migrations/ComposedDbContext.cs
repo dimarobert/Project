@@ -28,6 +28,9 @@ namespace Project.Migrations {
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Hashtag> Hashtags { get; set; }
 
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }
+
 
         // UserProfile Domain
         public DbSet<Interest> Interests { get; set; }

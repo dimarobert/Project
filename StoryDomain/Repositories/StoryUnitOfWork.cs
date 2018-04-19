@@ -12,6 +12,8 @@ namespace Project.StoryDomain.Repositories {
     public interface IStoryUnitOfWork : IUnitOfWork {
         IStoryRepository Stories { get; }
         ICommentRepository Comments { get; }
+        IHashtagRepository Hashtags { get; }
+        IGroupRepository Groups { get; }
     }
 
     public class StoryUnitOfWork : UnitOfWork, IStoryUnitOfWork {
@@ -21,9 +23,21 @@ namespace Project.StoryDomain.Repositories {
         public IStoryRepository Stories { get; }
         public ICommentRepository Comments { get; }
 
-        public StoryUnitOfWork(IStoryContext context, IStoryRepository stories, ICommentRepository comments) : base(context) {
+        public IHashtagRepository Hashtags { get; }
+
+        public IGroupRepository Groups { get; }
+
+        public StoryUnitOfWork(IStoryContext context,
+            IStoryRepository stories,
+            ICommentRepository comments,
+            IHashtagRepository hashtags,
+            IGroupRepository groups
+            ) : base(context) {
+
             Stories = stories;
             Comments = comments;
+            Hashtags = hashtags;
+            Groups = groups;
         }
     }
 

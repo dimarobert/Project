@@ -10,6 +10,6 @@ namespace Project.ViewModels.UserProfile {
 
         public string Title { get; set; }
 
-        public List<UserProfileRefVM> Members { get; set; }
+        public IList<UserProfileRefVM> Members { get; set; }
     }
 }

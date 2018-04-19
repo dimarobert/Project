@@ -65,6 +65,9 @@ namespace Project {
             container.Register<IStoryContext, StoryContext>(Reuse.InWebRequest);
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
             container.Register<ICommentRepository, CommentRepository>(Reuse.InWebRequest);
+            container.Register<IHashtagRepository, HashtagRepository>(Reuse.InWebRequest);
+            container.Register<IGroupRepository, GroupRepository>(Reuse.InWebRequest);
+            
 
             container.Register<IStoryUnitOfWork, StoryUnitOfWork>(Reuse.InWebRequest);
 

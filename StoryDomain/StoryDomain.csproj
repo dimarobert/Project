@@ -51,11 +51,15 @@
     <Compile Include="DAL\StoryContext.cs" />
     <Compile Include="DAL\StoryTypeConfiguration.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\GroupMember.cs" />
     <Compile Include="Models\Hashtag.cs" />
     <Compile Include="Models\Like.cs" />
     <Compile Include="Models\Story.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CommentRepository.cs" />
+    <Compile Include="Repositories\HashtagRepository.cs" />
+    <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\StoryRepository.cs" />
     <Compile Include="Repositories\StoryUnitOfWork.cs" />
   </ItemGroup>
@@ -71,6 +75,10 @@
     <ProjectReference Include="..\Project.Core\Project.Core.csproj">
       <Project>{4931192D-5913-475C-BD63-3C3DA6B14F5C}</Project>
       <Name>Project.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserProfileDomain\UserProfileDomain.csproj">
+      <Project>{ECEF368E-B9AE-41C2-AF74-539BAE460AA7}</Project>
+      <Name>UserProfileDomain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
