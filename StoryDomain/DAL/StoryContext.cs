@@ -19,6 +19,9 @@ namespace Project.StoryDomain.DAL {
 
         DbSet<Hashtag> Hashtags { get; set; }
 
+        DbSet<Group> Groups { get; set; }
+        DbSet<GroupMember> GroupMembers { get; set; }
+
     }
 
     public class StoryContext : IdentityReferenceDbContext<StoryContext>, IStoryContext {
@@ -30,6 +33,10 @@ namespace Project.StoryDomain.DAL {
         public DbSet<Comment> Comments { get; set; }
 
         public DbSet<Hashtag> Hashtags { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<GroupMember> GroupMembers { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {

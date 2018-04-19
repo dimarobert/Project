@@ -46,6 +46,14 @@ namespace Project {
                 cfg.CreateMap<Hashtag, HashtagVM>().ReverseMap();
                 cfg.CreateMap<Like, LikeVM>().ReverseMap();
 
+                cfg.CreateMap<GroupMember, UserProfileRefVM>()
+                    .AfterMap((src, dest, ctx) => ctx.Mapper.Map(src.UserProfile, dest));
+
+                cfg.CreateMap<Group, GroupVM>()
+                    .ForMember(gvm => gvm.Members, opt => opt.MapFrom(src => Mapper.Map<IList<UserProfileRefVM>>(src.Members)))
+                    .ReverseMap();
+
+
                 // Admin VM
                 cfg.CreateMap<UserProfile, UserBasicInfoVM>()
                    .ForMember(ubiVM => ubiVM.Email, opt => opt.MapFrom(src => src.User.Email))

@@ -114,6 +114,18 @@
     <Compile Include="Migrations\201804171516524_FixUserProfileRefInGoal.Designer.cs">
       <DependentUpon>201804171516524_FixUserProfileRefInGoal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804191808348_FixGoals.cs" />
+    <Compile Include="Migrations\201804191808348_FixGoals.Designer.cs">
+      <DependentUpon>201804191808348_FixGoals.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804191817077_AddGroupModel1.cs" />
+    <Compile Include="Migrations\201804191817077_AddGroupModel1.Designer.cs">
+      <DependentUpon>201804191817077_AddGroupModel1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804191820246_FixGroupModel.cs" />
+    <Compile Include="Migrations\201804191820246_FixGroupModel.Designer.cs">
+      <DependentUpon>201804191820246_FixGroupModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -180,6 +192,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804171516524_FixUserProfileRefInGoal.resx">
       <DependentUpon>201804171516524_FixUserProfileRefInGoal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804191808348_FixGoals.resx">
+      <DependentUpon>201804191808348_FixGoals.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804191817077_AddGroupModel1.resx">
+      <DependentUpon>201804191817077_AddGroupModel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804191820246_FixGroupModel.resx">
+      <DependentUpon>201804191820246_FixGroupModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

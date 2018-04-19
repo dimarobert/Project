@@ -17,4 +17,5 @@ namespace Project.StoryDomain.Repositories {
         public CommentRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
 
     }
+
 }
