@@ -19,15 +19,15 @@ namespace Project.Controllers {
 
         private ApplicationSignInManager signInManager;
         private ApplicationUserManager userManager;
-        private IUserProfileRepository userProfileRepository;
+        private IUserProfileUnitOfWork userProfileUnit;
 
         public AccountController() {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IUserProfileRepository userProfileRepository) {
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IUserProfileUnitOfWork userProfileUnit) {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.userProfileRepository = userProfileRepository;
+            this.userProfileUnit = userProfileUnit;
         }
 
         //
@@ -122,7 +122,8 @@ namespace Project.Controllers {
                 if (result.Succeeded) {
                     await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                    await userProfileRepository.CreateProfileAsync(user);
+                    await userProfileUnit.UserProfiles.AddProfileAsync(user);
+                    await userProfileUnit.CompleteAsync();
 
                     await userManager.AddToRoleAsync(user.Id, StandardRoles.Normal.ToString());
 

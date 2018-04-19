@@ -454,8 +454,8 @@ namespace Project.Tests.Controllers {
 
             mapper.Map(repositoryProfile, originalProfile, opts => opts.ConfigureMap());
 
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+            var upUOF = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
+            upUOF.Setup(uof => uof.UserProfiles.GetUserProfileAsync(It.IsAny<string>()))
                 .Returns(() => Task.FromResult(repositoryProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
@@ -467,8 +467,8 @@ namespace Project.Tests.Controllers {
             var action = await sut.UpdateProfile(expectedVM, updateType);
 
             // Assert
-            upRepo.Verify(r => r.SaveAsync());
-            upRepo.Verify(r => r.GetUserProfileAsync(It.IsAny<string>()));
+            upUOF.Verify(r => r.UserProfiles.GetUserProfileAsync(It.IsAny<string>()));
+            upUOF.Verify(r => r.CompleteAsync());
 
             AssertUpdatedVMBasedOnUpdateType(originalProfile, expectedVM, repositoryProfile, updateType);
         }
@@ -561,22 +561,10 @@ namespace Project.Tests.Controllers {
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
 
             // Arrange
-            var currentUserId = fixture.Create<string>();
-            var currentUserProfileId = fixture.Create<int>();
-
             var interestId = fixture.Create<int>();
-
-            var uService = fixture.Freeze<Mock<IUserService>>();
-            uService.Setup(s => s.GetUserId()).Returns(currentUserId);
-
-            var currentUserProfile = fixture.Build<UserProfile>()
-                .With(p => p.Id, currentUserProfileId)
-                .With(p => p.Interests, new List<UserInterest>())
+            var interest = fixture.Build<Interest>()
+                .With(i => i.Id, interestId)
                 .Create();
-
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(currentUserProfile));
 
             var interestRepo = fixture.Freeze<Mock<IInterestRepository>>();
             interestRepo.Setup(r => r.GetAsync(It.IsAny<Expression<Func<Interest, bool>>[]>())).Returns(Task.FromResult(new List<Interest>() as IList<Interest>));
@@ -589,6 +577,13 @@ namespace Project.Tests.Controllers {
             // Assert
             Assert.False(sut.ModelState.IsValid);
             Assert.Contains("Interest", sut.ModelState.Keys);
+
+            // Check that the expression used to match interest is evaluating properly
+            interestRepo.Verify(r => r.GetAsync(
+                It.Is<Expression<Func<Interest, bool>>[]>(exprs => 
+                    exprs.Select(e => e.Compile()(interest)).All(x => x)
+                )
+            ));
         }
 
         [Fact]
@@ -614,8 +609,8 @@ namespace Project.Tests.Controllers {
                 .With(p => p.Interests, currentUserInterests)
                 .Create();
 
-            var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
-            upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
+            var upUOF = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
+            upUOF.Setup(uof => uof.UserProfiles.GetUserProfileAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(currentUserProfile));
 
             var sut = fixture.CreateController<UserProfileController>();
@@ -624,14 +619,14 @@ namespace Project.Tests.Controllers {
             var action = await sut.AddInterest(interestId);
             var redirect = action as RedirectToRouteResult;
             // Assert
-            upRepo.Verify(r => r.InsertOrUpdateGraph(
+            upUOF.Verify(uof => uof.UserProfiles.InsertOrUpdateGraph(
                 It.Is<UserProfile>(p =>
                     p.Interests.Where(i =>
                         i.UserProfileId == currentUserProfileId && i.InterestId == interestId).Count() == 1
                     )
                 )
             );
-            upRepo.Verify(r => r.SaveAsync());
+            upUOF.Verify(uof => uof.CompleteAsync());
 
             Assert.IsType<RedirectToRouteResult>(action);
             Assert.Contains("action", redirect.RouteValues.Keys);

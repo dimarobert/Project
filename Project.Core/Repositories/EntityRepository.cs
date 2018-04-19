@@ -21,6 +21,9 @@ namespace Project.Core.Repositories {
 
         Task<IList<TEntity>> AllIncludingAsync(params Expression<Func<TEntity, object>>[] includeProperties);
 
+        TEntity Get(TKey entityId);
+        Task<TEntity> GetAsync(TKey entityId);
+
         IList<TEntity> Get(params Expression<Func<TEntity, bool>>[] filters);
         Task<IList<TEntity>> GetAsync(params Expression<Func<TEntity, bool>>[] filters);
 
@@ -30,10 +33,7 @@ namespace Project.Core.Repositories {
         void InsertOrUpdateGraph(TEntity entity);
         void InsertOrUpdate(TEntity entity);
 
-        void Save();
-        Task SaveAsync();
-
-        void Delete(TEntity entity);
+        void Remove(TEntity entity);
 
     }
 
@@ -57,6 +57,14 @@ namespace Project.Core.Repositories {
 
         public virtual async Task<IList<TEntity>> AllIncludingAsync(params Expression<Func<TEntity, object>>[] includeProperties) {
             return await GetIncludingQ(includeProperties).ToListAsync();
+        }
+
+        public virtual TEntity Get(TKey entityId) {
+            return GetQ(e => e.Id.Equals(entityId)).FirstOrDefault();
+        }
+
+        public virtual async Task<TEntity> GetAsync(TKey entityId) {
+            return await GetQ(e => e.Id.Equals(entityId)).FirstOrDefaultAsync();
         }
 
         public virtual IList<TEntity> Get(params Expression<Func<TEntity, bool>>[] filters) {
@@ -89,16 +97,8 @@ namespace Project.Core.Repositories {
                 context.ApplyStateChanges();
         }
 
-        public virtual void Delete(TEntity entity) {
+        public virtual void Remove(TEntity entity) {
             context.Set<TEntity>().Remove(entity);
-        }
-
-        public virtual void Save() {
-            context.SaveChanges();
-        }
-
-        public virtual async Task SaveAsync() {
-            await context.SaveChangesAsync();
         }
 
         protected virtual IQueryable<TEntity> GetQ(params Expression<Func<TEntity, bool>>[] filters) {

@@ -19,6 +19,8 @@ using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.DAL;
 using Project.UserProfileDomain.Repositories;
 using Project.Account.Repositories;
+using DryIoc.WebApi;
+using System.Web.Http;
 
 namespace Project {
     public class DryIocConfig {
@@ -29,8 +31,13 @@ namespace Project {
             return container;
         });
 
+        internal static void WithWebApi() {
+            var webApiContainer = GetContainer().WithWebApi(GlobalConfiguration.Configuration, throwIfUnresolved: type => DryIocWebApi.IsController(type));
+            container = new Lazy<IContainer>(() => webApiContainer);
+        }
+
         internal static void WithMvc() {
-            var mvcContainer = GetContainer().WithMvc(throwIfUnresolved: type => type.IsController());
+            var mvcContainer = GetContainer().WithMvc(throwIfUnresolved: type => DryIocMvc.IsController(type));
             container = new Lazy<IContainer>(() => mvcContainer);
         }
 
@@ -59,11 +66,15 @@ namespace Project {
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
             container.Register<ICommentRepository, CommentRepository>(Reuse.InWebRequest);
 
+            container.Register<IStoryUnitOfWork, StoryUnitOfWork>(Reuse.InWebRequest);
 
             // UserProfile Domain
             container.Register<IUserProfileContext, UserProfileContext>(Reuse.InWebRequest);
-            container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
             container.Register<IUserProfileRepository, UserProfileRepository>(Reuse.InWebRequest);
+            container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
+            container.Register<IGoalRepository, GoalRepository>(Reuse.InWebRequest);
+
+            container.Register<IUserProfileUnitOfWork, UserProfileUnitOfWork>(Reuse.InWebRequest);
 
         }
 

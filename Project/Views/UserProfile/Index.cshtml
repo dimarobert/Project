@@ -128,7 +128,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        @Html.DropDownListFor(m => m.Interests, new SelectList(Model.Interests, "Id", "Text"), "Choose...", new { @class = "custom-select", required = "required" })
+                                        @Html.DropDownList("interestId", new SelectList(Model.AvailableInterests, "Id", "Title"), "Choose...", new { @class = "custom-select", required = "required" })
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

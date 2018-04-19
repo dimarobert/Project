@@ -137,16 +137,20 @@ namespace Project.Tests.Controllers {
             AssertPocoListEqualsVmList(expectedInterests, model.Interests);
         }
 
-        private void AssertPocoListEqualsVmList(IList<UserProfile> expected, IList<UserProfileRefVM> actual) {
+        private void AssertPocoListEqualsVmList(IList<UserProfile> expected, IList<UserBasicInfoVM> actual) {
             for (int i = 0; i < expected.Count; i++) {
                 AssertPocoEqualsVM(expected[i], actual[i]);
             }
         }
 
-        private void AssertPocoEqualsVM(UserProfile expected, UserProfileRefVM actual) {
+        private void AssertPocoEqualsVM(UserProfile expected, UserBasicInfoVM actual) {
             Assert.Equal(expected.Id, actual.Id);
             Assert.Equal(expected.FirstName, actual.FirstName);
             Assert.Equal(expected.LastName, actual.LastName);
+            Assert.Equal(expected.BirthDate, actual.BirthDate);
+            Assert.Equal(expected.User.Email, actual.Email);
+            Assert.Equal(expected.User.UserName, actual.UserName);
+            Assert.Equal(expected.UserId, actual.UserId);
         }
 
         private void AssertPocoListEqualsVmList(IList<Interest> expected, IList<InterestVM> actual) {

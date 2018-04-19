@@ -16,13 +16,16 @@
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                @Html.ActionLink("Project H", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Project H", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item @Html.IsSelected("Home", "Index", "active")">@Html.ActionLink("Home", "Index", "Home", null, htmlAttributes: new { @class = "nav-link" })</li>
-                    @*<li class="nav-item @Html.IsSelected("Home", "About", "active")">@Html.ActionLink("About", "About", "Home", null, htmlAttributes: new { @class = "nav-link" })</li>
-                    <li class="nav-item @Html.IsSelected("Home", "Contact", "active")">@Html.ActionLink("Contact", "Contact", "Home", null, htmlAttributes: new { @class = "nav-link" })</li>*@
+                        @if (User.IsInRole(Project.Core.Account.StandardRoles.Admin.ToString())) {
+                            <li class="nav-item @Html.IsSelected("Admin", "Dashboard", "active")">@Html.ActionLink("Admin", "Dashboard", "Admin", null, htmlAttributes: new { @class = "nav-link" })</li>
+                        }
+                        @*<li class="nav-item @Html.IsSelected("Home", "About", "active")">@Html.ActionLink("About", "About", "Home", null, htmlAttributes: new { @class = "nav-link" })</li>
+                            <li class="nav-item @Html.IsSelected("Home", "Contact", "active")">@Html.ActionLink("Contact", "Contact", "Home", null, htmlAttributes: new { @class = "nav-link" })</li>*@
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>

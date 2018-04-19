@@ -19,8 +19,8 @@ namespace Project.UserProfileDomain.Repositories {
         UserProfile GetUserProfile(string userId);
         Task<UserProfile> GetUserProfileAsync(string userId);
 
-        void CreateProfile(UserInfo user);
-        Task CreateProfileAsync(UserInfo user);
+        void AddProfile(UserInfo user);
+        Task AddProfileAsync(UserInfo user);
 
         Task<IList<UserProfile>> GetUsersInRoleProfileAsync(string roleName);
         Task<IList<UserProfile>> GetUsersInRoleProfileAsync(StandardRoles role);
@@ -70,7 +70,7 @@ namespace Project.UserProfileDomain.Repositories {
             //var sql = (query as System.Data.Entity.Infrastructure.DbQuery<UserProfile>).Sql;
         }
 
-        public async Task CreateProfileAsync(UserInfo user) {
+        public async Task AddProfileAsync(UserInfo user) {
             if (await GetUserProfileAsync(user.Id) != null)
                 return;
 
@@ -79,10 +79,9 @@ namespace Project.UserProfileDomain.Repositories {
             };
 
             InsertOrUpdate(profile);
-            await SaveAsync();
         }
 
-        public void CreateProfile(UserInfo user) {
+        public void AddProfile(UserInfo user) {
 
             if (GetUserProfile(user.Id) != null)
                 return;
@@ -92,7 +91,6 @@ namespace Project.UserProfileDomain.Repositories {
             };
 
             InsertOrUpdate(profile);
-            Save();
         }
 
         private IQueryable<UserProfile> GetUsersInRoleProfileQAsync(string roleName) {
