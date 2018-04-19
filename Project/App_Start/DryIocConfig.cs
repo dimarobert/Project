@@ -66,11 +66,15 @@ namespace Project {
             container.Register<IStoryRepository, StoryRepository>(Reuse.InWebRequest);
             container.Register<ICommentRepository, CommentRepository>(Reuse.InWebRequest);
 
+            container.Register<IStoryUnitOfWork, StoryUnitOfWork>(Reuse.InWebRequest);
 
             // UserProfile Domain
             container.Register<IUserProfileContext, UserProfileContext>(Reuse.InWebRequest);
-            container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
             container.Register<IUserProfileRepository, UserProfileRepository>(Reuse.InWebRequest);
+            container.Register<IInterestRepository, InterestRepository>(Reuse.InWebRequest);
+            container.Register<IGoalRepository, GoalRepository>(Reuse.InWebRequest);
+
+            container.Register<IUserProfileUnitOfWork, UserProfileUnitOfWork>(Reuse.InWebRequest);
 
         }
 

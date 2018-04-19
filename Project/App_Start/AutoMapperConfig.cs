@@ -2,6 +2,7 @@
 using Project.StoryDomain.Models;
 using Project.UserProfileDomain.Models;
 using Project.ViewModels;
+using Project.ViewModels.Admin;
 using Project.ViewModels.Story;
 using Project.ViewModels.UserProfile;
 using System;
@@ -44,6 +45,11 @@ namespace Project {
                 cfg.CreateMap<Comment, CommentVM>().ReverseMap();
                 cfg.CreateMap<Hashtag, HashtagVM>().ReverseMap();
                 cfg.CreateMap<Like, LikeVM>().ReverseMap();
+
+                // Admin VM
+                cfg.CreateMap<UserProfile, UserBasicInfoVM>()
+                   .ForMember(ubiVM => ubiVM.Email, opt => opt.MapFrom(src => src.User.Email))
+                   .ForMember(ubiVM => ubiVM.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
             });
         }

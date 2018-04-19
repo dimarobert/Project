@@ -1,5 +1,7 @@
 ﻿@model Project.ViewModels.Admin.DashboardVM
 
+@using Project.Core.Account
+
 @{
     ViewBag.Title = "Admin Dashboard";
 }
@@ -10,7 +12,7 @@
         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Users</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cockroaches</a>
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Coaches</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Interests</a>
@@ -26,127 +28,127 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach (var rUser in Model.RegularUsers) {
+                    <tr>
+                        <th scope="row">@rUser.Id</th>
+                        <td>@rUser.FirstName</td>
+                        <td>@rUser.LastName</td>
+                        <td>@rUser.UserName</td>
+                        <td>@rUser.Email</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        @using (Ajax.BeginForm("GrantRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('grant-role-validation', data)" }, new { role = "form" })) {
+
+            @Html.AntiForgeryToken();
+
+            @Html.Hidden("RoleName", StandardRoles.Coach.ToString());
+            @Html.Hidden("UserId")
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Make Coach</button>
+            </div>
+
+            <div id="grant-role-validation"></div>
+        }
+
+    </div>
+    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>mdo</td>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
                 </tr>
+            </thead>
+            <tbody>
+                @foreach (var coach in Model.Coaches) {
+                    <tr>
+                        <th scope="row">@coach.Id</th>
+                        <td>@coach.FirstName</td>
+                        <td>@coach.LastName</td>
+                        <td>@coach.UserName</td>
+                        <td>@coach.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @using (Ajax.BeginForm("RevokeRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('revoke-role-validation', data)" }, new { role = "form" })) {
+
+            @Html.AntiForgeryToken();
+
+            @Html.Hidden("RoleName", StandardRoles.Coach.ToString());
+            @Html.Hidden("UserId")
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Revoke Coach</button>
+            </div>
+
+            <div id="revoke-role-validation"></div>
+        }
+
+    </div>
+    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+        <table class="table">
+            <thead>
                 <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>fat</td>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
                 </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>twitter</td>
-                </tr>
+            </thead>
+            <tbody>
+                @foreach (var interest in Model.Interests) {
+                    <tr>
+                        <th scope="row">@interest.Id</th>
+                        <td>@interest.Title</td>
+                    </tr>
+                }
+
             </tbody>
         </table>
     </div>
-    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab"><table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-        </tr>
-    </tbody>
-</table></div>
-    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab"><table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-        </tr>
-    </tbody>
-</table></div>
-    <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab"><table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-        </tr>
-    </tbody>
-</table></div>
+    <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in Model.Groups) {
+                    <tr>
+                        <th scope="row">@group.Id</th>
+                        <td>@group.Title</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<script>
-  $(function () {
-    $('#myTab li:last-child a').tab('show')
-  })
-</script>
+@*<script>
+        $(function () {
+            $('#myTab li:last-child a').tab('show')
+        })
+    </script>*@
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @Scripts.Render("~/Scripts/Admin")
+}

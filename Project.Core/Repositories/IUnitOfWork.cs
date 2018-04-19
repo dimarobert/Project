@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Project.Core.Repositories {
-    public interface IUnitOfWork : IDisposable {
+    public interface IUnitOfWork {
 
         void Complete();
         Task CompleteAsync();
@@ -15,7 +15,7 @@ namespace Project.Core.Repositories {
 
     public class UnitOfWork : IUnitOfWork {
 
-        IDbContext context;
+        protected IDbContext context;
 
         public UnitOfWork(IDbContext context) {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
@@ -27,10 +27,6 @@ namespace Project.Core.Repositories {
 
         public async Task CompleteAsync() {
             await context.SaveChangesAsync();
-        }
-
-        public void Dispose() {
-            
         }
     }
 }

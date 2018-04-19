@@ -65,6 +65,7 @@
     <Compile Include="Repositories\GoalRepository.cs" />
     <Compile Include="Repositories\InterestRepository.cs" />
     <Compile Include="Repositories\UserProfileRepository.cs" />
+    <Compile Include="Repositories\UserProfileUnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
