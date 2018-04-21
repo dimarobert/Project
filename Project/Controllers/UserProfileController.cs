@@ -7,10 +7,10 @@ using System.Web.Mvc;
 using AutoMapper;
 using Project.Account.Services;
 using Project.Core.Account;
+using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
-using Project.ViewModels;
 using Project.ViewModels.Story;
 using Project.ViewModels.UserProfile;
 
@@ -19,13 +19,13 @@ namespace Project.Controllers {
     public class UserProfileController : Controller {
         readonly IUserService userService;
 
-        readonly IUserProfileUnitOfWork userProfileUOF;
-        readonly IStoryUnitOfWork storyUOF;
+        readonly IUserProfileUnitOfWork userProfileUOW;
+        readonly IStoryUnitOfWork storyUOW;
 
-        public UserProfileController(IUserService userService, IUserProfileUnitOfWork userProfileUOF, IStoryUnitOfWork storyUOF) {
+        public UserProfileController(IUserService userService, IUserProfileUnitOfWork userProfileUOW, IStoryUnitOfWork storyUOW) {
             this.userService = userService;
-            this.userProfileUOF = userProfileUOF;
-            this.storyUOF = storyUOF;
+            this.userProfileUOW = userProfileUOW;
+            this.storyUOW = storyUOW;
         }
 
         [Route("{userName?}")]
@@ -42,10 +42,10 @@ namespace Project.Controllers {
             if (userInfo == null)
                 return View("PageNotFound");
 
-            var userProfile = await userProfileUOF.UserProfiles.GetUserProfileAsync(userInfo.Id);
-            var userStories = await storyUOF.Stories.GetUserStoriesAsync(userInfo.Id);
+            var userProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userInfo.Id);
+            var userStories = await storyUOW.Stories.GetUserStoriesAsync(userInfo.Id);
 
-            var availableInterests = userProfileUOF.Interests.GetAllForUser(userProfile.Id, true);
+            var availableInterests = userProfileUOW.Interests.GetAllForUser(userProfile.Id, true);
 
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
@@ -80,13 +80,13 @@ namespace Project.Controllers {
                 return View("Index", userProfileVM);
             }
 
-            var existingProfile = await userProfileUOF.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+            var existingProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
             UpdateProfileProperties(userProfileVM, existingProfile, updateTypeEnum);
 
-            userProfileUOF.UserProfiles.InsertOrUpdate(existingProfile);
+            userProfileUOW.UserProfiles.InsertOrUpdate(existingProfile);
 
-            await userProfileUOF.CompleteAsync();
+            await userProfileUOW.CompleteAsync();
 
             return RedirectToAction("Index");
         }
@@ -112,9 +112,9 @@ namespace Project.Controllers {
         [Route("{userName}/AddInterest")]
         public async Task<ActionResult> AddInterest(int interestId) {
 
-            var currentUserProfile = await userProfileUOF.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+            var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
-            var checkInterest = (await userProfileUOF.Interests.GetAsync(i => i.Id == interestId)).FirstOrDefault();
+            var checkInterest = (await userProfileUOW.Interests.GetAsync(i => i.Id == interestId)).FirstOrDefault();
             if (checkInterest == null) {
                 ModelState.AddModelError("Interest", "The provided interest does not exist.");
                 return View();
@@ -127,9 +127,9 @@ namespace Project.Controllers {
             };
 
             currentUserProfile.Interests.Add(userInterest);
-            userProfileUOF.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
+            userProfileUOW.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
 
-            await userProfileUOF.CompleteAsync();
+            await userProfileUOW.CompleteAsync();
 
             return RedirectToAction("Index");
         }
@@ -138,7 +138,7 @@ namespace Project.Controllers {
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddGoal")]
         public async Task<ActionResult> AddGoal(GoalVM goal) {
-            var currentUserProfile = await userProfileUOF.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+            var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
             if (goal.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Goal", "You cannot add goals for another user.");
@@ -149,9 +149,9 @@ namespace Project.Controllers {
             userGoal.State = Core.Models.ModelState.Added;
 
             currentUserProfile.Goals.Add(userGoal);
-            userProfileUOF.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
+            userProfileUOW.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
 
-            await userProfileUOF.CompleteAsync();
+            await userProfileUOW.CompleteAsync();
 
             return RedirectToAction("Index");
         }
@@ -160,14 +160,14 @@ namespace Project.Controllers {
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddStep")]
         public async Task<ActionResult> AddStep(GoalVM goal) {
-            var currentUserProfile = await userProfileUOF.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+            var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
             if (goal.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Goal", "You cannot add or update goal for another user.");
                 return View(goal);
             }
 
-            var checkGoal = await userProfileUOF.Goals.GetAsync(g => g.Id == goal.Id);
+            var checkGoal = await userProfileUOW.Goals.GetAsync(g => g.Id == goal.Id);
             if (!checkGoal.Any()) {
                 ModelState.AddModelError("Goal", "The provided goal does not exist.");
                 return View(goal);
@@ -178,11 +178,80 @@ namespace Project.Controllers {
             var goalToUpdate = Mapper.Map<Goal>(goal);
             goalToUpdate.Steps.Add(goalStep);
 
-            userProfileUOF.Goals.InsertOrUpdateGraph(goalToUpdate);
+            userProfileUOW.Goals.InsertOrUpdateGraph(goalToUpdate);
 
-            await userProfileUOF.CompleteAsync();
+            await userProfileUOW.CompleteAsync();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("AddStory")]
+        public async Task<ActionResult> AddStory(StoryVM story) {
+
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Required story fields were not filled in.");
+            }
+
+            var storyModel = Mapper.Map<Story>(story);
+            storyModel.Id = 0;
+            storyModel.State = Core.Models.ModelState.Added;
+
+            storyUOW.Stories.InsertOrUpdate(storyModel);
+            await storyUOW.CompleteAsync();
+
+            return Json(new { location = Url.Action("Index") });
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("EditStory/{storyId:int}")]
+        public async Task<ActionResult> EditStory(int storyId, StoryVM story) {
+
+            var existentStory = await storyUOW.Stories.GetStoryById(storyId);
+
+            if(existentStory == null) {
+                ModelState.AddModelError("storyId", "The story that you want to edit does not exist.");
+                return PartialView("_AjaxValidation", "");
+            }
+
+            if(existentStory.UserId != userService.GetUserId()) {
+                ModelState.AddModelError("storyId", "You do not have the rights to edit that story.");
+                return PartialView("_AjaxValidation", "");
+            }
+
+            var storyModel = Mapper.Map<Story>(story);
+            storyModel.State = Core.Models.ModelState.Modified;
+
+            storyUOW.Stories.InsertOrUpdate(storyModel);
+
+            await storyUOW.CompleteAsync();
+
+            return Json(new { location = Url.Action("Index") });
+        }
+
+        [HttpDelete]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("DeleteStory/{storyId:int}")]
+        public async Task<ActionResult> DeleteStory(int storyId) {
+
+            var existentStory = await storyUOW.Stories.GetStoryById(storyId);
+
+            if (existentStory == null) {
+                ModelState.AddModelError("storyId", "The story that you want to delete does not exist.");
+                return PartialView("_AjaxValidation", "");
+            }
+
+            if (existentStory.UserId != userService.GetUserId()) {
+                ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
+                return PartialView("_AjaxValidation", "");
+            }
+
+            storyUOW.Stories.Remove(existentStory);
+            await storyUOW.CompleteAsync();
+
+            return Json(new { location = Url.Action("Index") });
         }
     }
 

@@ -17,6 +17,8 @@ namespace Project.StoryDomain.Models {
 
         public string Title { get; set; }
 
+        public string Content { get; set; }
+
         public StoryType Type { get; set; }
 
         public virtual UserInfo User { get; set; }
