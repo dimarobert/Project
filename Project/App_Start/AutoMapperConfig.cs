@@ -39,7 +39,7 @@ namespace Project {
                 cfg.CreateMap<UserProfile, UserProfileRefVM>();
 
                 cfg.CreateMap<Story, StoryVM>()
-                    .ForMember(s => s.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                   // .ForMember(s => s.UserName, opt => opt.MapFrom(src => src.User.UserName))
                     .ReverseMap();
 
                 cfg.CreateMap<Comment, CommentVM>().ReverseMap();
