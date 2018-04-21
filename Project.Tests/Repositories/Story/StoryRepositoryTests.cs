@@ -45,23 +45,6 @@ namespace Project.Tests.Repositories.StoryDomain {
             Assert.Equal(0, userStories.Count);
         }
 
-        [Fact]
-        public void Should_ReturnEmptyList_WithNull_StoryList() {
-            var fixture = FixtureExtensions.CreateFixture();
-
-            // Arrange
-            var storyContext = fixture.FreezeDbContext<IStoryContext>();
-            MockingHelpers.MockDbContextSet(storyContext, c => c.Stories, null);
-
-            var sut = fixture.Create<StoryRepository>();
-
-            // Act
-            var userStories = sut.GetUserStories("1");
-
-            // Assert
-            Assert.Equal(0, userStories.Count);
-        }
-
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -74,10 +57,11 @@ namespace Project.Tests.Repositories.StoryDomain {
             // Arrange
             var stories = fixture
                 .Build<Story>()
-                .With(t => t.UserId, userId).CreateMany(numberOfStories).AsQueryable();
+                .With(t => t.UserId, userId)
+                .CreateMany(numberOfStories).AsQueryable();
 
             var storyContext = fixture.FreezeDbContext<IStoryContext>();
-            MockingHelpers.MockDbContextSet(storyContext, c => c.Stories, stories);
+            MockingHelpers.MockDbContextSet(storyContext, c => c.Set<Story>(), stories);
 
             var sut = fixture.Create<StoryRepository>();
 

@@ -15,6 +15,8 @@ namespace Project.StoryDomain.Repositories {
 
         Task<IList<Story>> GetUserStoriesAsync(string userId);
 
+        Task<Story> GetStoryById(int storyId);
+
     }
 
     public class StoryRepository : EntityRepository<Story, int>, IStoryRepository {
@@ -24,17 +26,21 @@ namespace Project.StoryDomain.Repositories {
         public StoryRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
 
         public IList<Story> GetUserStories(string userId) {
-            if (string.IsNullOrWhiteSpace(userId) || storyDbContext.Stories == null)
+            if (string.IsNullOrWhiteSpace(userId))
                 return new List<Story>();
 
-            return storyDbContext.Stories.Where(story => story.UserId == userId).ToList();
+            return GetQ(story => story.UserId == userId).ToList();
         }
 
         public async Task<IList<Story>> GetUserStoriesAsync(string userId) {
             if (string.IsNullOrWhiteSpace(userId) || storyDbContext.Stories == null)
                 return new List<Story>();
 
-            return await storyDbContext.Stories.Where(story => story.UserId == userId).ToListAsync();
+            return await GetQ(story => story.UserId == userId).ToListAsync();
+        }
+
+        public async Task<Story> GetStoryById(int storyId) {
+            return await GetQ(s => s.Id == storyId).FirstOrDefaultAsync();
         }
 
     }
