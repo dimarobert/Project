@@ -126,6 +126,10 @@
     <Compile Include="Migrations\201804191820246_FixGroupModel.Designer.cs">
       <DependentUpon>201804191820246_FixGroupModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804211643522_UpdateStoryModel.cs" />
+    <Compile Include="Migrations\201804211643522_UpdateStoryModel.Designer.cs">
+      <DependentUpon>201804211643522_UpdateStoryModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -201,6 +205,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804191820246_FixGroupModel.resx">
       <DependentUpon>201804191820246_FixGroupModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804211643522_UpdateStoryModel.resx">
+      <DependentUpon>201804211643522_UpdateStoryModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
