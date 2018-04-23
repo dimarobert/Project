@@ -1,6 +1,7 @@
 ﻿using Project.Account.Models;
 using Project.Core.Enums;
 using Project.Core.Models;
+using Project.UserProfileDomain.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,6 +21,10 @@ namespace Project.StoryDomain.Models {
         public string Content { get; set; }
 
         public StoryType Type { get; set; }
+
+        public int? InterestId { get; set; }
+
+        public Interest Interest { get; set; }
 
         public DateTime? Date { get; set; }
 

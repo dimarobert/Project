@@ -1,4 +1,5 @@
 ﻿using Project.StoryDomain.Models;
+using Project.UserProfileDomain.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
@@ -12,6 +13,10 @@ namespace Project.StoryDomain.DAL {
             HasMany(s => s.Comments)
                 .WithOptional(c => c.ParentStory)
                 .HasForeignKey(c => c.ParentStoryId);
+
+            HasOptional(s => s.Interest)
+                .WithMany()
+                .HasForeignKey(s => s.InterestId);
             
         }
     }
