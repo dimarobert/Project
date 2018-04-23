@@ -113,7 +113,7 @@
                             }
                             @if (Model.UserId == User.Identity.GetUserId())
                             {
-                                <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
                             }
                         </p>
                     </div>
@@ -186,8 +186,8 @@
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
                         <span class="pull-right">
-                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalEdit"><span> Edit</span></a>
-                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalDelete"><span> Delete</span></a>
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#@myModalEdit"><span> Edit</span></a>
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#@myModalDelete"><span> Delete</span></a>
                         </span>
                     </li>
                 </ul>
