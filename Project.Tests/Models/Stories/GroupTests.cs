@@ -2,6 +2,7 @@
 using AutoMapper;
 using Project.StoryDomain.Models;
 using Project.Tests.Utils;
+using Project.ViewModels.Admin;
 using Project.ViewModels.UserProfile;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Project.Tests.Models.Stories {
             var groupMembers = fixture.CreateMany<GroupMember>().ToList();
 
             // Act
-            var uprVM = Mapper.Map<IList<UserProfileRefVM>>(groupMembers);
+            var uprVM = Mapper.Map<IList<UserBasicInfoVM>>(groupMembers);
 
             // Assert
             Assert.Equal(groupMembers.Count, uprVM.Count);
