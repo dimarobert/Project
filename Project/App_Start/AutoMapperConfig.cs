@@ -44,7 +44,13 @@ namespace Project {
                 cfg.CreateMap<StoryVM, Story>()
                     .ForMember(s => s.User, opt => opt.Ignore());
 
-                cfg.CreateMap<Comment, CommentVM>().ReverseMap();
+                cfg.CreateMap<Comment, CommentVM>()
+                .ForMember(c => c.UserName, opt => opt.MapFrom(src => src.User.UserName));
+
+                cfg.CreateMap<CommentVM, Comment>()
+                .ForMember(c => c.User, opt => opt.Ignore());
+
+
                 cfg.CreateMap<Hashtag, HashtagVM>().ReverseMap();
                 cfg.CreateMap<Like, LikeVM>().ReverseMap();
 

@@ -39,7 +39,7 @@
             </thead>
             <tbody>
                 @foreach (var rUser in Model.RegularUsers) {
-                    <tr>
+                    <tr id="@("ru-"+ rUser.UserId)" onclick="MakeSelection('@rUser.UserId', 'grantrole-form', 'ru-', 'ru-grantrole')" style="cursor: pointer;">
                         <th scope="row">@rUser.Id</th>
                         <td>@rUser.FirstName</td>
                         <td>@rUser.LastName</td>
@@ -51,7 +51,7 @@
             </tbody>
         </table>
 
-        @using (Ajax.BeginForm("GrantRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('grant-role-validation', data)" }, new { role = "form" })) {
+        @using (Ajax.BeginForm("GrantRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('grant-role-validation', data)" }, new { id="grantrole-form", role = "form" })) {
 
             @Html.AntiForgeryToken();
 
@@ -59,7 +59,7 @@
             @Html.Hidden("UserId")
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Make Coach</button>
+                <button id="ru-grantrole" type="submit" class="btn btn-primary invisible">Make Coach</button>
             </div>
 
             <div id="grant-role-validation"></div>
@@ -79,7 +79,7 @@
             </thead>
             <tbody>
                 @foreach (var coach in Model.Coaches) {
-                    <tr>
+                    <tr id="@("ch-"+ coach.UserId)" onclick="MakeSelection('@coach.UserId', 'revokerole-form', 'ch-', 'ch-revokerole')" style="cursor: pointer;">
                         <th scope="row">@coach.Id</th>
                         <td>@coach.FirstName</td>
                         <td>@coach.LastName</td>
@@ -90,7 +90,7 @@
             </tbody>
         </table>
 
-        @using (Ajax.BeginForm("RevokeRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('revoke-role-validation', data)" }, new { role = "form" })) {
+        @using (Ajax.BeginForm("RevokeRole", "Admin", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "ValidateAjaxForm('revoke-role-validation', data)" }, new { id="revokerole-form", role = "form" })) {
 
             @Html.AntiForgeryToken();
 
@@ -98,7 +98,7 @@
             @Html.Hidden("UserId")
 
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Revoke Coach</button>
+                <button id="ch-revokerole" type="submit" class="btn btn-primary invisible">Revoke Coach</button>
             </div>
 
             <div id="revoke-role-validation"></div>
