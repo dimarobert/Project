@@ -197,14 +197,14 @@
                                     <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                 </div>
                                 <div class="comment-content col-md-11 col-sm-10">
-                                    <h6 class="small comment-meta"><a href="/UserProfile/@com.UserName">@com.UserName</a> Just Now</h6>
+                                    <h6 class="small comment-meta"><a href="/UserProfile/@com.UserName">@com.UserName</a> @com.Date</h6>
                                     <div class="comment-body">
                                         <p>
                                             @com.Text
                                             <br>
                                             <a href="javascript:void(0);" onclick="javascript:$('#com-@com.Id').show();$(this).hide();" class="text-right small"><i class="ion-reply"></i> Reply</a>
                                             <div id="com-@com.Id" style="display:none;">
-                                                @using (Html.BeginForm("AddStoryReply", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" }))
+                                                @using (Html.BeginForm("AddCommentReply", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" }))
                                                 {
                                                     @Html.AntiForgeryToken()
 
@@ -226,7 +226,7 @@
                                                 <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                             </div>
                                             <div class="comment-content col-md-11 col-sm-10 col-12">
-                                                <h6 class="small comment-meta"><a href="/UserProfile/@subcom.UserName">@subcom.UserName</a> Just Now</h6>
+                                                <h6 class="small comment-meta"><a href="/UserProfile/@subcom.UserName">@subcom.UserName</a> @subcom.Date</h6>
                                                 <div class="comment-body">
                                                     <p>
                                                         @subcom.Text
