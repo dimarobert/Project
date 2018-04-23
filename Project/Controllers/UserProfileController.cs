@@ -216,6 +216,44 @@ namespace Project.Controllers {
 
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
+        [Route("Story/AddComment")]
+        public async Task<ActionResult> AddStoryComment(CommentVM comment) {
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Required comment fields were not filled in.");
+            }
+
+            var commentModel = Mapper.Map<Comment>(comment);
+            commentModel.Date = DateTime.Now;
+            commentModel.State = Core.Models.ModelState.Added;
+
+            storyUOW.Comments.InsertOrUpdate(commentModel);
+
+            await storyUOW.CompleteAsync();
+
+            return null;
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("Comment/AddReply")]
+        public async Task<ActionResult> AddCommentReply(CommentVM reply) {
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Required reply fields were not filled in.");
+            }
+
+            var replyModel = Mapper.Map<Comment>(reply);
+            replyModel.Date = DateTime.Now;
+            replyModel.State = Core.Models.ModelState.Added;
+
+            storyUOW.Comments.InsertOrUpdate(replyModel);
+
+            await storyUOW.CompleteAsync();
+
+            return null;
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
         [Route("EditStory/{storyId:int}")]
         public async Task<ActionResult> EditStory(int storyId, StoryVM story) {
 
