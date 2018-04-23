@@ -22,9 +22,9 @@ namespace Project.StoryDomain.Models {
 
         public StoryType Type { get; set; }
 
-        public int? InterestId { get; set; }
+        public int? GroupId { get; set; }
 
-        public Interest Interest { get; set; }
+        public Group Group { get; set; }
 
         public DateTime? Date { get; set; }
 
