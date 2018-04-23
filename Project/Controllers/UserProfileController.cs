@@ -134,7 +134,21 @@ namespace Project.Controllers {
             currentUserProfile.Interests.Add(userInterest);
             userProfileUOW.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
 
+
+            var grp = (await storyUOW.Groups.GetAsync(g => g.InterestId == interestId)).FirstOrDefault();
+
+            var groupMember = new GroupMember {
+                UserProfileId = currentUserProfile.Id,
+                GroupId = grp.Id,
+                State = Core.Models.ModelState.Added
+            };
+
+            grp.Members.Add(groupMember);
+
+            storyUOW.Groups.InsertOrUpdateGraph(grp);
+
             await userProfileUOW.CompleteAsync();
+            await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
         }
