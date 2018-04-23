@@ -285,7 +285,7 @@ namespace Project.Controllers {
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("DeleteStory/{storyId:int}")]
         public async Task<ActionResult> DeleteStory(int storyId) {
@@ -305,7 +305,7 @@ namespace Project.Controllers {
             storyUOW.Stories.Remove(existentStory);
             await storyUOW.CompleteAsync();
 
-            return Json(new { location = Url.Action("Index") });
+            return RedirectToAction("Index");
         }
     }
 
