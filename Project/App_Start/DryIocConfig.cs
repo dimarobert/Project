@@ -21,6 +21,7 @@ using Project.UserProfileDomain.Repositories;
 using Project.Account.Repositories;
 using DryIoc.WebApi;
 using System.Web.Http;
+using Project.StoryDomain.Services;
 
 namespace Project {
     public class DryIocConfig {
@@ -67,6 +68,7 @@ namespace Project {
             container.Register<ICommentRepository, CommentRepository>(Reuse.InWebRequest);
             container.Register<IHashtagRepository, HashtagRepository>(Reuse.InWebRequest);
             container.Register<IGroupRepository, GroupRepository>(Reuse.InWebRequest);
+            container.Register<IStoryService, StoryService>(Reuse.Singleton);
             
 
             container.Register<IStoryUnitOfWork, StoryUnitOfWork>(Reuse.InWebRequest);

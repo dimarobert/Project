@@ -11,34 +11,32 @@ using Project.Account.Services;
 using Project.Core.Account;
 using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
+using Project.StoryDomain.Services;
 using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels.Story;
 using Project.ViewModels.UserProfile;
 
-namespace Project.Controllers
-{
+namespace Project.Controllers {
     [RoutePrefix("UserProfile")]
-    public class UserProfileController : Controller
-    {
+    public class UserProfileController : Controller {
         readonly IUserService userService;
 
         readonly IUserProfileUnitOfWork userProfileUOW;
         readonly IStoryUnitOfWork storyUOW;
+        readonly IStoryService storyService;
 
-        public UserProfileController(IUserService userService, IUserProfileUnitOfWork userProfileUOW, IStoryUnitOfWork storyUOW)
-        {
+        public UserProfileController(IUserService userService, IUserProfileUnitOfWork userProfileUOW, IStoryUnitOfWork storyUOW, IStoryService storyService) {
             this.userService = userService;
             this.userProfileUOW = userProfileUOW;
             this.storyUOW = storyUOW;
+            this.storyService = storyService;
         }
 
         [Route("{userName?}")]
-        public async Task<ActionResult> Index(string userName = null)
-        {
+        public async Task<ActionResult> Index(string userName = null) {
 
-            if (string.IsNullOrWhiteSpace(userName))
-            {
+            if (string.IsNullOrWhiteSpace(userName)) {
                 userName = userService.GetUserName();
             }
 
@@ -57,14 +55,9 @@ namespace Project.Controllers
             var viewModel = Mapper.Map<UserProfileVM>(userProfile);
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
             viewModel.AvailableInterests = Mapper.Map<List<InterestVM>>(availableInterests);
-            viewModel.Role = "";
-            viewModel.NewStory = new StoryVM
-            {
-                UserId = userProfile.UserId
-            };
 
-            var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r =>
-            {
+            viewModel.Role = "";
+            var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
                 Enum.TryParse<StandardRoles>(r?.Role.Name, out var role);
                 return role;
             });
@@ -78,19 +71,16 @@ namespace Project.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [Route("{userName}/Update/{updateType:enum(Project.Controllers.UserProfileUpdateType)}")]
-        public async Task<ActionResult> UpdateProfile(UserProfileVM userProfileVM, string updateType)
-        {
+        public async Task<ActionResult> UpdateProfile(UserProfileVM userProfileVM, string updateType) {
 
             Enum.TryParse(updateType, out UserProfileUpdateType updateTypeEnum);
 
-            if (updateTypeEnum == UserProfileUpdateType.Unknown)
-            {
+            if (updateTypeEnum == UserProfileUpdateType.Unknown) {
                 ModelState.AddModelError("updateType", "Invalid update type provided. Please check the request URL parameter.");
                 return View("Index", userProfileVM);
             }
 
-            if (userService.GetUserId() != userProfileVM.UserId)
-            {
+            if (userService.GetUserId() != userProfileVM.UserId) {
                 ModelState.AddModelError("UserId", "You cannot save the profile of another user.");
                 return View("Index", userProfileVM);
             }
@@ -106,10 +96,8 @@ namespace Project.Controllers
             return RedirectToAction("Index");
         }
 
-        private void UpdateProfileProperties(UserProfileVM userProfileVM, UserProfile existingProfile, UserProfileUpdateType updateTypeEnum)
-        {
-            switch (updateTypeEnum)
-            {
+        private void UpdateProfileProperties(UserProfileVM userProfileVM, UserProfile existingProfile, UserProfileUpdateType updateTypeEnum) {
+            switch (updateTypeEnum) {
                 case UserProfileUpdateType.Name:
                     existingProfile.FirstName = userProfileVM.FirstName;
                     existingProfile.LastName = userProfileVM.LastName;
@@ -127,20 +115,17 @@ namespace Project.Controllers
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddInterest")]
-        public async Task<ActionResult> AddInterest(int interestId)
-        {
+        public async Task<ActionResult> AddInterest(int interestId) {
 
             var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
             var checkInterest = (await userProfileUOW.Interests.GetAsync(i => i.Id == interestId)).FirstOrDefault();
-            if (checkInterest == null)
-            {
+            if (checkInterest == null) {
                 ModelState.AddModelError("Interest", "The provided interest does not exist.");
                 return View();
             }
 
-            var userInterest = new UserInterest
-            {
+            var userInterest = new UserInterest {
                 InterestId = interestId,
                 UserProfileId = currentUserProfile.Id,
                 State = Core.Models.ModelState.Added
@@ -157,12 +142,10 @@ namespace Project.Controllers
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddGoal")]
-        public async Task<ActionResult> AddGoal(GoalVM goal)
-        {
+        public async Task<ActionResult> AddGoal(GoalVM goal) {
             var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
-            if (goal.UserProfileId != currentUserProfile.Id)
-            {
+            if (goal.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Goal", "You cannot add goals for another user.");
                 return View(goal);
             }
@@ -181,19 +164,16 @@ namespace Project.Controllers
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("{userName}/AddStep")]
-        public async Task<ActionResult> AddStep(GoalVM goal)
-        {
+        public async Task<ActionResult> AddStep(GoalVM goal) {
             var currentUserProfile = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
 
-            if (goal.UserProfileId != currentUserProfile.Id)
-            {
+            if (goal.UserProfileId != currentUserProfile.Id) {
                 ModelState.AddModelError("Goal", "You cannot add or update goal for another user.");
                 return View(goal);
             }
 
             var checkGoal = await userProfileUOW.Goals.GetAsync(g => g.Id == goal.Id);
-            if (!checkGoal.Any())
-            {
+            if (!checkGoal.Any()) {
                 ModelState.AddModelError("Goal", "The provided goal does not exist.");
                 return View(goal);
             }
@@ -213,10 +193,8 @@ namespace Project.Controllers
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("AddStory")]
-        public async Task<ActionResult> AddStory(StoryVM story)
-        {
-            if (!ModelState.IsValid)
-            {
+        public async Task<ActionResult> AddStory(StoryVM story) {
+            if (!ModelState.IsValid) {
                 return PartialView("_AjaxValidation", "Required story fields were not filled in.");
             }
 
@@ -224,9 +202,13 @@ namespace Project.Controllers
 
             storyModel.State = Core.Models.ModelState.Added;
             storyModel.Date = DateTime.Now;
-            UserInfo user = await userService.FindUserByIdAsync(storyModel.UserId);
+            storyModel.UserId = userService.GetUserId();
 
             storyUOW.Stories.InsertOrUpdate(storyModel);
+
+            var hashtags = storyService.ExtractHashtags(storyModel);
+            await storyUOW.Hashtags.UpdateHashtags(hashtags);
+            
             await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
@@ -235,19 +217,16 @@ namespace Project.Controllers
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("EditStory/{storyId:int}")]
-        public async Task<ActionResult> EditStory(int storyId, StoryVM story)
-        {
+        public async Task<ActionResult> EditStory(int storyId, StoryVM story) {
 
             var existentStory = await storyUOW.Stories.GetStoryById(storyId);
 
-            if (existentStory == null)
-            {
+            if (existentStory == null) {
                 ModelState.AddModelError("storyId", "The story that you want to edit does not exist.");
                 return PartialView("_AjaxValidation", "");
             }
 
-            if (existentStory.UserId != userService.GetUserId())
-            {
+            if (existentStory.UserId != userService.GetUserId()) {
                 ModelState.AddModelError("storyId", "You do not have the rights to edit that story.");
                 return PartialView("_AjaxValidation", "");
             }
@@ -265,19 +244,16 @@ namespace Project.Controllers
         [HttpDelete]
         [Authorize, ValidateAntiForgeryToken]
         [Route("DeleteStory/{storyId:int}")]
-        public async Task<ActionResult> DeleteStory(int storyId)
-        {
+        public async Task<ActionResult> DeleteStory(int storyId) {
 
             var existentStory = await storyUOW.Stories.GetStoryById(storyId);
 
-            if (existentStory == null)
-            {
+            if (existentStory == null) {
                 ModelState.AddModelError("storyId", "The story that you want to delete does not exist.");
                 return PartialView("_AjaxValidation", "");
             }
 
-            if (existentStory.UserId != userService.GetUserId())
-            {
+            if (existentStory.UserId != userService.GetUserId()) {
                 ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
                 return PartialView("_AjaxValidation", "");
             }
@@ -289,8 +265,7 @@ namespace Project.Controllers
         }
     }
 
-    public enum UserProfileUpdateType
-    {
+    public enum UserProfileUpdateType {
         Unknown = 0,
         Name,
         AboutMe,

@@ -62,6 +62,7 @@
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\StoryRepository.cs" />
     <Compile Include="Repositories\StoryUnitOfWork.cs" />
+    <Compile Include="Services\StoryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
