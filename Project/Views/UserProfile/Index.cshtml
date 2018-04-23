@@ -1,4 +1,6 @@
-﻿@model Project.ViewModels.UserProfile.UserProfileVM
+﻿@using Project.ViewModels.UserProfile
+@using Project.ViewModels.Story
+@model UserProfileVM
 
 @using Microsoft.AspNet.Identity;
 @using Project.Controllers;
@@ -17,35 +19,24 @@
                 <div class="row">
                     <div class="col-12 col-lg-8 col-md-6">
                         <h3 class="mb-0 text-truncated">
-                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName))
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName)) {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-name" onclick="editName(this);">No name <i class="fa fa-pencil" aria-hidden="true"></i></span>
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-name">No name</span>
                                 }
-                            }
-                            else
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            } else {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="edit-inline-hover" id="profile-name" onclick="editName(this);">@(Model.FirstName + " " + Model.LastName) <i class="fa fa-pencil" aria-hidden="true"></i></span>
-                                }
-                                else
-                                {
+                                } else {
                                     <span id="profile-name">@(Model.FirstName + " " + Model.LastName)</span>
                                 }
                             }
                         </h3>
-                        @if (Model.UserId == User.Identity.GetUserId())
-                        {
+                        @if (Model.UserId == User.Identity.GetUserId()) {
                             using (Html.BeginForm("UpdateProfile", "UserProfile",
                                 new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.Name.ToString() }, FormMethod.Post,
-                                new { @class = "form-horizontal d-none", id = "name-form", role = "form" }))
-                            {
+                                new { @class = "form-horizontal d-none", id = "name-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-sm", placeholder = "First Name" })
@@ -62,37 +53,26 @@
                             @Model.Role
                         </p>
                         <p>
-                            @if (string.IsNullOrWhiteSpace(Model.AboutMe))
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            @if (string.IsNullOrWhiteSpace(Model.AboutMe)) {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. </span>
                                 }
-                            }
-                            else
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            } else {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">@Model.AboutMe <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe</span>
                                 }
                             }
                         </p>
-                        @if (Model.UserId == User.Identity.GetUserId())
-                        {
+                        @if (Model.UserId == User.Identity.GetUserId()) {
                             using (Html.BeginForm("UpdateProfile", "UserProfile",
                                 new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.AboutMe.ToString() }, FormMethod.Post,
-                                new { @class = "form-horizontal d-none", id = "aboutme-form", role = "form" }))
-                            {
+                                new { @class = "form-horizontal d-none", id = "aboutme-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.TextAreaFor(m => m.AboutMe, new { @class = "form-control", placeholder = "What defines you? Keep it short." })
@@ -105,12 +85,10 @@
                             }
                         }
                         <p>
-                            @foreach (var interest in Model.Interests)
-                            {
+                            @foreach (var interest in Model.Interests) {
                                 <span class="badge badge-info tags">@interest.Title</span>
                             }
-                            @if (Model.UserId == User.Identity.GetUserId())
-                            {
+                            @if (Model.UserId == User.Identity.GetUserId()) {
                                 <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
                             }
                         </p>
@@ -118,8 +96,7 @@
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" }))
-                                {
+                                @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" })) {
                                     @Html.AntiForgeryToken()
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Add Interest </h5>
@@ -183,7 +160,7 @@
     </div>
     <div class="col-8">
         <div class="card">
-            @Html.Partial("_Story", Model.NewStory)
+            @Html.Partial("_Story", new StoryVM())
         </div>
         <div class="card" style="margin-top:15px;">
             <div class="card-body">

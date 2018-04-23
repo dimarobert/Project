@@ -33,8 +33,6 @@ namespace Project.ViewModels.UserProfile
 
         public IList<StoryVM> Stories { get; set; }
 
-        public StoryVM NewStory { get; set; }
-
         public IList<InterestVM> AvailableInterests { get; set; }
     }
 }
