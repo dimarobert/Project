@@ -1,0 +1,40 @@
+﻿@model Project.ViewModels.Story.StoryVM
+<div class="card-body">
+    <div class="row">
+        <div class="col-8"><h3>Add Story</h3></div>
+    </div>
+        @using (Html.BeginForm("AddStory", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "addstory-form", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.UserId)
+            <div class="col-4">
+                @{
+                    List<SelectListItem> type = new List<SelectListItem>();
+
+                    type.Insert(0, (new SelectListItem { Text = "Regular", Value = "1" }));
+                    type.Insert(1, (new SelectListItem { Text = "Asking Advice", Value = "2" }));
+                }
+                @Html.DropDownListFor(x => x.Type, type, "Choose story type", new { @class = "form-control required" })
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    @Html.DisplayNameFor(x => x.Title)
+                    @Html.TextBoxFor(x => x.Title, htmlAttributes: new { @class = "form-control required" })
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    @Html.DisplayNameFor(x => x.Content)
+                    @Html.TextAreaFor(x => x.Content, htmlAttributes: new { @class = "form-control required" })
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary float-right">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                    Post
+                </button>
+            </div>
+        }
+</div>

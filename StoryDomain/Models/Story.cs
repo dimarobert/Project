@@ -21,7 +21,9 @@ namespace Project.StoryDomain.Models {
 
         public StoryType Type { get; set; }
 
-        public virtual UserInfo User { get; set; }
+        public DateTime? Date { get; set; }
+
+        //public virtual UserInfo User { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 

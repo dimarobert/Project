@@ -111,7 +111,7 @@
                             }
                             @if (Model.UserId == User.Identity.GetUserId())
                             {
-                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
+                                <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
                             }
                         </p>
                     </div>
@@ -183,29 +183,7 @@
     </div>
     <div class="col-8">
         <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-8"><h3>Add Story</h3></div>
-                    <div class="col-4">
-                        <select class="custom-select">
-                            <option value="1" selected>One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <textarea class="form-control" id="exampleTextarea" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <button type="button" class="btn btn-primary float-right">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                            Post
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @Html.Partial("_Story", Model.NewStory)
         </div>
         <div class="card" style="margin-top:15px;">
             <div class="card-body">

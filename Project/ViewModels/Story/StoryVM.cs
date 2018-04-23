@@ -1,4 +1,5 @@
 ﻿using Project.Account.Models;
+using Project.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,9 @@ namespace Project.ViewModels.Story
 
         [Required]
         public string Content { get; set; }
+
+        [Required]
+        public StoryType Type { get; set; }
 
         public string UserName { get; set; }
 

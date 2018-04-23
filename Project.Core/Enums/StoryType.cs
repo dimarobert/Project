@@ -8,9 +8,11 @@ namespace Project.Core.Enums
 {
     public enum StoryType
     {
-        Regular,
-        AskingAdvice,
-        GivingAdvice
+        Regular = 1,
 
+        AskingAdvice = 2,
+
+        GivingAdvice = 3,
+        
     }
 }
