@@ -10,6 +10,8 @@ namespace Project.ViewModels.Admin {
 
         public IList<UserBasicInfoVM> Coaches { get; set; }
 
+        public IList<UserBasicInfoVM> Admins { get; set; }
+
         public IList<InterestVM> Interests { get; set; }
 
         public IList<GroupVM> Groups { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Project.Core.Repositories;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace Project.StoryDomain.Repositories {
         }
 
         public async Task UpdateHashtags(IList<string> hashtags) {
+            hashtags = hashtags.Select(h => h.ToLower()).ToList();
+
             var existingHashtags = await GetAsync(h => hashtags.Contains(h.Value));
 
             foreach (var hashtag in hashtags) {
