@@ -14,9 +14,9 @@ namespace Project.StoryDomain.DAL {
                 .WithOptional(c => c.ParentStory)
                 .HasForeignKey(c => c.ParentStoryId);
 
-            HasOptional(s => s.Interest)
-                .WithMany()
-                .HasForeignKey(s => s.InterestId);
+            HasOptional(s => s.Group)
+                .WithMany(g => g.Stories)
+                .HasForeignKey(s => s.GroupId);
             
         }
     }
