@@ -10,56 +10,61 @@
 <div class="row">
     <div class="col-xs-6 col-md-4">
         <h2>Stories</h2>
-        @foreach (var story in Model)
-        {
-            <div class="card">
-                <div>
-                    <h2> @story.Title </h2>
-                </div>
-                <div>
-                    <h6> Posted on  @(story.Date.HasValue ? story.Date.ToString() : "-")  (Type: @story.Type)</h6>
-                </div>
-                <div>
-                    @story.Content
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary float-left" id="edit">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
-                        Modify story
-                    </button>
-                </div>
-                <div>
-                    <h5> @(story.Likes != null ? story.Likes.Count : 0 ) Likes</h5>
-
-                </div>
-                <div class="card-body">
-                    <div class="comments col-md-12" id="comments">
-                        <h3 class="mb-2">Comments</h3>
-                        <h6> @(story.Comments != null ? story.Comments.Count : 0 ) Comments</h6>
-                        @foreach (var comment in story.Comments)
-                        {
-                            <div class="comment mb-2 row">
-                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
-                                    <a href=""><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/m103.jpg" alt="avatar"></a>
-                                </div>
-                                <div class="comment-content col-md-11 col-sm-10">
-                                    <h6 class="small comment-meta"><a href="#">@comment.User.UserName</a> @*@@comment.Date*@</h6>
-                                    <div class="comment-body">
-                                        <p>
-                                            @comment.Text
-                                            <br>
-                                            <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
+        <div class="alert-message alert-message-success">
+            <h6>
+               I like Football
+            </h6>
+            <p>+5 Comments & +1 Likes</p>
+        </div>
+        <div class="alert-message alert-message-success">
+            <h6>
+                Hiking - The best of it!
+            </h6>
+            <p>+10 Comments & +4 Likes</p>
+        </div>
+        <div class="alert-message alert-message-success">
+            <h6>
+                Healthy is the new black
+            </h6>
+            <p>+23 Comments & +10 Likes</p>
+        </div>
     </div>
-    <div class="col-xs-6 col-md-4"><h2>Groups</h2></div>
-    <div class="col-xs-12 col-md-4"><h2>Goals</h2></div>
+    <div class="col-xs-6 col-md-4">
+        <h2>Groups</h2>
+        <div class="alert-message alert-message-info">
+            <h6>
+                Raw Vegan Community 
+            </h6>
+            <p>5 New Members</p>
+        </div>
+        <div class="alert-message alert-message-info">
+            <h6>
+                Bike and Scooters Community
+            </h6>
+            <p>5 New Members</p>
+        </div>
+        <div class="alert-message alert-message-info">
+            <h6>
+                Cheese and wine Fanatics
+            </h6>
+            <p>34 New Members</p>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-4">
+        <h2>Goals</h2>
+        <div class="alert-message alert-message-notice">
+            <h6>
+                Weight 90kg reached!
+            </h6>
+            <p>This is the 2nd goal reached.</p>
+        </div>
+        <div class="alert-message alert-message-notice">
+            <h6>
+                Weight 100kg reached!
+            </h6>
+            <p>This is the 1st goal reached.</p>
+        </div>
+    </div>
 </div>
 

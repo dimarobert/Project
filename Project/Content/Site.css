@@ -6,3 +6,77 @@
     cursor: pointer;
     background-color: lightgray;
 }
+
+.alert-message {
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #eee;
+}
+
+    .alert-message h6 {
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    .alert-message p:last-child {
+        margin-bottom: 0;
+    }
+
+    .alert-message code {
+        background-color: #fff;
+        border-radius: 3px;
+    }
+
+.alert-message-success {
+    background-color: #F4FDF0;
+    border-color: #3C763D;
+}
+
+    .alert-message-success h6 {
+        color: #3C763D;
+    }
+
+.alert-message-danger {
+    background-color: #fdf7f7;
+    border-color: #d9534f;
+}
+
+    .alert-message-danger h6 {
+        color: #d9534f;
+    }
+
+.alert-message-warning {
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+}
+
+    .alert-message-warning h6 {
+        color: #f0ad4e;
+    }
+
+.alert-message-info {
+    background-color: #f4f8fa;
+    border-color: #5bc0de;
+}
+
+    .alert-message-info h6 {
+        color: #5bc0de;
+    }
+
+.alert-message-default {
+    background-color: #EEE;
+    border-color: #B4B4B4;
+}
+
+    .alert-message-default h6 {
+        color: #000;
+    }
+
+.alert-message-notice {
+    background-color: #FCFCDD;
+    border-color: #BDBD89;
+}
+
+    .alert-message-notice h6 {
+        color: #444;
+    }

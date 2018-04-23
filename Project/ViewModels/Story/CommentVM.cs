@@ -13,12 +13,13 @@ namespace Project.ViewModels.Story
     {
         public int Id { get; set; }
 
-        public int ParentStoryId { get; set; }
+        public int? ParentStoryId { get; set; }
 
         public int? ParentCommentId { get; set; }
 
         public string UserId { get; set; }
 
+        [Required]
         public string Text { get; set; }
 
         public DateTime? Date { get; set; }

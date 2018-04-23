@@ -1,4 +1,5 @@
 ﻿using Project.StoryDomain.Models;
+using Project.UserProfileDomain.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
@@ -10,8 +11,12 @@ namespace Project.StoryDomain.DAL {
 
         public StoryTypeConfiguration() {
             HasMany(s => s.Comments)
-                .WithRequired()
+                .WithOptional(c => c.ParentStory)
                 .HasForeignKey(c => c.ParentStoryId);
+
+            HasOptional(s => s.Group)
+                .WithMany(g => g.Stories)
+                .HasForeignKey(s => s.GroupId);
             
         }
     }

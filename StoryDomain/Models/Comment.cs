@@ -11,8 +11,7 @@ namespace Project.StoryDomain.Models {
     public class Comment : ObjectWithState, IEntity<int> {
         public int Id { get; set; }
 
-        [Required]
-        public int ParentStoryId { get; set; }
+        public int? ParentStoryId { get; set; }
 
         public int? ParentCommentId { get; set; }
 
