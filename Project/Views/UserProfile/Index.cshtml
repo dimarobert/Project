@@ -212,12 +212,16 @@
                                     <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                 </div>
                                 <div class="comment-content col-md-11 col-sm-10">
-                                    <h6 class="small comment-meta"><a href="#">@com.User</a> Just Now</h6>
+                                    <h6 class="small comment-meta"><a href="/UserPorfile/@com.UserId">@com.UserId</a> Just Now</h6>
                                     <div class="comment-body">
                                         <p>
                                             @com.Text
                                             <br>
-                                            <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                            <a href="javascript:void(0);" onclick="javascript:$('#com-@com.Id').show();debugger; $(this).hide();" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                            <div id="com-@com.Id" style="display:none;"> 
+                                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="What do you think?" required>
+                                                <button type="button" class="btn btn-primary btn-sm float-right"><i class="fa fa-plus" aria-hidden="true"></i>  Post</button>
+                                            </div>
                                         </p>
                                     </div>
                                 </div>
@@ -235,7 +239,11 @@
                                                     <p>
                                                         @subcom.Text
                                                         <br>
-                                                        <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                                        <a href="javascript:void(0);" onclick="javascript:$('#com-@subcom.Id').show();debugger; $(this).hide();" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                                        <div id="com-@subcom.Id" style="display:none;">
+                                                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="What do you think?" required>
+                                                            <button type="button" class="btn btn-primary btn-sm float-right"><i class="fa fa-plus" aria-hidden="true"></i>  Post</button>
+                                                        </div>
                                                     </p>
                                                 </div>
                                             </div>
@@ -250,7 +258,9 @@
                     }
                     <div class="row pt-2">
                         <div class="col-12">
-                            <a href="" class="btn btn-sm btn-primary">Comment</a>
+                            <textarea class="form-control" id="" rows="3"></textarea>
+                            <br />
+                            <a href="" class="float-right btn btn-primary">Comment</a>
                         </div>
                     </div>
                 </div>
