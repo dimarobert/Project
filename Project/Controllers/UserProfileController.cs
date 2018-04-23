@@ -230,7 +230,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return null;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -249,7 +249,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return null;
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
