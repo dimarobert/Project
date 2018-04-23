@@ -36,8 +36,10 @@ namespace Project.Controllers {
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Dashboard() {
 
-            var regularUsers = await userProfileUnitOfWork.UserProfiles.GetUsersInRoleProfileAsync(StandardRoles.Normal);
+            var regularUsers = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Normal);
             var coaches = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Coach);
+            var admins = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Admin);
+
             var interests = await userProfileUnitOfWork.Interests.AllAsync;
             var groups = await storyUnitOfWork.Groups.AllAsync;
             var hashtags = await storyUnitOfWork.Hashtags.AllAsync;
@@ -45,6 +47,7 @@ namespace Project.Controllers {
             var dashboard = new DashboardVM() {
                 RegularUsers = Mapper.Map<List<UserBasicInfoVM>>(regularUsers),
                 Coaches = Mapper.Map<List<UserBasicInfoVM>>(coaches),
+                Admins = Mapper.Map<List<UserBasicInfoVM>>(admins),
                 Interests = Mapper.Map<List<InterestVM>>(interests),
                 Groups = Mapper.Map<List<GroupVM>>(groups),
                 Hashtags = Mapper.Map<List<HashtagVM>>(hashtags)

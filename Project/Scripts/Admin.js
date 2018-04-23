@@ -9,3 +9,18 @@
     }
 
 }
+
+function MakeSelection(userId, formId, rowIdPrefix, submitButtonId) {
+
+    var form = $('#' + formId);
+    var existingSelection = form.children('#UserId').val();
+
+    if (existingSelection) {
+        $('#' + rowIdPrefix + existingSelection).removeClass('table-active');
+    }
+
+    form.children('#UserId').val(userId);
+    $('#' + rowIdPrefix + userId).addClass('table-active');
+
+    $('#' + submitButtonId).removeClass('invisible');
+}
