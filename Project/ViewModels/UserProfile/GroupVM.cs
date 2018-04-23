@@ -1,4 +1,5 @@
-﻿using Project.ViewModels.Story;
+﻿using Project.ViewModels.Admin;
+using Project.ViewModels.Story;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,23 @@ namespace Project.ViewModels.UserProfile {
 
         public string Title { get; set; }
 
-        public IList<UserProfileRefVM> Members { get; set; }
+        public IList<UserBasicInfoVM> Members { get; set; }
 
         public IList<StoryVM> RegularStories { get; set; }
 
+        public IList<StoryVM> PromotedRegularStories { get; set; }
+
         public IList<StoryVM> GivingAdviceStories { get; set; }
+
+        public IList<StoryVM> PromotedGivingAdviceStories { get; set; }
 
         public IList<StoryVM> AskingAdviceStories { get; set; }
 
+        public IList<StoryVM> PromotedAskingAdviceStories { get; set; }
+
+        public int CurrentPage { get; set; }
+
+        public int NoOfPages { get; set; }
 
     }
 }

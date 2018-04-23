@@ -242,7 +242,6 @@
     <Compile Include="ViewModels\Story\StoryVM.cs" />
     <Compile Include="ViewModels\UserProfile\StepVM.cs" />
     <Compile Include="ViewModels\UserProfile\UserInterestVM.cs" />
-    <Compile Include="ViewModels\UserProfile\UserProfileRefVM.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -359,10 +358,10 @@
     <Content Include="Views\Shared\Forbidden.cshtml" />
     <Content Include="Views\Shared\_AjaxValidation.cshtml" />
     <Content Include="Views\UserProfile\_Story.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Group\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

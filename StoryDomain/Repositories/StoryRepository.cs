@@ -1,4 +1,5 @@
-﻿using Project.Core.Repositories;
+﻿using Project.Core.Enums;
+using Project.Core.Repositories;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
 using System;
@@ -17,10 +18,16 @@ namespace Project.StoryDomain.Repositories {
 
         Task<Story> GetStoryById(int storyId);
 
-    }
+        Task<IList<Story>> GetPromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type);
 
-    public class StoryRepository : EntityRepository<Story, int>, IStoryRepository {
+        Task<IList<Story>> GetAllStoriesByGroupAndTypeAsync(int groupId, StoryType type);
 
+        Task<IList<Story>> GetUnpromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type);
+
+        }
+
+        public class StoryRepository : EntityRepository<Story, int>, IStoryRepository {
+        private readonly int promotedStoryLikeNumber = 5;
         IStoryContext storyDbContext => context as IStoryContext;
 
         public StoryRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
@@ -43,5 +50,18 @@ namespace Project.StoryDomain.Repositories {
             return await GetQ(s => s.Id == storyId).FirstOrDefaultAsync();
         }
 
+        public async Task<IList<Story>> GetPromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type && s.Likes.Count >= promotedStoryLikeNumber)
+                .ToListAsync();
+        }
+
+        public async Task<IList<Story>> GetAllStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type).ToListAsync();
+        }
+
+        public async Task<IList<Story>> GetUnpromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type && s.Likes.Count < promotedStoryLikeNumber)
+                .ToListAsync();
+        }
     }
 }
