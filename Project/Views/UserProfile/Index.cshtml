@@ -201,7 +201,7 @@
                 <div class="card-body">
                     @if (story.Comments.Count() == 0)
                     {
-                        <h5>There are Comments yet</h5>
+                    <h5>There are no Comments yet</h5>
                     }
                     @foreach (var com in story.Comments)
                     {
@@ -212,7 +212,7 @@
                                     <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                 </div>
                                 <div class="comment-content col-md-11 col-sm-10">
-                                    <h6 class="small comment-meta"><a href="/UserPorfile/@com.UserId">@com.UserId</a> Just Now</h6>
+                                    <h6 class="small comment-meta"><a href="/UserProfile/@com.UserName">@com.UserName</a> Just Now</h6>
                                     <div class="comment-body">
                                         <p>
                                             @com.Text
@@ -234,7 +234,7 @@
                                                 <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                             </div>
                                             <div class="comment-content col-md-11 col-sm-10 col-12">
-                                                <h6 class="small comment-meta"><a href="#">@subcom.User</a> Just Now</h6>
+                                                <h6 class="small comment-meta"><a href="/UserProfile/@subcom.UserName">@subcom.UserName</a> Just Now</h6>
                                                 <div class="comment-body">
                                                     <p>
                                                         @subcom.Text
