@@ -6,7 +6,7 @@ namespace Project.StoryDomain.DAL {
 
         public CommentTypeConfiguration() {
             HasMany(c => c.Comments)
-                .WithOptional()
+                .WithOptional(c => c.ParentComment)
                 .HasForeignKey(c => c.ParentCommentId);
 
         }
