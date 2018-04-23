@@ -230,6 +230,7 @@
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\Admin\CreateInterestModel.cs" />
     <Compile Include="ViewModels\Admin\DashboardVM.cs" />
     <Compile Include="ViewModels\Admin\UserBasicInfoVM.cs" />
     <Compile Include="ViewModels\UserProfile\GoalVM.cs" />
@@ -358,6 +359,7 @@
     <Content Include="Views\Shared\Forbidden.cshtml" />
     <Content Include="Views\Shared\_AjaxValidation.cshtml" />
     <Content Include="Views\UserProfile\_Story.cshtml" />
+    <Content Include="Views\Admin\_CreateInterestModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

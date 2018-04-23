@@ -208,7 +208,7 @@ namespace Project.Controllers {
 
             var hashtags = storyService.ExtractHashtags(storyModel);
             await storyUOW.Hashtags.UpdateHashtags(hashtags);
-            
+
             await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
@@ -303,6 +303,11 @@ namespace Project.Controllers {
                 ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
                 return PartialView("_AjaxValidation", "");
             }
+
+            var allComments = await storyUOW.Stories.GetAllComments(existentStory.Id);
+
+            foreach (var comment in allComments)
+                storyUOW.Comments.Remove(comment);
 
             storyUOW.Stories.Remove(existentStory);
             await storyUOW.CompleteAsync();
