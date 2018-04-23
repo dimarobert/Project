@@ -134,6 +134,10 @@
     <Compile Include="Migrations\201804231744175_AddCommentDate.Designer.cs">
       <DependentUpon>201804231744175_AddCommentDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804231956562_FixCommentModel.cs" />
+    <Compile Include="Migrations\201804231956562_FixCommentModel.Designer.cs">
+      <DependentUpon>201804231956562_FixCommentModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -215,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804231744175_AddCommentDate.resx">
       <DependentUpon>201804231744175_AddCommentDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804231956562_FixCommentModel.resx">
+      <DependentUpon>201804231956562_FixCommentModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

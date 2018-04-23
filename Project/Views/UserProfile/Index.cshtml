@@ -209,7 +209,6 @@
                                                     @Html.AntiForgeryToken()
 
                                                     @Html.TextArea("Text", new { @class = "form-control form-control-sm", placeholder = "Add Reply" })
-                                                    @Html.Hidden("ParentStoryId", story.Id)
                                                     @Html.Hidden("ParentCommentId", com.Id)
                                                     <button type="submit" href="" class="float-right btn btn-sm btn-link"><i class="fa fa-plus" aria-hidden="true"></i> Add reply</button>
                                                 }

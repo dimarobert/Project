@@ -225,6 +225,7 @@ namespace Project.Controllers {
             var commentModel = Mapper.Map<Comment>(comment);
             commentModel.Date = DateTime.Now;
             commentModel.State = Core.Models.ModelState.Added;
+            commentModel.UserId = userService.GetUserId();
 
             storyUOW.Comments.InsertOrUpdate(commentModel);
 
@@ -244,6 +245,7 @@ namespace Project.Controllers {
             var replyModel = Mapper.Map<Comment>(reply);
             replyModel.Date = DateTime.Now;
             replyModel.State = Core.Models.ModelState.Added;
+            replyModel.UserId = userService.GetUserId();
 
             storyUOW.Comments.InsertOrUpdate(replyModel);
 

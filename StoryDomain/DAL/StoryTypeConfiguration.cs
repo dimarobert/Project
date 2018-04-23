@@ -10,7 +10,7 @@ namespace Project.StoryDomain.DAL {
 
         public StoryTypeConfiguration() {
             HasMany(s => s.Comments)
-                .WithRequired()
+                .WithOptional(c => c.ParentStory)
                 .HasForeignKey(c => c.ParentStoryId);
             
         }
