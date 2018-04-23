@@ -269,14 +269,20 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "");
             }
 
-            var storyModel = Mapper.Map<Story>(story);
-            storyModel.State = Core.Models.ModelState.Modified;
+            if (existentStory.Type != story.Type)
+                existentStory.Type = story.Type;
+            if (!string.IsNullOrEmpty(story.Title) && existentStory.Title != story.Title)
+                existentStory.Title = story.Title;
+            if (!string.IsNullOrEmpty(story.Content) && existentStory.Content != story.Content)
+                existentStory.Content = story.Content;
 
-            storyUOW.Stories.InsertOrUpdate(storyModel);
+            existentStory.State = Core.Models.ModelState.Modified;
+
+            storyUOW.Stories.InsertOrUpdate(existentStory);
 
             await storyUOW.CompleteAsync();
 
-            return Json(new { location = Url.Action("Index") });
+            return RedirectToAction("Index");
         }
 
         [HttpDelete]

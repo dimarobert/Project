@@ -174,6 +174,10 @@
         </div>
         @foreach (var story in Model.Stories)
         {
+
+            var myModalEdit = "myModal" + story.Id;
+            var myModalDelete = "myModal" + story.Id;
+
             <div class="card" style="margin-top:15px;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="background-color:teal;color:white;">
@@ -181,8 +185,58 @@
                         <h2>@story.Title</h2>
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
+                        <span class="pull-right">
+                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalEdit"><span> Edit</span></a>
+                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalDelete"><span> Delete</span></a>
+                        </span>
                     </li>
                 </ul>
+                <div class="modal fade" id="@myModalEdit" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("EditStory", "UserProfile", new { storyId = story.Id }, FormMethod.Post, new { @class = "form-horizontal", id = "editstory-form", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel">Edit Story </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            @Html.Label("Type")
+                                            @{
+                                                List<SelectListItem> type = new List<SelectListItem>();
+
+                                                type.Insert(0, (new SelectListItem { Text = "Regular", Value = "1" }));
+                                                type.Insert(1, (new SelectListItem { Text = "AskingAdvice", Value = "2" }));
+                                            }
+                                            @Html.DropDownList("Type", type.Select(l => new SelectListItem { Selected = (l.Text == story.Type.ToString()), Text = l.Text, Value = l.Value }), null, new { @class = "form-control required" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            @Html.Label("Title")
+                                            @Html.TextBox("Title", story.Title, htmlAttributes: new { @class = "form-control required" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            @Html.Label("Content")
+                                            @Html.TextArea("Content", story.Content, htmlAttributes: new { @class = "form-control required" })
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary"> Edit</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     @if (story.Comments.Count() == 0)
                     {
@@ -243,7 +297,7 @@
                     }
                     <div class="row pt-2">
                         <div class="col-12">
-                            @using (Html.BeginForm("AddStoryComment", "UserProfile",new { }, FormMethod.Post,new { @class = "form-horizontal", id = "comment-form", role = "form" }))
+                            @using (Html.BeginForm("AddStoryComment", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" }))
                             {
                                 @Html.AntiForgeryToken()
 
