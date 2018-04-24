@@ -38,6 +38,7 @@ namespace Project.Tests.Controllers {
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfileVM>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
         }
 
         [Fact]
@@ -530,6 +531,7 @@ namespace Project.Tests.Controllers {
         public async Task AddInterest_ShouldRetrieve_CurrentUserProfile() {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
 
             // Arrange
             var currentUserId = fixture.Create<string>();
@@ -537,12 +539,21 @@ namespace Project.Tests.Controllers {
                 .With(p => p.Interests, new List<UserInterest>())
                 .Create();
 
+            var group = fixture.Build<Group>()
+                .With(g => g.Members, new List<GroupMember>())
+                .CreateMany(1)
+                .ToList() as IList<Group>;
+
             var uService = fixture.Freeze<Mock<IUserService>>();
             uService.Setup(s => s.GetUserId()).Returns(currentUserId);
 
             var upRepo = fixture.Freeze<Mock<IUserProfileRepository>>();
             upRepo.Setup(r => r.GetUserProfileAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(currentUserProfile));
+
+            var storyUOW = fixture.Freeze<Mock<IStoryUnitOfWork>>();
+            storyUOW.Setup(uow => uow.Groups.GetAsync(It.IsAny<Expression<Func<Group, bool>>[]>()))
+                .Returns(Task.FromResult(group));
 
             var interestId = fixture.Create<int>();
             var sut = fixture.CreateController<UserProfileController>();
@@ -590,6 +601,7 @@ namespace Project.Tests.Controllers {
         public async Task AddInterest_ShouldInsertAndSaveToDatabase() {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<UserProfile>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
 
             // Arrange
             var currentUserId = fixture.Create<string>();
@@ -609,9 +621,18 @@ namespace Project.Tests.Controllers {
                 .With(p => p.Interests, currentUserInterests)
                 .Create();
 
-            var upUOF = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
-            upUOF.Setup(uof => uof.UserProfiles.GetUserProfileAsync(It.IsAny<string>()))
+            var group = fixture.Build<Group>()
+                .With(g => g.Members, new List<GroupMember>())
+                .CreateMany(1)
+                .ToList() as IList<Group>;
+
+            var upUOW = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
+            upUOW.Setup(uow => uow.UserProfiles.GetUserProfileAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(currentUserProfile));
+
+            var storyUOW = fixture.Freeze<Mock<IStoryUnitOfWork>>();
+            storyUOW.Setup(uow => uow.Groups.GetAsync(It.IsAny<Expression<Func<Group, bool>>[]>()))
+                .Returns(Task.FromResult(group));
 
             var sut = fixture.CreateController<UserProfileController>();
 
@@ -619,14 +640,14 @@ namespace Project.Tests.Controllers {
             var action = await sut.AddInterest(interestId);
             var redirect = action as RedirectToRouteResult;
             // Assert
-            upUOF.Verify(uof => uof.UserProfiles.InsertOrUpdateGraph(
+            upUOW.Verify(uow => uow.UserProfiles.InsertOrUpdateGraph(
                 It.Is<UserProfile>(p =>
                     p.Interests.Where(i =>
                         i.UserProfileId == currentUserProfileId && i.InterestId == interestId).Count() == 1
                     )
                 )
             );
-            upUOF.Verify(uof => uof.CompleteAsync());
+            upUOW.Verify(uow => uow.CompleteAsync());
 
             Assert.IsType<RedirectToRouteResult>(action);
             Assert.Contains("action", redirect.RouteValues.Keys);

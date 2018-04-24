@@ -36,8 +36,6 @@ namespace Project {
                     .ForMember(upVM => upVM.Interests, opt => opt.MapFrom(src => Mapper.Map<IList<InterestVM>>(src.Interests)))
                     .ReverseMap();
 
-                cfg.CreateMap<UserProfile, UserProfileRefVM>();
-
                 cfg.CreateMap<Story, StoryVM>()
                     .ForMember(s => s.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
@@ -54,11 +52,11 @@ namespace Project {
                 cfg.CreateMap<Hashtag, HashtagVM>().ReverseMap();
                 cfg.CreateMap<Like, LikeVM>().ReverseMap();
 
-                cfg.CreateMap<GroupMember, UserProfileRefVM>()
+                cfg.CreateMap<GroupMember, UserBasicInfoVM>()
                     .AfterMap((src, dest, ctx) => ctx.Mapper.Map(src.UserProfile, dest));
 
                 cfg.CreateMap<Group, GroupVM>()
-                    .ForMember(gvm => gvm.Members, opt => opt.MapFrom(src => Mapper.Map<IList<UserProfileRefVM>>(src.Members)))
+                    .ForMember(gvm => gvm.Members, opt => opt.MapFrom(src => Mapper.Map<IList<UserBasicInfoVM>>(src.Members)))
                     .ReverseMap();
 
 

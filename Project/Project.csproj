@@ -218,6 +218,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsonApiController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -242,7 +243,6 @@
     <Compile Include="ViewModels\Story\StoryVM.cs" />
     <Compile Include="ViewModels\UserProfile\StepVM.cs" />
     <Compile Include="ViewModels\UserProfile\UserInterestVM.cs" />
-    <Compile Include="ViewModels\UserProfile\UserProfileRefVM.cs" />
     <Compile Include="ViewModels\UserProfile\UserProfileVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +359,7 @@
     <Content Include="Views\Shared\Forbidden.cshtml" />
     <Content Include="Views\Shared\_AjaxValidation.cshtml" />
     <Content Include="Views\UserProfile\_Story.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Admin\_CreateInterestModal.cshtml" />
   </ItemGroup>
   <ItemGroup>

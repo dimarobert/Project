@@ -111,8 +111,9 @@ namespace Project.Tests.Controllers {
             var action = await sut.Dashboard();
 
             // Assert
-            upRepo.Verify(r => r.GetUsersInRoleProfileAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)));
+            upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)));
             upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)));
+            upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Admin)));
             interestRepo.Verify(r => r.AllAsync);
             hashtagRepo.Verify(r => r.AllAsync);
             groupRepo.Verify(r => r.AllAsync);
@@ -137,6 +138,10 @@ namespace Project.Tests.Controllers {
                 .CreateMany()
                 .ToList();
 
+            var expectedAdminUsers = fixture.Build<UserProfile>()
+                .CreateMany()
+                .ToList();
+
             var expectedInterests = fixture.Build<Interest>()
                 .CreateMany()
                 .ToList();
@@ -152,10 +157,12 @@ namespace Project.Tests.Controllers {
 
 
             var unitOfWork = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
-            unitOfWork.Setup(uof => uof.UserProfiles.GetUsersInRoleProfileAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)))
+            unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)))
                 .Returns(Task.FromResult(expectedRegularUsers as IList<UserProfile>));
             unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)))
                 .Returns(Task.FromResult(expectedCoachUsers as IList<UserProfile>));
+            unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Admin)))
+                .Returns(Task.FromResult(expectedAdminUsers as IList<UserProfile>));
 
             unitOfWork.Setup(uof => uof.Interests.AllAsync)
                 .Returns(Task.FromResult(expectedInterests as IList<Interest>));
@@ -175,11 +182,13 @@ namespace Project.Tests.Controllers {
 
             Assert.Equal(expectedRegularUsers.Count, model.RegularUsers.Count);
             Assert.Equal(expectedCoachUsers.Count, model.Coaches.Count);
+            Assert.Equal(expectedAdminUsers.Count, model.Admins.Count);
             Assert.Equal(expectedInterests.Count, model.Interests.Count);
             Assert.Equal(expectedGroups.Count, model.Groups.Count);
             Assert.Equal(expectedHashtags.Count, model.Hashtags.Count);
             AssertPocoListEqualsVmList(expectedRegularUsers, model.RegularUsers);
             AssertPocoListEqualsVmList(expectedCoachUsers, model.Coaches);
+            AssertPocoListEqualsVmList(expectedAdminUsers, model.Admins);
             AssertPocoListEqualsVmList(expectedInterests, model.Interests);
             AssertPocoListEqualsVmList(expectedGroups, model.Groups);
         }

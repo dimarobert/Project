@@ -1,0 +1,43 @@
+﻿@model Project.ViewModels.UserProfile.GroupVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+<div>
+    @foreach(var member in Model.Members) {
+        
+    }
+</div>
+<div>
+    @foreach (var story in Model.PromotedRegularStories) {
+       
+    }
+</div>
+<div>
+    @foreach (var story in Model.PromotedGivingAdviceStories) {
+
+    }
+</div>
+<div>
+    @foreach (var story in Model.PromotedAskingAdviceStories) {
+
+    }
+</div>
+<div>
+    @foreach (var story in Model.RegularStories) {
+
+    }
+</div>
+<div>
+    @foreach (var story in Model.AskingAdviceStories) {
+
+    }
+</div>
+<div>
+    @foreach (var story in Model.GivingAdviceStories) {
+
+    }
+</div>

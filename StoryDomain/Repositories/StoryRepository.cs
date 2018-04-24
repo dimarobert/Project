@@ -1,4 +1,5 @@
-﻿using Project.Core.Repositories;
+﻿using Project.Core.Enums;
+using Project.Core.Repositories;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
 using System;
@@ -17,10 +18,16 @@ namespace Project.StoryDomain.Repositories {
 
         Task<Story> GetStoryById(int storyId);
         Task<IList<Comment>> GetAllComments(int id);
+        Task<IList<Story>> GetPromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type);
+
+        Task<IList<Story>> GetAllStoriesByGroupAndTypeAsync(int groupId, StoryType type);
+
+        Task<IList<Story>> GetUnpromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type);
+
     }
 
     public class StoryRepository : EntityRepository<Story, int>, IStoryRepository {
-
+        private readonly int promotedStoryLikeNumber = 5;
         IStoryContext storyDbContext => context as IStoryContext;
 
         public StoryRepository(IStoryContext storyDbContext) : base(storyDbContext) { }
@@ -43,6 +50,20 @@ namespace Project.StoryDomain.Repositories {
             return await GetQ(s => s.Id == storyId).FirstOrDefaultAsync();
         }
 
+        public async Task<IList<Story>> GetPromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type && s.Likes.Count >= promotedStoryLikeNumber)
+                .ToListAsync();
+        }
+
+        public async Task<IList<Story>> GetAllStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type).ToListAsync();
+        }
+
+        public async Task<IList<Story>> GetUnpromotedStoriesByGroupAndTypeAsync(int groupId, StoryType type) {
+            return await GetQ(s => s.GroupId == groupId && s.Type == type && s.Likes.Count < promotedStoryLikeNumber)
+                .ToListAsync();
+        }
+
         public async Task<IList<Comment>> GetAllComments(int id) {
             var story = await GetIncludingQ(GetQ(s => s.Id == id), s => s.Comments).FirstOrDefaultAsync();
 
@@ -50,7 +71,7 @@ namespace Project.StoryDomain.Repositories {
                 return new List<Comment>();
 
             var result = new List<Comment>();
-            foreach(var comment in story.Comments) {
+            foreach (var comment in story.Comments) {
                 await GetRepliesRecursive(comment.Id, result);
                 result.Add(comment);
             }
@@ -60,7 +81,7 @@ namespace Project.StoryDomain.Repositories {
         private async Task GetRepliesRecursive(int parentCommentId, List<Comment> accumulator) {
             var replies = await storyDbContext.Comments.Where(c => c.ParentCommentId == parentCommentId).Include(c => c.Comments).ToListAsync();
 
-            foreach(var reply in replies) {
+            foreach (var reply in replies) {
                 if (reply.Comments.Any()) {
                     await GetRepliesRecursive(reply.Id, accumulator);
                 }

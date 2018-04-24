@@ -15,6 +15,7 @@ namespace Project.UserProfileDomain.Repositories {
 
         IList<UserInterest> GetUserInterests(int userProfileId);
         IList<Interest> GetAllForUser(int userProfileId, bool excludeAlreadyAdded = false);
+        Interest GetInterest(int interestId);
     }
 
     public class InterestRepository : EntityRepository<Interest, int>, IInterestRepository {
@@ -34,6 +35,10 @@ namespace Project.UserProfileDomain.Repositories {
                         .Where(ui => ui.UserProfileId == userProfileId && ui.InterestId == i.Id)
                         .Any()
                 ).ToList();
+        }
+
+        public Interest GetInterest(int interestId) {
+            return userProfileDbContext.Interests.Where(i => i.Id == interestId).FirstOrDefault();
         }
     }
 }
