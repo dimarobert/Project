@@ -26,6 +26,7 @@ namespace Project.Tests.Models.Tasks {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Comment>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
             fixture.Customizations.Add(new NavigationPropertyOmitter<Comment, Comment>());
 
             // Arrange

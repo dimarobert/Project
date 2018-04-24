@@ -44,6 +44,7 @@ namespace Project.Tests.Controllers {
         public void Index_AuthenticatedUser_ShouldDisplayTaskList() {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
 
             // Arrange
             var userStories = fixture.CreateMany<Story>(3).ToList();

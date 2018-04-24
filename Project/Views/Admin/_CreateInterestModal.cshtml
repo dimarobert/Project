@@ -1,0 +1,33 @@
+﻿
+@using Project.ViewModels.Admin
+@model CreateInterestModel
+
+<div class="modal fade" id="@(Model.HtmlId + "Modal")" tabindex="-1" role="dialog" aria-labelledby="@(Model.HtmlId + "Label")" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("CreateInterest", "Admin", null, FormMethod.Post, new { @class = "form-horizontal", id = Model.HtmlId + "-form", role = "form" })) {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title" id="@(Model.HtmlId + "Label")">Create Interest</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-10">
+                            @Html.Label("Interest name")
+                            @Html.TextBox("Title", Model.InitialTitle, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
