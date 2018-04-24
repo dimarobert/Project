@@ -161,5 +161,33 @@ namespace Project.Controllers {
 
             return RedirectToAction("Dashboard");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> BanUser(BanUserVM bannedUser) {
+
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+            if (bannedUser.BanUntil < DateTime.Now) {
+                ModelState.AddModelError("BanUntil", "Must be greater than the current date.");
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+
+            var user = await userProfileUnitOfWork.UserProfiles.GetAsync(bannedUser.UserProfileId);
+
+            if (user == null) {
+                ModelState.AddModelError("UserProfileId", "The user does not exist.");
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+
+            user.BannedUntil = bannedUser.BanUntil;
+
+            userProfileUnitOfWork.UserProfiles.InsertOrUpdate(user);
+
+            await userProfileUnitOfWork.CompleteAsync();
+
+            return RedirectToAction("Dashboard");
+        }
     }
 }

@@ -21,6 +21,8 @@ namespace Project.UserProfileDomain.Models {
 
         public string AboutMe { get; set; }
 
+        public DateTime? BannedUntil { get; set; }
+
 
 
         public virtual UserInfo User { get; set; }

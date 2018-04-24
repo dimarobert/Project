@@ -6,6 +6,13 @@
 
 @{
     ViewBag.Title = "Admin Dashboard";
+
+
+}
+@section styles {
+
+    @Styles.Render("~/Content/DateTimePicker")
+
 }
 
 <h2>Admin Dashboard</h2>
@@ -40,6 +47,7 @@
                     <th scope="col">Last Name</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Is Banned</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +58,11 @@
                         <td>@rUser.LastName</td>
                         <td>@rUser.UserName</td>
                         <td>@rUser.Email</td>
+                        <td>@(rUser.BannedUntil > DateTime.Now)</td>
+                        <td>
+                            <a href="#" class="btn-link text-danger" data-toggle="modal" data-target="@("#BanUser" + rUser.Id + "Modal")">Ban User</a>
+                            @Html.Partial("_BanUser", new BanUserVM { UserProfileId = rUser.Id, UserName = rUser.UserName })
+                        </td>
                     </tr>
                 }
 
@@ -80,6 +93,7 @@
                     <th scope="col">Last Name</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Is Banned</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,6 +104,11 @@
                         <td>@coach.LastName</td>
                         <td>@coach.UserName</td>
                         <td>@coach.Email</td>
+                        <td>@(coach.BannedUntil > DateTime.Now)</td>
+                        <td>
+                            <a href="#" class="btn-link text-danger" data-toggle="modal" data-target="@("#BanUser" + coach.Id + "Modal")">Ban Coach</a>
+                            @Html.Partial("_BanUser", new BanUserVM { UserProfileId = coach.Id, UserName = coach.UserName })
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -144,11 +163,11 @@
             </thead>
             <tbody>
                 @foreach (var interest in Model.Interests) {
-                <tr>
-                    <th scope="row">@interest.Id</th>
-                    <td>@interest.Title</td>
-                </tr>
-        }
+                    <tr>
+                        <th scope="row">@interest.Id</th>
+                        <td>@interest.Title</td>
+                    </tr>
+                }
 
             </tbody>
         </table>
@@ -191,8 +210,8 @@
                         <td>@hashtag.Value</td>
                         <td>@hashtag.UsageCount</td>
                         <td>
-                            <a href="#" class="pull-right" data-toggle="modal" data-target="#createInterestModal">Create Interest</a>
-                            @Html.Partial("_CreateInterestModal", new CreateInterestModel { HtmlId = "createInterest", InitialTitle = hashtag.Value })
+                            <a href="#" class="pull-right" data-toggle="modal" data-target="@("#createInterest" + hashtag.Id + "Modal")">Create Interest</a>
+                            @Html.Partial("_CreateInterestModal", new CreateInterestModel { HtmlId = "createInterest" + hashtag.Id, InitialTitle = hashtag.Value })
                         </td>
                     </tr>
                 }
@@ -201,14 +220,10 @@
     </div>
 </div>
 
-@*<script>
-        $(function () {
-            $('#myTab li:last-child a').tab('show')
-        })
-    </script>*@
-
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     @Scripts.Render("~/Scripts/Admin")
+    @Scripts.Render("~/Scripts/DateTimePicker")
 }
+

@@ -21,7 +21,7 @@ namespace Project
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/popper.js",
+                      "~/Scripts/umd/popper.js",
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
@@ -32,6 +32,14 @@ namespace Project
 
             bundles.Add(new ScriptBundle("~/Scripts/UserProfile.Index").Include(
                 "~/Scripts/UserProfile.Index.js"));
+
+
+            bundles.Add(new StyleBundle("~/Content/DateTimePicker").Include(
+                "~/Content/tempusdominus-bootstrap-4.min.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/DateTimePicker").Include(
+                "~/Scripts/moment-with-locales.min.js",
+                "~/Scripts/tempusdominus-bootstrap-4.min.js"));
 
             bundles.Add(new ScriptBundle("~/Scripts/Admin").Include(
                 "~/Scripts/Admin.js"));
