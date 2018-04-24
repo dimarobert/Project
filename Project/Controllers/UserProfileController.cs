@@ -212,6 +212,18 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "Required story fields were not filled in.");
             }
 
+            if (story.Type == Core.Enums.StoryType.GivingAdvice && !userService.IsInRole(StandardRoles.Coach)) {
+                ModelState.AddModelError("Type", "You cannot give an advice because you are not a coach.");
+                return PartialView("_AjaxValidation", "You are not allowed to create this type of story.");
+            }
+
+            var user = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+
+            if(user.BannedUntil > DateTime.Now) {
+                ModelState.AddModelError("UserBanned", "You have been banned so you cannot post a story.");
+                return PartialView("_AjaxValidation", "Could not post story.");
+            }
+
             var storyModel = Mapper.Map<Story>(story);
 
             storyModel.State = Core.Models.ModelState.Added;
@@ -266,6 +278,34 @@ namespace Project.Controllers {
             await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("{userName}/Story/{storyId:int}/Like")]
+        public async Task<ActionResult> AddStoryLike(string username, int storyId) {
+
+            var story = await storyUOW.Stories.GetAsync(storyId);
+            if (story == null) {
+                return RedirectToAction("Index", new { username });
+            }
+
+            if (story.UserId == userService.GetUserId()) {
+                return RedirectToAction("Index", new { username });
+            }
+
+            story.Likes.Add(new Like {
+                StoryId = story.Id,
+                UserId = userService.GetUserId(),
+                Date = DateTime.Now,
+                State = Core.Models.ModelState.Added
+            });
+
+            storyUOW.Stories.InsertOrUpdateGraph(story);
+
+            await storyUOW.CompleteAsync();
+
+            return RedirectToAction("Index", new { username });
         }
 
         [HttpPost]

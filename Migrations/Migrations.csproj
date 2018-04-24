@@ -142,6 +142,10 @@
     <Compile Include="Migrations\201804232039599_StoryInterestGroup.Designer.cs">
       <DependentUpon>201804232039599_StoryInterestGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804241847453_AddBannedUntil.cs" />
+    <Compile Include="Migrations\201804241847453_AddBannedUntil.Designer.cs">
+      <DependentUpon>201804241847453_AddBannedUntil.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -229,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804232039599_StoryInterestGroup.resx">
       <DependentUpon>201804232039599_StoryInterestGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804241847453_AddBannedUntil.resx">
+      <DependentUpon>201804241847453_AddBannedUntil.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
