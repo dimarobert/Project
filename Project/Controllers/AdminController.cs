@@ -3,6 +3,7 @@ using Project.Account.Services;
 using Project.Core.Account;
 using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
+using Project.UserProfileDomain.Models;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels;
 using Project.ViewModels.Account;
@@ -134,5 +135,31 @@ namespace Project.Controllers {
             return Json(new { location = Url.Action("Dashboard") });
         }
 
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CreateInterest(InterestVM interest) {
+
+            var existingInterest = userProfileUnitOfWork.Interests.Get(i => i.Title == interest.Title).FirstOrDefault();
+
+            if (existingInterest != null)
+                return RedirectToAction("Dashboard");
+
+
+            var interestModel = Mapper.Map<Interest>(interest);
+
+            userProfileUnitOfWork.Interests.InsertOrUpdate(interestModel);
+            await userProfileUnitOfWork.CompleteAsync();
+
+            var group = new Group {
+                InterestId = interestModel.Id,
+                Title = interestModel.Title
+            };
+
+            storyUnitOfWork.Groups.InsertOrUpdate(group);
+            await storyUnitOfWork.CompleteAsync();
+
+            return RedirectToAction("Dashboard");
+        }
     }
 }

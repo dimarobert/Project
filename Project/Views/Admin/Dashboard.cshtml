@@ -1,4 +1,6 @@
-﻿@model Project.ViewModels.Admin.DashboardVM
+﻿
+@using Project.ViewModels.Admin
+@model DashboardVM
 
 @using Project.Core.Account
 
@@ -142,14 +144,16 @@
             </thead>
             <tbody>
                 @foreach (var interest in Model.Interests) {
-                    <tr>
-                        <th scope="row">@interest.Id</th>
-                        <td>@interest.Title</td>
-                    </tr>
-                }
+                <tr>
+                    <th scope="row">@interest.Id</th>
+                    <td>@interest.Title</td>
+                </tr>
+        }
 
             </tbody>
         </table>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#createNewInterestModal">Create Interest</a>
+        @Html.Partial("_CreateInterestModal", new CreateInterestModel { HtmlId = "createNewInterest", InitialTitle = "" })
     </div>
     <div class="tab-pane" id="groups" role="tabpanel" aria-labelledby="groups-tab">
         <table class="table">
@@ -186,6 +190,10 @@
                         <th scope="row">@hashtag.Id</th>
                         <td>@hashtag.Value</td>
                         <td>@hashtag.UsageCount</td>
+                        <td>
+                            <a href="#" class="pull-right" data-toggle="modal" data-target="#createInterestModal">Create Interest</a>
+                            @Html.Partial("_CreateInterestModal", new CreateInterestModel { HtmlId = "createInterest", InitialTitle = hashtag.Value })
+                        </td>
                     </tr>
                 }
             </tbody>

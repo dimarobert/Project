@@ -19,35 +19,24 @@
                 <div class="row">
                     <div class="col-12 col-lg-8 col-md-6">
                         <h3 class="mb-0 text-truncated">
-                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName))
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            @if (string.IsNullOrWhiteSpace(Model.FirstName) && string.IsNullOrWhiteSpace(Model.LastName)) {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-name" onclick="editName(this);">No name <i class="fa fa-pencil" aria-hidden="true"></i></span>
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-name">No name</span>
                                 }
-                            }
-                            else
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            } else {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="edit-inline-hover" id="profile-name" onclick="editName(this);">@(Model.FirstName + " " + Model.LastName) <i class="fa fa-pencil" aria-hidden="true"></i></span>
-                                }
-                                else
-                                {
+                                } else {
                                     <span id="profile-name">@(Model.FirstName + " " + Model.LastName)</span>
                                 }
                             }
                         </h3>
-                        @if (Model.UserId == User.Identity.GetUserId())
-                        {
+                        @if (Model.UserId == User.Identity.GetUserId()) {
                             using (Html.BeginForm("UpdateProfile", "UserProfile",
                                 new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.Name.ToString() }, FormMethod.Post,
-                                new { @class = "form-horizontal d-none", id = "name-form", role = "form" }))
-                            {
+                                new { @class = "form-horizontal d-none", id = "name-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-sm", placeholder = "First Name" })
@@ -64,37 +53,26 @@
                             @Model.Role
                         </p>
                         <p>
-                            @if (string.IsNullOrWhiteSpace(Model.AboutMe))
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            @if (string.IsNullOrWhiteSpace(Model.AboutMe)) {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">User did not write anything about him. <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-aboutme">User did not write anything about him. </span>
                                 }
-                            }
-                            else
-                            {
-                                if (Model.UserId == User.Identity.GetUserId())
-                                {
+                            } else {
+                                if (Model.UserId == User.Identity.GetUserId()) {
                                     <span class="text-muted font-italic edit-inline-hover" id="profile-aboutme" onclick="editAboutme(this);">@Model.AboutMe <i class="fa fa-pencil" aria-hidden="true"></i></span>
 
-                                }
-                                else
-                                {
+                                } else {
                                     <span class="text-muted font-italic" id="profile-aboutme">@Model.AboutMe</span>
                                 }
                             }
                         </p>
-                        @if (Model.UserId == User.Identity.GetUserId())
-                        {
+                        @if (Model.UserId == User.Identity.GetUserId()) {
                             using (Html.BeginForm("UpdateProfile", "UserProfile",
                                 new { userName = User.Identity.GetUserName(), updateType = UserProfileUpdateType.AboutMe.ToString() }, FormMethod.Post,
-                                new { @class = "form-horizontal d-none", id = "aboutme-form", role = "form" }))
-                            {
+                                new { @class = "form-horizontal d-none", id = "aboutme-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.TextAreaFor(m => m.AboutMe, new { @class = "form-control", placeholder = "What defines you? Keep it short." })
@@ -107,21 +85,18 @@
                             }
                         }
                         <p>
-                            @foreach (var interest in Model.Interests)
-                            {
+                            @foreach (var interest in Model.Interests) {
                                 <span class="badge badge-info tags">@interest.Title</span>
                             }
-                            @if (Model.UserId == User.Identity.GetUserId())
-                            {
-                                <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
+                            @if (Model.UserId == User.Identity.GetUserId()) {
+                                <a href="#" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
                             }
                         </p>
                     </div>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" }))
-                                {
+                                @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" })) {
                                     @Html.AntiForgeryToken()
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Add Interest </h5>
@@ -172,11 +147,10 @@
         <div class="card">
             @Html.Partial("_Story", new StoryVM())
         </div>
-        @foreach (var story in Model.Stories)
-        {
+        @foreach (var story in Model.Stories) {
 
             var myModalEdit = "myModal" + story.Id;
-            var myModalDelete = "myModal" + story.Id;
+            var myModalDelete = "myModalDelete" + story.Id;
 
             <div class="card" style="margin-top:15px;">
                 <ul class="list-group list-group-flush">
@@ -186,16 +160,15 @@
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
                         <span class="pull-right">
-                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalEdit"><span> Edit</span></a>
-                            <a href="javascript:alert('Open Popup');" data-toggle="modal" data-target="#@myModalDelete"><span> Delete</span></a>
+                            <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
+                            <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
                         </span>
                     </li>
                 </ul>
                 <div class="modal fade" id="@myModalEdit" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                            @using (Html.BeginForm("EditStory", "UserProfile", new { storyId = story.Id }, FormMethod.Post, new { @class = "form-horizontal", id = "editstory-form", role = "form" }))
-                            {
+                            @using (Html.BeginForm("EditStory", "UserProfile", new { storyId = story.Id }, FormMethod.Post, new { @class = "form-horizontal", id = "editstory-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editModalLabel">Edit Story </h5>
@@ -237,13 +210,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="@myModalDelete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            @using (Html.BeginForm("DeleteStory", "UserProfile", new { storyId = story.Id }, FormMethod.Post, new { @class = "form-horizontal", id = "deletestory-form", role = "form" })) {
+                                @Html.AntiForgeryToken()
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">Delete Story </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    @Html.Label("Are you sure you want to delete this story?")
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> No </button>
+                                        <button type="submit" class="btn btn-primary"> Yes </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
-                    @if (story.Comments.Count() == 0)
-                    {
+                    @if (story.Comments.Count() == 0) {
                         <h5>There are no Comments yet</h5>
                     }
-                    @foreach (var com in story.Comments)
-                    {
+                    @foreach (var com in story.Comments) {
                         <div class="comments col-md-12" id="comments">
                             <!-- comment -->
                             <div class="comment mb-2 row">
@@ -256,10 +249,9 @@
                                         <p>
                                             @com.Text
                                             <br>
-                                            <a href="javascript:void(0);" onclick="javascript:$('#com-@com.Id').show();$(this).hide();" class="text-right small"><i class="ion-reply"></i> Reply</a>
+                                            <a href="#" onclick="javascript:$('#com-@com.Id').show();$(this).hide();" class="text-right small"><i class="ion-reply"></i> Reply</a>
                                             <div id="com-@com.Id" style="display:none;">
-                                                @using (Html.BeginForm("AddCommentReply", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" }))
-                                                {
+                                                @using (Html.BeginForm("AddCommentReply", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" })) {
                                                     @Html.AntiForgeryToken()
 
                                                     @Html.TextArea("Text", new { @class = "form-control form-control-sm", placeholder = "Add Reply" })
@@ -270,8 +262,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                @foreach (var subcom in com.Comments)
-                                {
+                                @foreach (var subcom in com.Comments) {
                                     <!-- reply is indented -->
                                     <div class="comment-reply col-md-11 offset-md-1 col-sm-10 offset-sm-2">
                                         <div class="row">
@@ -297,8 +288,7 @@
                     }
                     <div class="row pt-2">
                         <div class="col-12">
-                            @using (Html.BeginForm("AddStoryComment", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" }))
-                            {
+                            @using (Html.BeginForm("AddStoryComment", "UserProfile", new { }, FormMethod.Post, new { @class = "form-horizontal", id = "comment-form", role = "form" })) {
                                 @Html.AntiForgeryToken()
 
                                 @Html.TextArea("Text", new { @class = "form-control form-control-sm", placeholder = "Add Comment" })

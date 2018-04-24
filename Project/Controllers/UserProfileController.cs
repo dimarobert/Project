@@ -134,7 +134,21 @@ namespace Project.Controllers {
             currentUserProfile.Interests.Add(userInterest);
             userProfileUOW.UserProfiles.InsertOrUpdateGraph(currentUserProfile);
 
+
+            var grp = (await storyUOW.Groups.GetAsync(g => g.InterestId == interestId)).FirstOrDefault();
+
+            var groupMember = new GroupMember {
+                UserProfileId = currentUserProfile.Id,
+                GroupId = grp.Id,
+                State = Core.Models.ModelState.Added
+            };
+
+            grp.Members.Add(groupMember);
+
+            storyUOW.Groups.InsertOrUpdateGraph(grp);
+
             await userProfileUOW.CompleteAsync();
+            await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
         }
@@ -208,7 +222,7 @@ namespace Project.Controllers {
 
             var hashtags = storyService.ExtractHashtags(storyModel);
             await storyUOW.Hashtags.UpdateHashtags(hashtags);
-            
+
             await storyUOW.CompleteAsync();
 
             return RedirectToAction("Index");
@@ -287,7 +301,7 @@ namespace Project.Controllers {
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
         [Route("DeleteStory/{storyId:int}")]
         public async Task<ActionResult> DeleteStory(int storyId) {
@@ -304,10 +318,15 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "");
             }
 
+            var allComments = await storyUOW.Stories.GetAllComments(existentStory.Id);
+
+            foreach (var comment in allComments)
+                storyUOW.Comments.Remove(comment);
+
             storyUOW.Stories.Remove(existentStory);
             await storyUOW.CompleteAsync();
 
-            return Json(new { location = Url.Action("Index") });
+            return RedirectToAction("Index");
         }
     }
 

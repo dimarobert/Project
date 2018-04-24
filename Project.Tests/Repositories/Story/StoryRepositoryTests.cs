@@ -52,6 +52,7 @@ namespace Project.Tests.Repositories.StoryDomain {
         public void Should_ReturnAllValues_WithSameUserId(int numberOfStories) {
             var fixture = FixtureExtensions.CreateFixture();
             fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Story>());
+            fixture.Customizations.Add(new ManyNavigationPropertyOmitter<Group>());
 
             var userId = "1";
             // Arrange
