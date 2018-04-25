@@ -107,7 +107,7 @@
                             }
                         }
                                 <p>
-                            @foreach (var interest in Model.Interests)
+                            @foreach (var interest in Model.Interests) { 
                                     <span class="badge badge-info tags">@Html.ActionLink(interest.Title, "Index", "Group", routeValues: new { interestId = interest.Id }, htmlAttributes: new { title = "Go to group", @class = "nav-link" })</span>
                                     }
 
