@@ -13,7 +13,7 @@
 
 <div id="accordion">
     <div class="card">
-    @Html.Partial("_Story", new CreateStoryVM (User.IsInRole("Coach")){ GroupId = Model.Id})
+        <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                     Add a Post
@@ -22,6 +22,7 @@
         </div>
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
+                @Html.Partial("_Story", new StoryVM { GroupId = Model.Id })
             </div>
         </div>
     </div>
@@ -45,6 +46,7 @@
         </div>
     </div>
 
+</div>
 <hr />
 <h2>See all Stories</h2>
 @if (Model.RegularStories.Count + Model.GivingAdviceStories.Count + Model.AskingAdviceStories.Count == 0)

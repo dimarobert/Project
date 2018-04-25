@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-8"><h3>Add Story</h3></div>
     </div>
-    @using (Html.BeginForm("AddStory", "Group", null, FormMethod.Post, new { @class = "form-horizontal", id = "addstory-form", role = "form" })) {
+    @using (Html.BeginForm("AddStory", "UserProfile", null, FormMethod.Post, new { @class = "form-horizontal", id = "addstory-form", role = "form" })) {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(Model => Model.GroupId)
         <div class="col-4">

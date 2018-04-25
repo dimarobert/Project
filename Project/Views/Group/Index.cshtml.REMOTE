@@ -1,0 +1,51 @@
+﻿@model Project.ViewModels.UserProfile.GroupVM
+@using Project.ViewModels.UserProfile
+@using Project.ViewModels.Story
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+<div class="card">
+    @Html.Partial("_Story", new CreateStoryVM (User.IsInRole("Coach")){ GroupId = Model.Id})
+</div>
+<div>
+    @if(Model.Members.Count == 0) { <p>No members to show.</p>}
+    @foreach (var member in Model.Members) {
+    <p>@Html.ActionLink($"{member.FirstName} {member.LastName} ({member.UserName})", "Index", "UserProfile", routeValues: new { member.UserName }, htmlAttributes: null)</p>
+    }
+</div>
+@if (Model.RegularStories.Count + Model.GivingAdviceStories.Count + Model.AskingAdviceStories.Count == 0) {
+    <h4>No story to show. Be the first one to add a story to this group.</h4>
+}
+<div>
+    @foreach (var story in Model.PromotedRegularStories) {
+        <h4>story.Title</h4>
+    }
+</div>
+<div>
+    @foreach (var story in Model.PromotedGivingAdviceStories) {
+        <h4>story.Title</h4>
+    }
+</div>
+<div>
+    @foreach (var story in Model.PromotedAskingAdviceStories) {
+        <h4>story.Title</h4>
+    }
+</div>
+<div>
+    @foreach (var story in Model.RegularStories) {
+        <h4>story.Title</h4>
+    }
+</div>
+<div>
+    @foreach (var story in Model.AskingAdviceStories) {
+        <h4>story.Title</h4>
+    }
+</div>
+<div>
+    @foreach (var story in Model.GivingAdviceStories) {
+        <h4>story.Title</h4>
+    }
+</div>

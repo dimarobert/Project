@@ -70,6 +70,7 @@ namespace Project.Controllers {
             return View(groupVM);
         }
 
+<<<<<<< 626cc02a38170728defb09de421597bfc240d0ca
         private void SetUserLikeAbility(IList<StoryVM> stories) {
             foreach (var story in stories) {
                 story.CanCurrentUserLike = true;
@@ -86,5 +87,46 @@ namespace Project.Controllers {
                 }
             }
         }
+=======
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("Group/AddStory")]
+        public async Task<ActionResult> AddStory(StoryVM story) {
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Required story fields were not filled in.");
+            }
+
+            if (story.Type == Core.Enums.StoryType.GivingAdvice && !userService.IsInRole(StandardRoles.Coach)) {
+                ModelState.AddModelError("Type", "You cannot give an advice because you are not a coach.");
+                return PartialView("_AjaxValidation", "You are not allowed to create this type of story.");
+            }
+
+            var user = await userProfileUnitOfWork.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+
+            if (user.BannedUntil > DateTime.Now) {
+                ModelState.AddModelError("UserBanned", "You have been banned so you cannot post a story.");
+                return PartialView("_AjaxValidation", "Could not post story.");
+            }
+
+            var storyModel = Mapper.Map<Story>(story);
+            if (storyModel.GroupId.HasValue) {
+                var group = await storyUnitOfWork.Groups.GetGroupByIdAsync(storyModel.GroupId.Value);
+                storyModel.Group = group;
+            }
+            storyModel.State = Core.Models.ModelState.Added;
+            storyModel.Date = DateTime.Now;
+            storyModel.UserId = userService.GetUserId();
+
+            storyUnitOfWork.Stories.InsertOrUpdate(storyModel);
+
+            var hashtags = storyService.ExtractHashtags(storyModel);
+            if (hashtags != null && hashtags.Count > 0) {
+                await storyUnitOfWork.Hashtags.UpdateHashtags(hashtags);
+            }
+
+            await storyUnitOfWork.CompleteAsync();
+            return Redirect(Request.UrlReferrer.AbsolutePath);
+       }
+>>>>>>> AddStory to Group; allow coach to add GivingAdvice story in groups
     }
 }
