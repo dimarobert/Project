@@ -331,7 +331,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index", new { username });
+            return RedirectToAction("Index", new { username = story.User.UserName });
         }
 
         [HttpPost]
