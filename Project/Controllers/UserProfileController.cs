@@ -56,6 +56,8 @@ namespace Project.Controllers {
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
             viewModel.AvailableInterests = Mapper.Map<List<InterestVM>>(availableInterests);
 
+            SetUserLikeAbility(viewModel.Stories);
+
             if (userService.IsInRole(StandardRoles.Coach))
                 viewModel.IsCoach = true;
 
@@ -69,6 +71,18 @@ namespace Project.Controllers {
 
 
             return View(viewModel);
+        }
+
+        private void SetUserLikeAbility(IList<StoryVM> stories) {
+           foreach(var story in stories) {
+                story.CanCurrentUserLike = false;
+
+                if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)))
+                    story.CanCurrentUserLike = true;
+            }
         }
 
         [HttpPost]
