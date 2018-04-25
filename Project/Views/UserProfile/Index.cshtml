@@ -106,16 +106,15 @@
                                 @Html.HiddenFor(m => m.UserId)
                             }
                         }
-                        <p>
+                                <p>
                             @foreach (var interest in Model.Interests)
-                            {
-                                <span class="badge badge-info tags">@interest.Title</span>
-                            }
-                            @if (Model.UserId == User.Identity.GetUserId())
-                            {
+                                    <span class="badge badge-info tags">@Html.ActionLink(interest.Title, "Index", "Group", routeValues: new { interestId = interest.Id }, htmlAttributes: new { title = "Go to group", @class = "nav-link" })</span>
+                                    }
+
+                                    @if (Model.UserId == User.Identity.GetUserId()) {
                                 <a href="#" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
-                            }
-                        </p>
+}
+                                </p>
                     </div>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">

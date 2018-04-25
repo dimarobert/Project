@@ -248,7 +248,10 @@ namespace Project.Controllers {
             }
 
             var storyModel = Mapper.Map<Story>(story);
-
+            if(storyModel.GroupId.HasValue) {
+                var group = await storyUOW.Groups.GetGroupByIdAsync(storyModel.GroupId.Value);
+                storyModel.Group = group;
+            }
             storyModel.State = Core.Models.ModelState.Added;
             storyModel.Date = DateTime.Now;
             storyModel.UserId = userService.GetUserId();
@@ -259,8 +262,8 @@ namespace Project.Controllers {
             await storyUOW.Hashtags.UpdateHashtags(hashtags);
 
             await storyUOW.CompleteAsync();
-
             return RedirectToAction("Index");
+            //return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
