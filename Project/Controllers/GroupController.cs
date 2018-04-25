@@ -59,7 +59,31 @@ namespace Project.Controllers
                 PromotedGivingAdviceStories = Mapper.Map<List<StoryVM>>(pGivingAdviceStories),
             };
 
+            SetUserLikeAbility(groupVM.RegularStories);
+            SetUserLikeAbility(groupVM.AskingAdviceStories);
+            SetUserLikeAbility(groupVM.GivingAdviceStories);
+            SetUserLikeAbility(groupVM.PromotedRegularStories);
+            SetUserLikeAbility(groupVM.PromotedAskingAdviceStories);
+            SetUserLikeAbility(groupVM.PromotedGivingAdviceStories);
+
             return View(groupVM);
+        }
+
+        private void SetUserLikeAbility(IList<StoryVM> stories) {
+            foreach (var story in stories) {
+                story.CanCurrentUserLike = true;
+                story.DidCurrentUserLiked = false;
+
+                if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)) {
+                    story.CanCurrentUserLike = false;
+                    continue;
+                }
+
+                if (story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))) {
+                    story.CanCurrentUserLike = false;
+                    story.DidCurrentUserLiked = true;
+                }
+            }
         }
     }
 }
