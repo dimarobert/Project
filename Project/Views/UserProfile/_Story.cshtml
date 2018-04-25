@@ -1,5 +1,7 @@
-﻿@model Project.ViewModels.Story.StoryVM
+﻿@using Project.ViewModels.Story
+@using Project.Core.Enums
 
+@model CreateStoryVM
 
 <div class="card-body">
     <div class="row">
@@ -12,8 +14,11 @@
             @{
                 List<SelectListItem> type = new List<SelectListItem>();
 
-                type.Insert(0, (new SelectListItem { Text = "Regular", Value = "1" }));
-                type.Insert(1, (new SelectListItem { Text = "Asking Advice", Value = "2" }));
+                type.Insert(0, (new SelectListItem { Text = "Regular", Value = StoryType.Regular.ToString() }));
+                type.Insert(1, (new SelectListItem { Text = "Asking Advice", Value = StoryType.AskingAdvice.ToString() }));
+                if (Model.IsCoach) {
+                    type.Insert(2, (new SelectListItem { Text = "Giving Advice", Value = StoryType.GivingAdvice.ToString() }));
+                }
             }
             @Html.DropDownListFor(x => x.Type, type, "Choose story type", new { @class = "form-control required" })
         </div>

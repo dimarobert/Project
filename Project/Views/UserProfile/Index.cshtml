@@ -145,7 +145,7 @@
     </div>
     <div class="col-8">
         <div class="card">
-            @Html.Partial("_Story", new StoryVM())
+            @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
         </div>
         @foreach (var story in Model.Stories) {
 
@@ -155,7 +155,7 @@
             <div class="card" style="margin-top:15px;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="background-color:teal;color:white;">
-                        <span class="pull-right badge badge-primary">@story.Type</span>
+                        <span class="pull-right badge badge-primary">@story.GetTypeString()</span>
                         <h2>@story.Title</h2>
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
