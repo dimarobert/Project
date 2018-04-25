@@ -160,8 +160,15 @@
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
                         <span class="pull-right">
-                            <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
-                            <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            @if (story.UserId == User.Identity.GetUserId())
+                            {
+                                <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
+                            }
+                            @if (story.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                            {
+                                <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            }
+
                         </span>
                     </li>
                 </ul>

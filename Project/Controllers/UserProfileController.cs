@@ -357,7 +357,7 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "");
             }
 
-            if (existentStory.UserId != userService.GetUserId()) {
+            if (existentStory.UserId != userService.GetUserId() && !User.IsInRole("Admin")) {
                 ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
                 return PartialView("_AjaxValidation", "");
             }
