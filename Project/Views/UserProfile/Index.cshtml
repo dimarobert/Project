@@ -87,7 +87,6 @@
                         @foreach (var interest in Model.Interests)
                         {
                             <a href="/Group?interestId=@interest.Id"><span class="badge badge-info tags">@interest.Title</span></a>
-                            <a href="/Group?interestId=@interest.Id"><span class="badge badge-info tags">@interest.Title</span></a>
                         }
 
                         @if (Model.UserId == User.Identity.GetUserId())
