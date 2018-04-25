@@ -46,7 +46,7 @@
     </div>
 
 <hr />
-<h2>See all Stories</h2>
+<h3>Stories of this community</h3>
 @if (Model.RegularStories.Count + Model.GivingAdviceStories.Count + Model.AskingAdviceStories.Count == 0)
 {
     <h4>No story to show. Be the first one to add a story to this group.</h4>
@@ -55,13 +55,13 @@ else
 {
     <ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Promoted</a>
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Regular</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Regular</a>
+            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Asking advice</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Advice</a>
+            <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Giving advice</a>
         </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
@@ -260,7 +260,7 @@ else
                 </div>
             }
 
-            @foreach (var story in Model.PromotedGivingAdviceStories)
+            @foreach (var story in Model.RegularStories)
             {
                 var myModalEdit = "myModal" + story.Id;
                 var myModalDelete = "myModalDelete" + story.Id;
@@ -648,7 +648,7 @@ else
                 </div>
             }
 
-            @foreach (var story in Model.RegularStories)
+            @foreach (var story in Model.AskingAdviceStories)
             {
                 var myModalEdit = "myModal" + story.Id;
                 var myModalDelete = "myModalDelete" + story.Id;
@@ -842,7 +842,7 @@ else
             }
         </div>
         <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-            @foreach (var story in Model.AskingAdviceStories)
+            @foreach (var story in Model.PromotedGivingAdviceStories)
             {
                 var myModalEdit = "myModal" + story.Id;
                 var myModalDelete = "myModalDelete" + story.Id;
