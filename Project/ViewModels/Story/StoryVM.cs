@@ -8,6 +8,15 @@ using System.Web;
 
 namespace Project.ViewModels.Story
 {
+    public class CreateStoryVM : StoryVM {
+
+        public CreateStoryVM(bool isCoach) {
+            IsCoach = isCoach;
+        }
+
+        public bool IsCoach { get; set; }
+    }
+
     public class StoryVM
     {
         public int Id { get; set; }
@@ -32,5 +41,21 @@ namespace Project.ViewModels.Story
         public IList<CommentVM> Comments { get; set; }
 
         public IList<LikeVM> Likes { get; set; }
+
+        public string GetTypeString() {
+            switch (Type) {
+                case StoryType.Regular:
+                    return "Story";
+
+                case StoryType.AskingAdvice:
+                    return "Asking Advice";
+
+                case StoryType.GivingAdvice:
+                    return "Giving Advice";
+
+                default:
+                    return "";
+            }
+        }
     }
 }

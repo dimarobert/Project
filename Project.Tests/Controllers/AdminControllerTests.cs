@@ -112,7 +112,7 @@ namespace Project.Tests.Controllers {
 
             // Assert
             upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)));
-            upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)));
+            upRepo.Verify(r => r.GetUsersInRoleProfileAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)));
             upRepo.Verify(r => r.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Admin)));
             interestRepo.Verify(r => r.AllAsync);
             hashtagRepo.Verify(r => r.AllAsync);
@@ -159,7 +159,7 @@ namespace Project.Tests.Controllers {
             var unitOfWork = fixture.Freeze<Mock<IUserProfileUnitOfWork>>();
             unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Normal)))
                 .Returns(Task.FromResult(expectedRegularUsers as IList<UserProfile>));
-            unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)))
+            unitOfWork.Setup(uof => uof.UserProfiles.GetUsersInRoleProfileAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Coach)))
                 .Returns(Task.FromResult(expectedCoachUsers as IList<UserProfile>));
             unitOfWork.Setup(uof => uof.UserProfiles.GetStrictInRoleUserProfilesAsync(It.Is<StandardRoles>(sr => sr == StandardRoles.Admin)))
                 .Returns(Task.FromResult(expectedAdminUsers as IList<UserProfile>));

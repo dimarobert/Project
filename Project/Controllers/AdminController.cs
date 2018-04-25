@@ -38,7 +38,7 @@ namespace Project.Controllers {
         public async Task<ActionResult> Dashboard() {
 
             var regularUsers = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Normal);
-            var coaches = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Coach);
+            var coaches = await userProfileUnitOfWork.UserProfiles.GetUsersInRoleProfileAsync(StandardRoles.Coach);
             var admins = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Admin);
 
             var interests = await userProfileUnitOfWork.Interests.AllAsync;
@@ -115,6 +115,10 @@ namespace Project.Controllers {
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateGroup(GroupVM group) {
+
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Could not create the group.");
+            }
 
             var existingGroup = await storyUnitOfWork.Groups.FindByTitleAsync(group.Title);
             if (existingGroup != null) {

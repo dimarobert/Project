@@ -56,6 +56,9 @@ namespace Project.Controllers {
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
             viewModel.AvailableInterests = Mapper.Map<List<InterestVM>>(availableInterests);
 
+            if (userService.IsInRole(StandardRoles.Coach))
+                viewModel.IsCoach = true;
+
             viewModel.Role = "";
             var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
                 Enum.TryParse<StandardRoles>(r?.Role.Name, out var role);
@@ -63,6 +66,7 @@ namespace Project.Controllers {
             });
             if (maxRole > StandardRoles.Normal)
                 viewModel.Role = maxRole.ToString();
+
 
             return View(viewModel);
         }
