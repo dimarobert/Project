@@ -38,7 +38,7 @@ namespace Project.Controllers {
 
             if (group == null) {
                 ModelState.AddModelError("Group", "The provided interest group does not exist.");
-                return RedirectToAction("Index", new { groupId = 0 });
+                return View("PageNotFound");
             }
 
             var givingAdviceStories = await storyUnitOfWork.Stories.GetUnpromotedStoriesByGroupAndTypeAsync(group.Id, StoryType.GivingAdvice);
