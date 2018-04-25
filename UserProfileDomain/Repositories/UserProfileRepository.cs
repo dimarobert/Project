@@ -40,6 +40,25 @@ namespace Project.UserProfileDomain.Repositories {
 
         public UserProfileRepository(IUserProfileContext userProfileContext) : base(userProfileContext) { }
 
+        public override void InsertOrUpdate(UserProfile entity) {
+            //SetDatesToUTC(entity);
+
+            base.InsertOrUpdate(entity);
+        }
+
+        public override void InsertOrUpdateGraph(UserProfile entityGraph) {
+            //SetDatesToUTC(entityGraph);
+            base.InsertOrUpdateGraph(entityGraph);
+        }
+
+        private static void SetDatesToUTC(UserProfile entity) {
+            if (entity.BirthDate.HasValue)
+                entity.BirthDate = entity.BirthDate.Value.ToUniversalTime();
+
+            if (entity.BannedUntil.HasValue)
+                entity.BannedUntil = entity.BannedUntil.Value.ToUniversalTime();
+        }
+
         public UserProfile GetUserProfile(string userId) {
             return GetQ(profile => profile.UserId == userId).FirstOrDefault();
         }
@@ -54,7 +73,7 @@ namespace Project.UserProfileDomain.Repositories {
             if (role < StandardRoles.Admin)
                 query = FilterNotInRoleQAsync(query, StandardRoles.Admin.ToString());
 
-            if(role < StandardRoles.Coach)
+            if (role < StandardRoles.Coach)
                 query = FilterNotInRoleQAsync(query, StandardRoles.Coach.ToString());
 
             return await query.ToListAsync();

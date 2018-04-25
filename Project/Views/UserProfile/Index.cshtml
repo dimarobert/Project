@@ -96,8 +96,8 @@
                     </div>
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" })) {
+                            @using (Html.BeginForm("AddInterest", "UserProfile", new { userName = User.Identity.GetUserName() }, FormMethod.Post, new { @class = "form-horizontal", id = "addinterest-form", role = "form" })) {
+                                <div class="modal-content">
                                     @Html.AntiForgeryToken()
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Add Interest </h5>
@@ -108,12 +108,12 @@
                                     <div class="modal-body">
                                         @Html.DropDownList("interestId", new SelectList(Model.AvailableInterests, "Id", "Title"), "Choose...", new { @class = "custom-select", required = "required" })
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-                                    </div>
-                                }
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="col-12 col-lg-4 col-md-6 text-center">
@@ -146,7 +146,10 @@
     </div>
     <div class="col-8">
         <div class="card">
-            @Html.Partial("_Story", new StoryVM())
+            @if (Model.UserId == User.Identity.GetUserId())
+            {
+                @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
+            }
         </div>
         @foreach (var story in Model.Stories) {
 
@@ -156,13 +159,20 @@
             <div class="card" style="margin-top:15px;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="background-color:teal;color:white;">
-                        <span class="pull-right badge badge-primary">@story.Type</span>
+                        <span class="pull-right badge badge-primary">@story.GetTypeString()</span>
                         <h2>@story.Title</h2>
                         <hr />
                         <p><b>@story.Content</b> <br /> <small>@story.Date - @story.Likes.Count() <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i></small></p>
                         <span class="pull-right">
-                            <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
-                            <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            @if (story.UserId == User.Identity.GetUserId())
+                            {
+                                <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
+                            }
+                            @if (story.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                            {
+                                <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            }
+
                         </span>
                     </li>
                 </ul>
@@ -202,10 +212,10 @@
                                             @Html.TextArea("Content", story.Content, htmlAttributes: new { @class = "form-control required" })
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary"> Edit</button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary"> Edit</button>
                                 </div>
                             }
                         </div>
@@ -224,10 +234,10 @@
                                 </div>
                                 <div class="modal-body">
                                     @Html.Label("Are you sure you want to delete this story?")
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> No </button>
-                                        <button type="submit" class="btn btn-primary"> Yes </button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"> No </button>
+                                    <button type="submit" class="btn btn-primary"> Yes </button>
                                 </div>
                             }
                         </div>
