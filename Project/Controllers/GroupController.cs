@@ -16,6 +16,7 @@ using System.Web.Mvc;
 
 namespace Project.Controllers
 {
+    [RoutePrefix("Group")]
     public class GroupController : Controller
     {
         readonly IUserService userService;
@@ -29,6 +30,7 @@ namespace Project.Controllers
         }
 
         [HttpGet]
+        [Route("{interestId:int}")]
         public async Task<ActionResult> Index(int interestId)
         {
             var group = await storyUnitOfWork.Groups.GetGroupByInterestIdAsync(interestId);
