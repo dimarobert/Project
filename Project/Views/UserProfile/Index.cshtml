@@ -84,13 +84,11 @@
                                 @Html.HiddenFor(m => m.UserId)
                             }
                         }
-                        @foreach (var interest in Model.Interests)
-                        {
-                            <a href="/Group?interestId=@interest.Id"><span class="badge badge-info tags">@interest.Title</span></a>
+                        @foreach (var interest in Model.Interests) {
+                            <a href="@Url.Action("Index", "Group", new { interestId = interest.Id })"><span class="badge badge-info tags">@interest.Title</span></a>
                         }
 
-                        @if (Model.UserId == User.Identity.GetUserId())
-                        {
+                        @if (Model.UserId == User.Identity.GetUserId()) {
                             <a href="#" data-toggle="modal" data-target="#exampleModal"><span class="badge badge-primary tags"><i class="fa fa-plus" aria-hidden="true"></i> Add Interest</span></a>
                         }
                     </div>
@@ -171,7 +169,6 @@
                                         <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i>
                                     } else if (story.CanCurrentUserLike) {
                                         <i class="fa fa-heart-o" onclick="$('#like-@story.Id').click();" style="color:red; cursor:pointer;" aria-hidden="true"></i>
-                                            <i class="fa fa-heart-o" onclick="$('#like-@story.Id').click();" style="color:red;" aria-hidden="true"></i>
                                         <button type="submit" id="like-@story.Id" style="display:none;"></button>
                                     } else {
                                         <i class="fa fa-heart" style="color:gray;" aria-hidden="true"></i>
