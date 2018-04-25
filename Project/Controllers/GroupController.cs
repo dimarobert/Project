@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Project.Account.Services;
+using Project.Core.Account;
 using Project.Core.Enums;
 using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
+using Project.StoryDomain.Services;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels.Admin;
 using Project.ViewModels.Story;
@@ -14,30 +16,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Project.Controllers
-{
+namespace Project.Controllers {
     [RoutePrefix("Group")]
-    public class GroupController : Controller
-    {
+    public class GroupController : Controller {
         readonly IUserService userService;
         readonly IUserProfileUnitOfWork userProfileUnitOfWork;
         readonly IStoryUnitOfWork storyUnitOfWork;
+        readonly IStoryService storyService;
 
-        public GroupController(IUserService userService, IUserProfileUnitOfWork userProfileUnitOfWork, IStoryUnitOfWork storyUnitOfWork) {
+        public GroupController(IUserService userService, IUserProfileUnitOfWork userProfileUnitOfWork, IStoryUnitOfWork storyUnitOfWork, IStoryService storyService) {
             this.userService = userService;
             this.userProfileUnitOfWork = userProfileUnitOfWork;
             this.storyUnitOfWork = storyUnitOfWork;
+            this.storyService = storyService;
         }
 
         [HttpGet]
         [Route("{interestId:int}")]
-        public async Task<ActionResult> Index(int interestId)
-        {
+        public async Task<ActionResult> Index(int interestId) {
             var group = await storyUnitOfWork.Groups.GetGroupByInterestIdAsync(interestId);
 
-            if(group == null) {
+            if (group == null) {
                 ModelState.AddModelError("Group", "The provided interest group does not exist.");
-                return RedirectToAction("Index", new { groupId = 0});
+                return RedirectToAction("Index", new { groupId = 0 });
             }
 
             var givingAdviceStories = await storyUnitOfWork.Stories.GetUnpromotedStoriesByGroupAndTypeAsync(group.Id, StoryType.GivingAdvice);
@@ -85,5 +86,45 @@ namespace Project.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
+        [Route("Group/AddStory")]
+        public async Task<ActionResult> AddStory(StoryVM story) {
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Required story fields were not filled in.");
+            }
+
+            if (story.Type == Core.Enums.StoryType.GivingAdvice && !userService.IsInRole(StandardRoles.Coach)) {
+                ModelState.AddModelError("Type", "You cannot give an advice because you are not a coach.");
+                return PartialView("_AjaxValidation", "You are not allowed to create this type of story.");
+            }
+
+            var user = await userProfileUnitOfWork.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+
+            if (user.BannedUntil > DateTime.Now) {
+                ModelState.AddModelError("UserBanned", "You have been banned so you cannot post a story.");
+                return PartialView("_AjaxValidation", "Could not post story.");
+            }
+
+            var storyModel = Mapper.Map<Story>(story);
+            if (storyModel.GroupId.HasValue) {
+                var group = await storyUnitOfWork.Groups.GetGroupByIdAsync(storyModel.GroupId.Value);
+                storyModel.Group = group;
+            }
+            storyModel.State = Core.Models.ModelState.Added;
+            storyModel.Date = DateTime.Now;
+            storyModel.UserId = userService.GetUserId();
+
+            storyUnitOfWork.Stories.InsertOrUpdate(storyModel);
+
+            var hashtags = storyService.ExtractHashtags(storyModel);
+            if (hashtags != null && hashtags.Count > 0) {
+                await storyUnitOfWork.Hashtags.UpdateHashtags(hashtags);
+            }
+
+            await storyUnitOfWork.CompleteAsync();
+            return Redirect(Request.UrlReferrer.AbsolutePath);
+       }
     }
 }

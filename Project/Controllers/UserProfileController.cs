@@ -262,8 +262,7 @@ namespace Project.Controllers {
             await storyUOW.Hashtags.UpdateHashtags(hashtags);
 
             await storyUOW.CompleteAsync();
-            return RedirectToAction("Index");
-            //return Redirect(Request.UrlReferrer.AbsolutePath);
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
