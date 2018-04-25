@@ -145,7 +145,10 @@
     </div>
     <div class="col-8">
         <div class="card">
-            @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
+            @if (Model.UserId == User.Identity.GetUserId())
+            {
+                @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
+            }
         </div>
         @foreach (var story in Model.Stories) {
 
