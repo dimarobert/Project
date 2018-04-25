@@ -170,7 +170,10 @@
     </div>
     <div class="col-8">
         <div class="card">
-            @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
+            @if (Model.UserId == User.Identity.GetUserId())
+            {
+                @Html.Partial("_Story", new CreateStoryVM(Model.IsCoach))
+            }
         </div>
         @foreach (var story in Model.Stories)
         {
@@ -203,8 +206,15 @@
                             </small>
                         </p>
                         <span class="pull-right">
-                            <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
-                            <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            @if (story.UserId == User.Identity.GetUserId())
+                            {
+                                <a href="#" class="text-light" data-toggle="modal" data-target="#@myModalEdit">Edit</a>
+                            }
+                            @if (story.UserId == User.Identity.GetUserId() || User.IsInRole("Admin"))
+                            {
+                                <a href="#" class="text-danger" data-toggle="modal" data-target="#@myModalDelete">Delete</a>
+                            }
+
                         </span>
                     </li>
                 </ul>

@@ -75,13 +75,18 @@ namespace Project.Controllers {
 
         private void SetUserLikeAbility(IList<StoryVM> stories) {
            foreach(var story in stories) {
-                story.CanCurrentUserLike = false;
+                story.CanCurrentUserLike = true;
+                story.DidCurrentUserliked = false;
 
-                if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))
+                if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)) {
+                    story.CanCurrentUserLike = false;
                     continue;
+                }
 
-                if (!story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)))
-                    story.CanCurrentUserLike = true;
+                if (story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))) {
+                    story.CanCurrentUserLike = false;
+                    story.DidCurrentUserliked = true;
+                }
             }
         }
 
@@ -371,7 +376,7 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "");
             }
 
-            if (existentStory.UserId != userService.GetUserId()) {
+            if (existentStory.UserId != userService.GetUserId() && !User.IsInRole("Admin")) {
                 ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
                 return PartialView("_AjaxValidation", "");
             }
