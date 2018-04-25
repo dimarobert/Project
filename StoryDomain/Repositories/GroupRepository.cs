@@ -3,6 +3,7 @@ using Project.Core.Enums;
 using Project.Core.Repositories;
 using Project.StoryDomain.DAL;
 using Project.StoryDomain.Models;
+using Project.UserProfileDomain.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -13,10 +14,10 @@ namespace Project.StoryDomain.Repositories {
 
         Task<Group> FindByTitleAsync(string groupTitle);
         Task<Group> GetGroupByIdAsync(int id);
+        Task<Group> GetGroupByInterestIdAsync(int interestId);
+        }
 
-    }
-
-    public class GroupRepository : EntityRepository<Group, int>, IGroupRepository {
+        public class GroupRepository : EntityRepository<Group, int>, IGroupRepository {
 
         IStoryContext storyContext => context as IStoryContext;
 
@@ -28,7 +29,12 @@ namespace Project.StoryDomain.Repositories {
 
         public async Task<Group> GetGroupByIdAsync(int id) {
             return await GetQ(g => g.Id == id)
-                .Include(u => u.Members)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Group> GetGroupByInterestIdAsync(int interestId) {
+            return await GetQ(g => g.InterestId == interestId)
+                .Include(u => u.Members.Select(up => up.UserProfile))
                 .Include(u => u.Stories)
                 .FirstOrDefaultAsync();
         }

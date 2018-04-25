@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Project.Account.Services;
 using Project.Core.Enums;
+using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels.Admin;
@@ -27,11 +28,10 @@ namespace Project.Controllers
             this.storyUnitOfWork = storyUnitOfWork;
         }
 
-        [HttpPost]
-        [Authorize, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(int groupId)
+        [HttpGet]
+        public async Task<ActionResult> Index(int interestId)
         {
-            var group = await storyUnitOfWork.Groups.GetGroupByIdAsync(groupId);
+            var group = await storyUnitOfWork.Groups.GetGroupByInterestIdAsync(interestId);
 
             if(group == null) {
                 ModelState.AddModelError("Group", "The provided interest group does not exist.");
@@ -46,7 +46,9 @@ namespace Project.Controllers
             var pRegularStories = await storyUnitOfWork.Stories.GetPromotedStoriesByGroupAndTypeAsync(group.Id, StoryType.Regular);
 
             var groupVM = new GroupVM() {
-                Members = Mapper.Map<List<UserBasicInfoVM>>(group.Members),
+                Id = group.Id,
+                Title = group.Title,
+                Members = Mapper.Map<List<UserBasicInfoVM>>(group.Members.Select(u => u.UserProfile).ToList()),
                 RegularStories = Mapper.Map<List<StoryVM>>(regularStories),
                 AskingAdviceStories = Mapper.Map<List<StoryVM>>(askingAdviceStories),
                 GivingAdviceStories = Mapper.Map<List<StoryVM>>(givingAdviceStories),
@@ -54,6 +56,7 @@ namespace Project.Controllers
                 PromotedAskingAdviceStories = Mapper.Map<List<StoryVM>>(pAskingAdviceStories),
                 PromotedGivingAdviceStories = Mapper.Map<List<StoryVM>>(pGivingAdviceStories),
             };
+
             return View(groupVM);
         }
     }
