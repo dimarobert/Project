@@ -76,7 +76,7 @@ namespace Project.Controllers {
         private void SetUserLikeAbility(IList<StoryVM> stories) {
            foreach(var story in stories) {
                 story.CanCurrentUserLike = true;
-                story.DidCurrentUserliked = false;
+                story.DidCurrentUserLiked = false;
 
                 if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)) {
                     story.CanCurrentUserLike = false;
@@ -85,7 +85,7 @@ namespace Project.Controllers {
 
                 if (story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))) {
                     story.CanCurrentUserLike = false;
-                    story.DidCurrentUserliked = true;
+                    story.DidCurrentUserLiked = true;
                 }
             }
         }
