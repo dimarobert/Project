@@ -44,7 +44,7 @@ namespace Project.ViewModels.Story
 
         public bool CanCurrentUserLike { get; set; }
 
-        public bool DidCurrentUserliked { get; set; }
+        public bool DidCurrentUserLiked { get; set; }
 
         public string GetTypeString() {
             switch (Type) {

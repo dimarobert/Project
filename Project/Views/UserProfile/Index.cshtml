@@ -187,24 +187,35 @@
                         <span class="pull-right badge badge-primary">@story.GetTypeString()</span>
                         <h2>@story.Title</h2>
                         <hr />
-                        <p>
-                            <b>@story.Content</b> <br /> <small>
-                                @story.Date - @story.Likes.Count()
-                                @if (true)
-                                {
-                                    <i class="fa fa-heart" style="color:gray;" aria-hidden="true"></i>
-                                }
-                                @if (true)
-                                {
-                                    <i class="fa fa-heart-o" style="color:red;" aria-hidden="true"></i>
-                                }
+                        @using (Html.BeginForm("AddStoryLike", "UserProfile", new { username = User.Identity.GetUserName(), storyId = story.Id }, FormMethod.Post, new { @class = "form-horizontal", id = "like-forms", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <p>
+                                <b>@story.Content</b> <br /> <small>
+                                    @story.Date - @story.Likes.Count()
+                                    @if (!story.CanCurrentUserLike && story.DidCurrentUserLiked == false)
+                                    {
+                                        <i class="fa fa-heart" style="color:gray;" aria-hidden="true"></i>
 
-                                else
-                                {
-                                    <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i>
-                                }
-                            </small>
-                        </p>
+                                    }
+                                    else
+                                    {
+                                        if (!story.DidCurrentUserLiked)
+                                        {
+
+                                            <i class="fa fa-heart-o" onclick="debugger;$('#like-@story.Id').click();" style="color:red;" aria-hidden="true"></i>
+                                            <button type="submit" id="like-@story.Id" style="display:none;"></button>
+
+                                        }
+
+                                        else
+                                        {
+                                            <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i>
+                                        }
+                                    }
+                                </small>
+                            </p>
+                        }
                         <span class="pull-right">
                             @if (story.UserId == User.Identity.GetUserId())
                             {
