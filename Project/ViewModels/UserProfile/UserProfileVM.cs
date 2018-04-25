@@ -27,6 +27,8 @@ namespace Project.ViewModels.UserProfile
 
         public string Role { get; set; }
 
+        public bool IsCoach { get; set; }
+
         public IList<InterestVM> Interests { get; set; }
 
         public IList<GoalVM> Goals { get; set; }

@@ -1,0 +1,69 @@
+﻿
+@using Project.ViewModels.Admin
+@model BanUserVM
+
+@{
+    var htmlId = "BanUser" + Model.UserProfileId;
+}
+
+<div class="modal fade" id="@(htmlId + "Modal")" tabindex="-1" role="dialog" aria-labelledby="@(htmlId + "Label")" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            @using (Html.BeginForm("BanUser", "Admin", null, FormMethod.Post, new { @class = "form-horizontal", id = htmlId + "-form", role = "form" })) {
+                @Html.AntiForgeryToken()
+                <div class="modal-header alert-danger">
+                    <h5 class="modal-title" id="@(htmlId + "Label")">Ban @Model.UserName</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-10">
+                            @Html.HiddenFor(m => m.UserProfileId)
+                            @Html.HiddenFor(m => m.BanUntil)
+
+                            @Html.LabelFor(m => m.BanUntil)
+
+
+                            <div class="input-group date" id="@(htmlId + "-BanUntil")" data-target-input="nearest">
+                                @Html.TextBox("BanUntilTime", "", new Dictionary<string, object> {
+                                    ["class"] = "form-control datetimepicker-input",
+                                })
+                                <div class="input-group-append" data-target="#@(htmlId + "-BanUntil")" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer alert-danger">
+                    <button type="submit" class="btn btn-danger">Ban</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        var dt = $('#@(htmlId + "-BanUntil")');
+        dt.datetimepicker({
+            date: new Date(),
+            format: ""
+        });
+
+        var form = $('#@(htmlId + "-form")');
+        form.submit(function () {
+            var banUntilHidden = $('#BanUntil', form);
+
+            var mDate = dt.datetimepicker('viewDate');
+            banUntilHidden.val(mDate.toISOString());
+        });
+    });
+</script>
+

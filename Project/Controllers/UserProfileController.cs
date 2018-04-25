@@ -56,6 +56,11 @@ namespace Project.Controllers {
             viewModel.Stories = Mapper.Map<List<StoryVM>>(userStories);
             viewModel.AvailableInterests = Mapper.Map<List<InterestVM>>(availableInterests);
 
+            SetUserLikeAbility(viewModel.Stories);
+
+            if (userService.IsInRole(StandardRoles.Coach))
+                viewModel.IsCoach = true;
+
             viewModel.Role = "";
             var maxRole = userInfo.Roles.DefaultIfEmpty().Max(r => {
                 Enum.TryParse<StandardRoles>(r?.Role.Name, out var role);
@@ -64,7 +69,25 @@ namespace Project.Controllers {
             if (maxRole > StandardRoles.Normal)
                 viewModel.Role = maxRole.ToString();
 
+
             return View(viewModel);
+        }
+
+        private void SetUserLikeAbility(IList<StoryVM> stories) {
+           foreach(var story in stories) {
+                story.CanCurrentUserLike = true;
+                story.DidCurrentUserliked = false;
+
+                if (story.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase)) {
+                    story.CanCurrentUserLike = false;
+                    continue;
+                }
+
+                if (story.Likes.Any(l => l.UserId.Equals(userService.GetUserId(), StringComparison.OrdinalIgnoreCase))) {
+                    story.CanCurrentUserLike = false;
+                    story.DidCurrentUserliked = true;
+                }
+            }
         }
 
         [HttpPost]
@@ -212,6 +235,18 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "Required story fields were not filled in.");
             }
 
+            if (story.Type == Core.Enums.StoryType.GivingAdvice && !userService.IsInRole(StandardRoles.Coach)) {
+                ModelState.AddModelError("Type", "You cannot give an advice because you are not a coach.");
+                return PartialView("_AjaxValidation", "You are not allowed to create this type of story.");
+            }
+
+            var user = await userProfileUOW.UserProfiles.GetUserProfileAsync(userService.GetUserId());
+
+            if(user.BannedUntil > DateTime.Now) {
+                ModelState.AddModelError("UserBanned", "You have been banned so you cannot post a story.");
+                return PartialView("_AjaxValidation", "Could not post story.");
+            }
+
             var storyModel = Mapper.Map<Story>(story);
             if(storyModel.GroupId.HasValue) {
                 var group = await storyUOW.Groups.GetGroupByIdAsync(storyModel.GroupId.Value);
@@ -273,6 +308,34 @@ namespace Project.Controllers {
 
         [HttpPost]
         [Authorize, ValidateAntiForgeryToken]
+        [Route("{userName}/Story/{storyId:int}/Like")]
+        public async Task<ActionResult> AddStoryLike(string username, int storyId) {
+
+            var story = await storyUOW.Stories.GetAsync(storyId);
+            if (story == null) {
+                return RedirectToAction("Index", new { username });
+            }
+
+            if (story.UserId == userService.GetUserId()) {
+                return RedirectToAction("Index", new { username });
+            }
+
+            story.Likes.Add(new Like {
+                StoryId = story.Id,
+                UserId = userService.GetUserId(),
+                Date = DateTime.Now,
+                State = Core.Models.ModelState.Added
+            });
+
+            storyUOW.Stories.InsertOrUpdateGraph(story);
+
+            await storyUOW.CompleteAsync();
+
+            return RedirectToAction("Index", new { username });
+        }
+
+        [HttpPost]
+        [Authorize, ValidateAntiForgeryToken]
         [Route("EditStory/{storyId:int}")]
         public async Task<ActionResult> EditStory(int storyId, StoryVM story) {
 
@@ -316,7 +379,7 @@ namespace Project.Controllers {
                 return PartialView("_AjaxValidation", "");
             }
 
-            if (existentStory.UserId != userService.GetUserId()) {
+            if (existentStory.UserId != userService.GetUserId() && !User.IsInRole("Admin")) {
                 ModelState.AddModelError("storyId", "You do not have the rights to delete that story.");
                 return PartialView("_AjaxValidation", "");
             }

@@ -38,7 +38,7 @@ namespace Project.Controllers {
         public async Task<ActionResult> Dashboard() {
 
             var regularUsers = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Normal);
-            var coaches = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Coach);
+            var coaches = await userProfileUnitOfWork.UserProfiles.GetUsersInRoleProfileAsync(StandardRoles.Coach);
             var admins = await userProfileUnitOfWork.UserProfiles.GetStrictInRoleUserProfilesAsync(StandardRoles.Admin);
 
             var interests = await userProfileUnitOfWork.Interests.AllAsync;
@@ -116,6 +116,10 @@ namespace Project.Controllers {
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateGroup(GroupVM group) {
 
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Could not create the group.");
+            }
+
             var existingGroup = await storyUnitOfWork.Groups.FindByTitleAsync(group.Title);
             if (existingGroup != null) {
                 ModelState.AddModelError("GroupTitle", "A group with that title already exists.");
@@ -158,6 +162,34 @@ namespace Project.Controllers {
 
             storyUnitOfWork.Groups.InsertOrUpdate(group);
             await storyUnitOfWork.CompleteAsync();
+
+            return RedirectToAction("Dashboard");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> BanUser(BanUserVM bannedUser) {
+
+            if (!ModelState.IsValid) {
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+            if (bannedUser.BanUntil < DateTime.Now) {
+                ModelState.AddModelError("BanUntil", "Must be greater than the current date.");
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+
+            var user = await userProfileUnitOfWork.UserProfiles.GetAsync(bannedUser.UserProfileId);
+
+            if (user == null) {
+                ModelState.AddModelError("UserProfileId", "The user does not exist.");
+                return PartialView("_AjaxValidation", "Invalid model.");
+            }
+
+            user.BannedUntil = bannedUser.BanUntil;
+
+            userProfileUnitOfWork.UserProfiles.InsertOrUpdate(user);
+
+            await userProfileUnitOfWork.CompleteAsync();
 
             return RedirectToAction("Dashboard");
         }
