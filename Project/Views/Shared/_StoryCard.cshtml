@@ -121,7 +121,7 @@
                         <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                     </div>
                     <div class="comment-content col-md-11 col-sm-10">
-                        <h6 class="small comment-meta"><a href="/UserProfile/@com.UserName">@com.UserName</a> @com.Date</h6>
+                        <h6 class="small comment-meta"><a href="@Url.Action("Index", "UserProfile", new { username = com.UserName })">@com.UserName</a> @com.Date</h6>
                         <div class="comment-body">
                             <p>
                                 @com.Text
@@ -147,7 +147,7 @@
                                     <a href=""><img class="mx-auto rounded-circle img-fluid" src="https://www.titanmachinery.ro/files/persons/img_default.gif" alt="avatar"></a>
                                 </div>
                                 <div class="comment-content col-md-11 col-sm-10 col-12">
-                                    <h6 class="small comment-meta"><a href="/UserProfile/@subcom.UserName">@subcom.UserName</a> @subcom.Date</h6>
+                                    <h6 class="small comment-meta"><a href="@Url.Action("Index", "UserProfile", new { username = subcom.UserName })">@subcom.UserName</a> @subcom.Date</h6>
                                     <div class="comment-body">
                                         <p>
                                             @subcom.Text
