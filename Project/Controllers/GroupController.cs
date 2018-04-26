@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Project.Account.Services;
+using Project.Core.Account;
 using Project.Core.Enums;
 using Project.StoryDomain.Models;
 using Project.StoryDomain.Repositories;
+using Project.StoryDomain.Services;
 using Project.UserProfileDomain.Repositories;
 using Project.ViewModels.Admin;
 using Project.ViewModels.Story;
@@ -14,30 +16,29 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Project.Controllers
-{
+namespace Project.Controllers {
     [RoutePrefix("Group")]
-    public class GroupController : Controller
-    {
+    public class GroupController : Controller {
         readonly IUserService userService;
         readonly IUserProfileUnitOfWork userProfileUnitOfWork;
         readonly IStoryUnitOfWork storyUnitOfWork;
+        readonly IStoryService storyService;
 
-        public GroupController(IUserService userService, IUserProfileUnitOfWork userProfileUnitOfWork, IStoryUnitOfWork storyUnitOfWork) {
+        public GroupController(IUserService userService, IUserProfileUnitOfWork userProfileUnitOfWork, IStoryUnitOfWork storyUnitOfWork, IStoryService storyService) {
             this.userService = userService;
             this.userProfileUnitOfWork = userProfileUnitOfWork;
             this.storyUnitOfWork = storyUnitOfWork;
+            this.storyService = storyService;
         }
 
         [HttpGet]
         [Route("{interestId:int}")]
-        public async Task<ActionResult> Index(int interestId)
-        {
+        public async Task<ActionResult> Index(int interestId) {
             var group = await storyUnitOfWork.Groups.GetGroupByInterestIdAsync(interestId);
 
-            if(group == null) {
+            if (group == null) {
                 ModelState.AddModelError("Group", "The provided interest group does not exist.");
-                return RedirectToAction("Index", new { groupId = 0});
+                return View("PageNotFound");
             }
 
             var givingAdviceStories = await storyUnitOfWork.Stories.GetUnpromotedStoriesByGroupAndTypeAsync(group.Id, StoryType.GivingAdvice);

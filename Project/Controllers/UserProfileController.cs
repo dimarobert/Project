@@ -224,7 +224,7 @@ namespace Project.Controllers {
 
             await userProfileUOW.CompleteAsync();
 
-            return RedirectToAction("Index");
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -262,8 +262,7 @@ namespace Project.Controllers {
             await storyUOW.Hashtags.UpdateHashtags(hashtags);
 
             await storyUOW.CompleteAsync();
-            return RedirectToAction("Index");
-            //return Redirect(Request.UrlReferrer.AbsolutePath);
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -283,7 +282,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index");
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -303,7 +302,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index");
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -331,7 +330,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index", new { username = story.User.UserName });
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -364,7 +363,7 @@ namespace Project.Controllers {
 
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index");
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpPost]
@@ -392,7 +391,7 @@ namespace Project.Controllers {
             storyUOW.Stories.Remove(existentStory);
             await storyUOW.CompleteAsync();
 
-            return RedirectToAction("Index");
+            return Redirect(Request.UrlReferrer.AbsolutePath);
         }
     }
 
