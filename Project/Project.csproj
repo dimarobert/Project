@@ -369,6 +369,7 @@
     <Content Include="Views\Admin\_CreateInterestModal.cshtml" />
     <Content Include="Views\Shared\_Story.cshtml" />
     <Content Include="Views\Admin\_BanUser.cshtml" />
+    <Content Include="Views\Shared\_StoryCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
