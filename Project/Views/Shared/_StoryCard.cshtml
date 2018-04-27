@@ -18,7 +18,8 @@
                 @Html.AntiForgeryToken()
                 <p>
                     <b>@Model.Content</b> <br /> <small>
-                        @Model.Date - @Model.Likes.Count()
+                        by @Model.UserName
+                        on @Model.Date - @Model.Likes.Count()
 
                         @if (Model.DidCurrentUserLiked) {
                             <i class="fa fa-heart" style="color:red;" aria-hidden="true"></i>
